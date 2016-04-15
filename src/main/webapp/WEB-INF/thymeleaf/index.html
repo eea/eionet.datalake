@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:include="layout :: headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div id="container">
+      <div th:include="layout :: bannerFragment">
+      </div>
+      <div id="workarea">
+        <h1>EEA Web Datalake</h1>
+        <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
+<p>
+Welcome roug to EEA Datalake! 
+</p>
+<p>
+The site is only open to uploaders with an Eionet account.
+</p>
+<p>
+</p>
+      </div>
+    </div>
+    <!-- container -->
+    <div id="pagefoot" th:include="layout :: footerFragment">
+    Footer
+    </div>
+  </body>
+</html>
