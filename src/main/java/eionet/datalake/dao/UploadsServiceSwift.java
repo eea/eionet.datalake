@@ -163,16 +163,9 @@ public class UploadsServiceSwift implements UploadsService {
             throw new FileNotFoundException(fileId);
         }
         Map<String, Object> metadata = swiftObject.getMetadata();
-        uploadRec.setExpires(swiftObject.getDeleteAtAsDate());
         uploadRec.setFilename((String) metadata.get("filename"));
         uploadRec.setContentType((String) metadata.get("content-type"));
         uploadRec.setSize(swiftObject.getContentLength());
-        Date today = new Date(System.currentTimeMillis());
-        if (uploadRec.getExpires() != null) {
-            if (today.after(uploadRec.getExpires())) {
-                throw new FileNotFoundException(fileId);
-            }
-        }
         uploadRec.setContentStream(swiftObject.downloadObjectAsInputStream());
         return uploadRec;
     }
@@ -196,18 +189,10 @@ public class UploadsServiceSwift implements UploadsService {
     }
 
     @Override
-    public List<Upload> getUnexpired() {
+    public List<Upload> getAll() {
         //FIXME: Implement
         Collection<DirectoryOrObject> c = container.listDirectory();
         return new ArrayList<Upload>(0);
-    }
-
-    /**
-     * The object store can expire files automatically. We don't have to do it.
-     */
-    @Override
-    public List<String> getExpired() {
-        return new ArrayList<String>(0);
     }
 
     @Override

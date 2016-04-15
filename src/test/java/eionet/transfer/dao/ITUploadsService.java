@@ -56,18 +56,6 @@ public class ITUploadsService {
         //Get All
         List<Upload> docList = metadataService.getAll();
         assertEquals(2, docList.size());
-
-        //Get expired as of now.
-        List<String> expiredList = metadataService.getExpired();
-        assertEquals(2, expiredList.size());
-
-        // Get expired as of Jan 2014.
-        Date expirationDate3 = new Date(stringDatetimeToTimestamp("2014-01-01 09:00:01"));
-        List<String> expiredList2 = metadataService.getExpired(expirationDate3);
-        assertEquals(1, expiredList2.size());
-
-        String expiredId1 = expiredList.get(0);
-        assertEquals(uuid1, expiredId1);
     }
  
     private void createRecord(String uuid, String expiration) throws Exception {

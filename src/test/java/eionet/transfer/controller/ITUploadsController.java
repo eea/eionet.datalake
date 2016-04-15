@@ -28,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 /**
- * Test the uploads controller.
+ * Test the dataset controller.
  */
 public class ITUploadsController {
 
@@ -53,10 +53,10 @@ public class ITUploadsController {
 
     @Test
     public void testAbout() throws Exception {
-        this.mockMvc.perform(get("/uploads"))
+        this.mockMvc.perform(get("/datasets"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("breadcrumbs"))
-                .andExpect(model().attributeExists("uploads"))
-                .andExpect(view().name("uploads"));
+                .andExpect(model().attributeExists("datasets"))
+                .andExpect(view().name("datasets"));
     }
 }

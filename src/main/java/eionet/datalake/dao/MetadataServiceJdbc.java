@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Service to store metadata for uploaded files using JDBC.
+ * Service to store metadata for datasets using JDBC.
  */
 @Service
 public class MetadataServiceJdbc implements MetadataService {
@@ -48,16 +48,16 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public void save(Upload upload) {
-        String query = "INSERT INTO uploads (id, expires, filename, uploader, contenttype, filesize) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO datasets (id, filename, uploader, contenttype, filesize) VALUES (?, ?, ?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(query, upload.getId(), upload.getExpires(),
+        jdbcTemplate.update(query, upload.getId(), 
             upload.getFilename(), upload.getUploader(),
             upload.getContentType(), upload.getSize());
     }
 
     @Override
     public Upload getById(String id) {
-        String query = "SELECT id, expires, filename, uploader, contenttype, filesize FROM uploads WHERE id = ?";
+        String query = "SELECT id, expires, filename, uploader, contenttype, filesize FROM datasets WHERE id = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         Upload uploadRec = jdbcTemplate.queryForObject(query, new Object[]{id}, new RowMapper<Upload>() {
@@ -67,7 +67,6 @@ public class MetadataServiceJdbc implements MetadataService {
                 Upload uploadRec = new Upload();
                 uploadRec.setId(rs.getString("id"));
                 uploadRec.setFilename(rs.getString("filename"));
-                uploadRec.setExpires(rs.getDate("expires"));
                 uploadRec.setUploader(rs.getString("uploader"));
                 uploadRec.setContentType(rs.getString("contenttype"));
                 uploadRec.setSize(rs.getLong("filesize"));
@@ -80,7 +79,7 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public List<Upload> getAll() {
-        String query = "SELECT id, expires, filename, uploader, contenttype, filesize FROM uploads";
+        String query = "SELECT id, filename, uploader, contenttype, filesize FROM datasets";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         List<Upload> uploadList = new ArrayList<Upload>();
@@ -91,7 +90,6 @@ public class MetadataServiceJdbc implements MetadataService {
             Upload uploadRec = new Upload();
             uploadRec.setId((String) (row.get("id")));
             uploadRec.setFilename((String) (row.get("filename")));
-            uploadRec.setExpires((Date) (row.get("expires")));
             uploadRec.setUploader((String) (row.get("uploader")));
             uploadRec.setContentType((String) (row.get("contenttype")));
             uploadRec.setSize((Long) (row.get("filesize")));
@@ -102,54 +100,14 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public void deleteById(String id) {
-        String query = "DELETE FROM uploads WHERE id = ?";
+        String query = "DELETE FROM datasets WHERE id = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query, id);
     }
 
     @Override
-    public List<String> getExpired() {
-        Date now = new Date(System.currentTimeMillis());
-        return getExpired(now);
-    }
-
-    @Override
-    public List<String> getExpired(Date expireDate) {
-        String query = "SELECT id FROM uploads WHERE expires < ?";
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List<String> uploadList = new ArrayList<String>();
-
-        Object[] parameters = new Object[] {expireDate};
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(query, parameters);
-        for (Map<String, Object> row : rows) {
-            String uuidName = new String((String) row.get("id"));
-            uploadList.add(uuidName);
-        }
-        return uploadList;
-    }
-
-    @Override
-    public List<Upload> getUnexpired() {
-        Date now = new Date(System.currentTimeMillis());
-        return getUnexpired(now);
-    }
-
-    @Override
-    public List<Upload> getUnexpired(Date expireDate) {
-        List<Upload> allUploads = getAll();
-        List<Upload> uploadList = new ArrayList<Upload>();
-
-        for (Upload upload : allUploads) {
-            if (expireDate.before(upload.getExpires())) {
-                uploadList.add(upload);
-            }
-        }
-        return uploadList;
-    }
-
-    @Override
     public void deleteAll() {
-        String query = "DELETE FROM uploads";
+        String query = "DELETE FROM datasets";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query);
     }

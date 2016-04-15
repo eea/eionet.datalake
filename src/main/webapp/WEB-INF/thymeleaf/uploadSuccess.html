@@ -9,17 +9,8 @@
       <div id="workarea">
         <h1>File successfully uploaded</h1>
         <p>
-        Your file is uploaded now and you can share it with your colleagues!
+        Your file is uploaded now and you can query it.
         </p>
-        <h2>Please use your download links</h2>
-        <p>
-        You can send these links to your colleagues, any person who knows this link will be able to download your file.
-        </p>
-        <h3>Direct Download Link</h3>
-        <pre id="downloadlink" th:text="${url} + '/download/'+${uuid}">http://xyz/download/UUID</pre>
-
-        <h3>Remove Link (use this link to remove your file)</h3>
-        <pre id="deletelink" th:text="${url} + '/delete/'+${uuid}">http://xyz/delete/UUID</pre>
         <p>
         Return to <a href="index.html" th:href="@{/}">Home</a>.
         </p>

@@ -168,20 +168,6 @@ public class FileOpsController {
         org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
         response.flushBuffer();
         is.close();
-        deleteExpired();
-    }
-
-    /**
-     * Delete all expired items from the database.
-     */
-    private void deleteExpired() {
-        try {
-            List<String> expiredObjects = uploadsService.getExpired();
-            uploadsService.deleteFiles(expiredObjects);
-        } catch (IOException ex) {
-            logger.error("I/O exception when deleting expired files");
-        }
-
     }
 
     @RequestMapping(value = "/delete/{file_name}")
@@ -209,14 +195,5 @@ public class FileOpsController {
     public String filenotFoundError(HttpServletRequest req, Exception exception) {
         return "filenotfound";
     }
-    /*
-    public ModelAndView filenotFoundError(HttpServletRequest req, Exception exception) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("exception", exception);
-        mav.addObject("url", req.getRequestURL());
-        mav.setViewName("filenotfound");
-        return mav;
-    }
-    */
 }
 

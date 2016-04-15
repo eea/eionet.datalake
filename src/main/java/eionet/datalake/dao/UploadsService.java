@@ -39,11 +39,6 @@ public interface UploadsService {
      */
     Upload getById(String fileId) throws IOException;
 
-    /**
-     * Return all expired items from the database.
-     */
-    List<String> getExpired();
-
     boolean deleteById(String fileId) throws IOException;
 
     /**
@@ -54,9 +49,9 @@ public interface UploadsService {
     void deleteFiles(List<String> ids) throws IOException;
 
     /**
-     * Get a list of all files where the expiration date has not passed.
+     * Get a list of all files.
      */
-    List<Upload> getUnexpired();
+    List<Upload> getAll();
 
     /**
      * Method to show the user the max upload size.

@@ -11,8 +11,8 @@
       </div>
       <div id="workarea">
         <h1 th:text="${title}">Page title here</h1>
-        <div th:if="${#lists.isEmpty(uploads)}">Table is empty.</div>
-        <div th:if="${not #lists.isEmpty(uploads)}">
+        <div th:if="${#lists.isEmpty(datasets)}">Table is empty.</div>
+        <div th:if="${not #lists.isEmpty(datasets)}">
           <form action="#" th:action="@{/deletefiles}" method="POST">
             <table class="datatable" style="width:100%">
               <col style="width:1em"/>
@@ -26,25 +26,22 @@
                   <th scope="col"></th>
                   <th scope="col">Identifier</th>
                   <th scope="col">File name</th>
-                  <th scope="col">Expires</th>
                   <th scope="col">Size</th>
                   <th scope="col">Uploader</th>
                 </tr>
               </thead>
               <tbody th:remove="all-but-first">
-                <tr th:each="upload : ${uploads}">
-                  <td><input type="checkbox" name="id" th:name="id" th:value="${upload.id}"/>
-                  <td><a th:href="@{'/download/'+${upload.id}}" href="#" th:title="'Download ' + ${upload.id}" th:text="${#strings.substring(upload.id, 0, 8)}">12345678</a></td>
-                  <td th:text="${upload.filename}">Long realistic file name</td>
-                  <td th:text="${upload.expires}">2014-11-29</td>
-                  <td th:text="${upload.humaneSize}">893 MB</td>
-                  <td th:text="${upload.uploader}">uploader</td>
+                <tr th:each="dataset : ${datasets}">
+                  <td><input type="checkbox" name="id" th:name="id" th:value="${dataset.id}"/>
+                  <td><a th:href="@{'/download/'+${dataset.id}}" href="#" th:title="'Download ' + ${dataset.id}" th:text="${#strings.substring(dataset.id, 0, 8)}">12345678</a></td>
+                  <td th:text="${dataset.filename}">Long realistic file name</td>
+                  <td th:text="${dataset.humaneSize}">893 MB</td>
+                  <td th:text="${dataset.uploader}">uploader</td>
                   </td>
                 </tr>
                 <tr>
                   <td>88888</td>
                   <td>Filename.txt</td>
-                  <td>2015-05-29</td>
                   <td>2992929</td>
                   <td>johnny</td>
                 </tr>

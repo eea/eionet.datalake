@@ -45,30 +45,6 @@ public interface MetadataService {
     void deleteById(String id);
 
     /**
-     * Get a list of all files where the expiration date has passed.
-     */
-    List<String> getExpired();
-
-    /**
-     * Get a list of all files where the expiration date has passed.
-     *
-     * @param expirationDate - The cut-off date.
-     */
-    List<String> getExpired(Date expirationDate);
-
-    /**
-     * Get a list of all files where the expiration date has not passed.
-     */
-    List<Upload> getUnexpired();
-
-    /**
-     * Get a list of all files where the expiration date has not passed.
-     *
-     * @param expirationDate - The cut-off date.
-     */
-    List<Upload> getUnexpired(Date expirationDate);
-
-    /**
      * Get all records.
      */
     List<Upload> getAll();

@@ -89,8 +89,8 @@
             <ul>
               <li><a href="index.html" th:href="@{/}">Home</a></li>
               <li><a href="about.html" th:href="@{/about}">About Datalake</a></li>
-              <li><a href="fileupload.html" th:href="@{/fileupload}">Datalake file</a></li>
-              <li sec:authorize-url="/uploads"><a href="uploads.html" th:href="@{/uploads}">Current uploads</a></li>
+              <li><a href="fileupload.html" th:href="@{/fileupload}">Upload file</a></li>
+              <li sec:authorize-url="/datasets"><a href="datasets.html" th:href="@{/datasets}">Datasets</a></li>
               <li sec:authorize="hasRole('ADMIN')">
                  <a href="view_users.html" th:href="@{/users/view}">User authorisations</a>
               </li>

@@ -78,7 +78,6 @@ public class UploadsServiceDBFiles implements UploadsService {
         rec.setId(uuidName);
         rec.setFilename(Filenames.removePath(myFile.getOriginalFilename()));
         rec.setContentType(myFile.getContentType());
-        rec.setExpires(expirationDate);
         rec.setSize(myFile.getSize());
         String userName = getUserName();
         rec.setUploader(userName);
@@ -116,10 +115,6 @@ public class UploadsServiceDBFiles implements UploadsService {
         } catch (Exception e) {
             throw new FileNotFoundException(fileId);
         }
-        Date today = new Date(System.currentTimeMillis());
-        if (today.after(uploadRec.getExpires())) {
-            throw new FileNotFoundException(fileId);
-        }
         uploadRec.setContentStream(storageService.getById(fileId));
         return uploadRec;
     }
@@ -139,13 +134,8 @@ public class UploadsServiceDBFiles implements UploadsService {
     }
 
     @Override
-    public List<String> getExpired() {
-        return metadataService.getExpired();
-    }
-
-    @Override
-    public List<Upload> getUnexpired() {
-        return metadataService.getUnexpired();
+    public List<Upload> getAll() {
+        return metadataService.getAll();
     }
 
     @Override

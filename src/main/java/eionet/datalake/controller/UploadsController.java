@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * View uploaded files.
+ * View datasets.
  */
 @Controller
 public class UploadsController {
@@ -40,15 +40,15 @@ public class UploadsController {
     @Autowired
     private UploadsService uploadsService;
 
-    @RequestMapping(value = "/uploads", method = RequestMethod.GET)
+    @RequestMapping(value = "/datasets", method = RequestMethod.GET)
     public String findUploads(Model model) {
-        String pageTitle = "Uploads List";
+        String pageTitle = "Dataset List";
 
-        List<Upload> uploads = uploadsService.getUnexpired();
-        model.addAttribute("uploads", uploads);
+        List<Upload> datasets = uploadsService.getAll();
+        model.addAttribute("datasets", datasets);
         model.addAttribute("title", pageTitle);
         BreadCrumbs.set(model, pageTitle);
-        return "uploads";
+        return "datasets";
     }
 
 }
