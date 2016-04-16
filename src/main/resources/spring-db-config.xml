@@ -37,6 +37,10 @@
         <property name="storageDir" value="${storage.dir}" />
     </bean>
 
+    <bean id="sqlService" class="eionet.datalake.dao.SQLService">
+        <property name="storageDir" value="${storage.dir}" />
+    </bean>
+
     <bean id="userService" class="eionet.datalake.dao.UserManagementServiceJdbc">
         <property name="dataSource" ref="dataSource"/>
     </bean>

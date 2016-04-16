@@ -16,14 +16,6 @@
             <label for="file">Select a file to upload:</label>
             <input type="file" name="file" id="file" onchange="fileSelected();"/>
           </div>
-          <div class="formrow">
-            <label for="fileTTL">The file will be kept on the server for:</label>
-            <select name="fileTTL" id="fileTTL">
-              <option selected="selected" value="10">10 days</option>
-              <option value="30">1 month</option>
-              <option value="90">3 months</option>
-            </select>
-          </div>
           <div id="uploadprogress">
             <div id="fileName"></div>
             <div id="fileSize"></div>
@@ -31,21 +23,18 @@
             <progress id="progressbar" max="100"><span>0</span>% uploaded</progress>
           </div>
           <div class="formrow">
-            <p>Click this button to upload &amp; share your file</p>
+            <p>Click this button to upload your dataset</p>
             <input type="submit" id="submitbutton" onclick="return uploadFile()" value="Upload" />
-            <p>By uploading your files, you accept our <a href="about.html" th:href="@{/about}">terms &amp; conditions</a></p>
           </div>
         </form>
         <div id="uploadcomplete" th:style="${uuid}? 'display:block' : ''">
           <h1>File successfully uploaded</h1>
           <p>
-          Your file is uploaded now and you can share it with your colleagues!
+          Your file is uploaded now and you can query it.
           </p>
-          <h3>Direct Download Link</h3>
-          <pre id="downloadlink" th:text="${url} + '/download/'+${uuid}">http://xyz/download/UUID</pre>
-
-          <h3>Remove Link (use this link to remove your file)</h3>
-          <pre id="deletelink" th:text="${url} + '/delete/'+${uuid}">http://xyz/delete/UUID</pre>
+          <p>
+          <a id="factsheetLink" href="#" th:href="@{'/datasets/' + ${uuid}}">Dataset factsheet</a>
+          </p>
           <p>
           Return to <a href="index.html" th:href="@{/}">Home</a>.
           </p>
@@ -132,13 +121,9 @@
         /* This event is raised when the server sends back a response */
         var xmlDocument = evt.target.responseXML;
 
-        var downloadLink = xmlDocument.documentElement.getElementsByTagName("downloadLink")[0];
-        var downloadchild = document.getElementById('downloadlink');
-        downloadchild.firstChild.nodeValue = downloadLink.firstChild.nodeValue;
-        var deleteLink = xmlDocument.documentElement.getElementsByTagName("deleteLink")[0];
-        var deletechild = document.getElementById('deletelink');
-        deletechild.firstChild.nodeValue = deleteLink.firstChild.nodeValue;
-
+        //var downloadLink = xmlDocument.documentElement.getElementsByTagName("downloadLink")[0];
+        //var downloadchild = document.getElementById('downloadlink');
+        //downloadchild.firstChild.nodeValue = downloadLink.firstChild.nodeValue;
         document.getElementById('uploadprogress').style.display = "none";
         document.getElementById('uploadcomplete').style.display = "block";
         document.getElementById('submitbutton').value = "Upload";

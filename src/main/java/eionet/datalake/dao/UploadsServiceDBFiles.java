@@ -79,9 +79,7 @@ public class UploadsServiceDBFiles implements UploadsService {
         rec.setSize(myFile.getSize());
         String userName = getUserName();
         rec.setUploader(userName);
-        System.out.println("Before metadata save");
         metadataService.save(rec);
-        System.out.println("After metadata save");
         logger.info("Uploaded: " + myFile.getOriginalFilename() + " by " + userName);
     }
 

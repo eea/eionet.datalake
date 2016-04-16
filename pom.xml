@@ -19,7 +19,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd'T'HHmm</maven.build.timestamp.format>
     </properties>
 
-    <version>1.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <name>datalake</name>
     <url>http://datalake.eionet.europa.eu</url>
 
@@ -405,9 +405,9 @@
           <build>
             <plugins>
               <plugin>
-                <groupId>org.jolokia</groupId>
+                <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>${docker.maven.plugin.rhuss.version}</version>
+                <version>0.14.0</version>
                 <configuration>
                   <verbose>false</verbose>
                   <logDate>default</logDate>
@@ -471,32 +471,7 @@
 
                     <image>
                       <alias>database</alias>
-                      <name>dockerrepo.eionet.europa.eu:5000/${project.groupId}/${project.artifactId}-db</name>
-                      <build>
-                        <from>java:8</from>
-                        <maintainer>Søren Roug &lt;soren.roug@eea.europa.eu&gt;</maintainer>
-                        <tags>
-                          <tag>latest</tag>
-                          <tag>${maven.build.timestamp}</tag>
-                        </tags>
-                        <env>
-                          <H2_RELEASE_DATE>2015-10-11</H2_RELEASE_DATE>
-                        </env>
-                        <workdir>/tmp</workdir>
-                        <runCmds>
-                          <run>wget http://www.h2database.com/h2-$H2_RELEASE_DATE.zip</run>
-                          <run>unzip h2-$H2_RELEASE_DATE.zip</run>
-                          <run>rm -f h2-$H2_RELEASE_DATE.zip</run>
-                          <run>mv h2 /opt</run>
-                        </runCmds>
-                        <optimise>true</optimise>
-
-                        <!-- Expose ports -->
-                        <ports>
-                          <port>1521</port>
-                        </ports>
-                        <cmd>java -cp /opt/h2/bin/h2*.jar org.h2.tools.Server -tcp -tcpAllowOthers -tcpPort 1521 -baseDir /var/tmp</cmd>
-                      </build>
+                      <name>dockerrepo.eionet.europa.eu:5000/eionet/transfer-db</name>
                       <run>
                         <ports>
                           <port>database.port:1521</port>

@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.Base64;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
@@ -114,17 +115,39 @@ public class FileOpsController {
         String url = requestUrl.substring(0, requestUrl.length() - "/fileupload".length());
         printer.println("<?xml version='1.0'?>");
         printer.println("<package>");
-        printer.println("<downloadLink>" + url + "/download/" + uuidName + "</downloadLink>");
-        printer.println("<deleteLink>" + url + "/delete/" + uuidName + "</deleteLink>");
+        printer.println("<datasetLink>" + url + "/datasets/" + uuidName + "</datasetLink>");
         printer.println("</package>");
         printer.flush();
         response.flushBuffer();
     }
 
     private String storeFile(MultipartFile myFile) throws IOException {
-        String uuidName = UUID.randomUUID().toString();
+        String uuidName = generateUniqueId();
         uploadsService.storeFile(myFile, uuidName);
         return uuidName;
+    }
+
+    /**
+     * Generate Unique ID. Shorter, but requires Java 8.
+     */
+    /*
+    private String generateUniqueId() {
+        UUID uuid = UUID.randomUUID();
+        byte[16] uuidBytes;
+        long lowBits = uuid.getLeastSignificantBits();
+        for (i = 0; i < 8; i++) {
+            uuidBytes[i] = (lowBits >> (i * 8)) & 0xff;
+        }
+        long highBits = uuid.getMostSignificantBits();
+        for (i = 0; i < 8; i++) {
+            uuidBytes[i + 8] = (highBits >> (i * 8)) & 0xff;
+        }
+        String base64encodedString = Base64.getUrlEncoder().encodeToString(uuidBytes);
+    }
+    */
+
+    private String generateUniqueId() {
+        return UUID.randomUUID().toString();
     }
 
     /**
@@ -145,7 +168,7 @@ public class FileOpsController {
     /**
      * Download a file.
      */
-    @RequestMapping(value = "/download/{file_name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/datasets/{file_name}/download", method = RequestMethod.GET)
     public void downloadFile(
         @PathVariable("file_name") String fileId, HttpServletResponse response) throws IOException {
 

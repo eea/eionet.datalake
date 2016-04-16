@@ -20,6 +20,7 @@
 package eionet.datalake.controller;
 
 import eionet.datalake.dao.UploadsService;
+import eionet.datalake.dao.SQLService;
 import eionet.datalake.model.Upload;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Humane;
@@ -30,6 +31,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Controller for dataset pages.
@@ -40,6 +43,9 @@ public class DatasetController {
 
     @Autowired
     private UploadsService uploadsService;
+
+    @Autowired
+    private SQLService sqlService;
 
     @RequestMapping(value = "/datasets")
     public String listDatasets(Model model) {
@@ -53,13 +59,30 @@ public class DatasetController {
     }
 
     /**
-     * Dataset
+     * Dataset query page
      */
     @RequestMapping(value = "/datasets/{uuid}/query")
     public String datasetQuery(
-        @PathVariable("uuid") String fileId, final Model model) throws IOException {
+            @PathVariable("uuid") String fileId, final Model model) throws IOException {
+        Upload dataset = uploadsService.getById(fileId);
         model.addAttribute("uuid", fileId);
-        return "datasetFactsheet";
+        model.addAttribute("dataset", dataset);
+        return "datasetQuery";
+    }
+
+    /**
+     * Dataset query page
+     */
+    @RequestMapping(value = "/datasets/{uuid}/query", method = RequestMethod.POST)
+    public String datasetQueryPost(
+            @PathVariable("uuid") String fileId,
+            @RequestParam("query") String query, final Model model) throws IOException {
+        Upload dataset = uploadsService.getById(fileId);
+        model.addAttribute("uuid", fileId);
+        model.addAttribute("query", query);
+        model.addAttribute("dataset", dataset);
+        // FIXME: Run the query and put it into results.
+        return "datasetQuery";
     }
 
     /**
@@ -67,8 +90,12 @@ public class DatasetController {
      */
     @RequestMapping(value = "/datasets/{uuid}")
     public String datasetFactsheet(
-        @PathVariable("uuid") String fileId, final Model model) throws IOException {
+            @PathVariable("uuid") String fileId, final Model model) throws Exception {
+        Upload dataset = uploadsService.getById(fileId);
+        List<String> tables = sqlService.metaTables(fileId);
         model.addAttribute("uuid", fileId);
+        model.addAttribute("dataset", dataset);
+        model.addAttribute("tables", tables);
         return "datasetFactsheet";
     }
 
