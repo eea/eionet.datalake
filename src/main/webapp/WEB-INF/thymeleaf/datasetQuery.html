@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:include="layout :: headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div id="container">
+      <div th:include="layout :: bannerFragment">
+      </div>
+      <div id="workarea">
+        <h1 th:text="'Query ' + ${uuid}">Page title here</h1>
+        <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
+<p>
+
+</p>
+<form action="#" th:action="@{'/datasets/' + ${uuid} + '/query'}" method="post">
+    <table class="datatable">
+        <tr>
+            <th scope="row"><label for="query">Query</label></th>
+            <td>
+                <textarea cols="70" rows="10" name="query" id="query"></textarea>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Execute"/>
+</form>
+
+      </div>
+    </div>
+    <!-- container -->
+    <div id="pagefoot" th:include="layout :: footerFragment">
+    Footer
+    </div>
+  </body>
+</html>
