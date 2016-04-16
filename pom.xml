@@ -10,7 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java_version>1.7</java_version>
+        <java_version>1.8</java_version>
         <spring.version>4.1.6.RELEASE</spring.version>
         <spring.security.version>4.0.2.RELEASE</spring.security.version>
         <thymeleaf.version>2.1.4.RELEASE</thymeleaf.version>
@@ -394,14 +394,6 @@
           <properties>
             <tomcat.port>4590</tomcat.port>
           </properties>
-          <dependencies>
-            <dependency>
-                <groupId>eionet</groupId>
-                <artifactId>jolokia</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <type>war</type>
-            </dependency>
-          </dependencies>
           <build>
             <plugins>
               <plugin>
@@ -417,12 +409,12 @@
                       <alias>service</alias>
                       <name>dockerrepo.eionet.europa.eu:5000/${project.groupId}/${project.artifactId}</name>
                       <build>
-                        <from>tomcat:8.0.32-jre7</from>
+                        <from>tomcat:8.5.0-jre8</from>
                         <maintainer>Søren Roug &lt;soren.roug@eea.europa.eu&gt;</maintainer>
                         <tags>
                           <tag>latest</tag>
                           <tag>${project.version}</tag>
-                          <tag>${maven.build.timestamp}</tag>
+                          <!-- <tag>${maven.build.timestamp}</tag> -->
                         </tags>
                         <assembly>
                           <descriptorRef>rootWar</descriptorRef>
@@ -441,10 +433,6 @@
                         <!-- Default command for the build image -->
                         <!--<cmd>catalina.sh run</cmd> -->
                       </build>
-
-                      <!-- ............................................................... -->
-                      <!-- Runtime configuration for starting/stopping/linking containers -->
-                      <!-- ............................................................... -->
                       <run>
                         <env>
                           <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://localhost:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb</CATALINA_OPTS>

@@ -23,6 +23,7 @@ import eionet.datalake.dao.UploadsService;
 import eionet.datalake.model.Upload;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Filenames;
+import eionet.datalake.util.UniqueId;
 import java.io.InputStream;
 //import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -122,32 +123,9 @@ public class FileOpsController {
     }
 
     private String storeFile(MultipartFile myFile) throws IOException {
-        String uuidName = generateUniqueId();
+        String uuidName = UniqueId.generateUniqueId();
         uploadsService.storeFile(myFile, uuidName);
         return uuidName;
-    }
-
-    /**
-     * Generate Unique ID. Shorter, but requires Java 8.
-     */
-    /*
-    private String generateUniqueId() {
-        UUID uuid = UUID.randomUUID();
-        byte[16] uuidBytes;
-        long lowBits = uuid.getLeastSignificantBits();
-        for (i = 0; i < 8; i++) {
-            uuidBytes[i] = (lowBits >> (i * 8)) & 0xff;
-        }
-        long highBits = uuid.getMostSignificantBits();
-        for (i = 0; i < 8; i++) {
-            uuidBytes[i + 8] = (highBits >> (i * 8)) & 0xff;
-        }
-        String base64encodedString = Base64.getUrlEncoder().encodeToString(uuidBytes);
-    }
-    */
-
-    private String generateUniqueId() {
-        return UUID.randomUUID().toString();
     }
 
     /**
