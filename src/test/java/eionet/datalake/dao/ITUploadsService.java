@@ -44,9 +44,9 @@ public class ITUploadsService {
     public void simpleTest() throws Exception {
 
         String uuid1 = "b1dd4c8e-18b4-445c-bc75-d373dad22c40";
-        createRecord(uuid1, "2013-05-01 19:00:01");
+        createRecord(uuid1);
         String uuid2 = "62c8a681-bf6f-4d88-878c-a2e92ea310e1";
-        createRecord(uuid2, "2015-01-01 09:00:01");
+        createRecord(uuid2);
 
         //Read
         Upload doc1 = metadataService.getById(uuid1);
@@ -58,29 +58,12 @@ public class ITUploadsService {
         assertEquals(2, docList.size());
     }
  
-    private void createRecord(String uuid, String expiration) throws Exception {
+    private void createRecord(String uuid) throws Exception {
         Upload doc = new Upload();
         doc.setId(uuid);
         doc.setFilename("testfile.txt");
-        Date expirationDate = new Date(stringDatetimeToTimestamp(expiration));
-        doc.setExpires(expirationDate);
         doc.setUploader("testperson");
         metadataService.save(doc);
-    }
-
-    /**
-     * Mock function that converts a datetime value in string format into a timestamp
-     * value, in the same way that the MySql jdbc driver does.
-     * 
-     * @param datetime The datetime value in yyyy-MM-dd HH:mm:ss format
-     * @return The corresponding unix timestamp
-     * @throws ParseException 
-     */
-    private long stringDatetimeToTimestamp(String datetime) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long millis = format.parse(datetime).getTime();
-
-        return millis;
     }
 
 }

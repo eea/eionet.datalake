@@ -41,7 +41,7 @@ public class BreadCrumbs {
 
     static {
         //eionetCrumb = new BreadCrumb("http://www.eionet.europa.eu/", "Eionet");
-        homeCrumb = new BreadCrumb("/", "Transfer");
+        homeCrumb = new BreadCrumb("/", "Datalake");
     }
 
     /**

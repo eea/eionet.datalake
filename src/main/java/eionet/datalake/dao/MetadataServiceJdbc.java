@@ -57,7 +57,7 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public Upload getById(String id) {
-        String query = "SELECT id, expires, filename, uploader, contenttype, filesize FROM datasets WHERE id = ?";
+        String query = "SELECT id, filename, uploader, contenttype, filesize FROM datasets WHERE id = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         Upload uploadRec = jdbcTemplate.queryForObject(query, new Object[]{id}, new RowMapper<Upload>() {

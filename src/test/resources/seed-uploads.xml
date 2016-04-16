@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <uploads
-      id="b1dd4c8e-18b4-445c-bc75-d373dad22c40" expires="2010-03-17"
+  <datasets
+      id="b1dd4c8e-18b4-445c-bc75-d373dad22c40"
       filename="mytestfile.pdf" uploader="johnny"
       contenttype="application/octet-stream" filesize="999"
     />

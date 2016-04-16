@@ -32,7 +32,7 @@ public interface UploadsService {
     /**
      * Save file and metadata.
      */
-    void storeFile(MultipartFile myFile, String uuidName, int fileTTL) throws IOException;
+    void storeFile(MultipartFile myFile, String uuidName) throws IOException;
 
     /**
      * Download a file.

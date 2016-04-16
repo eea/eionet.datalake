@@ -30,7 +30,6 @@ import java.util.Date;
 public class Upload {
 
     private String id;
-    private Date expires;
     private String filename;
     private String uploader;
     private String contentType;
@@ -43,14 +42,6 @@ public class Upload {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Date getExpires() {
-        return expires;
-    }
-
-    public void setExpires(Date expires) {
-        this.expires = expires;
     }
 
     public String getFilename() {

@@ -447,7 +447,7 @@
                       <!-- ............................................................... -->
                       <run>
                         <env>
-                          <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://localhost:4580 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb</CATALINA_OPTS>
+                          <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://localhost:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb</CATALINA_OPTS>
                         </env>
                         <!-- Assign dynamically mapped ports to maven variables (which can be reused in integration tests) -->
                         <ports>
@@ -537,7 +537,6 @@
                 <version>2.19</version>
                 <configuration>
                   <systemPropertyVariables>
-                    <log.url>http://${docker.host.address}:${tomcat.port}/jolokia</log.url>
                     <db.url>jdbc:h2:tcp://${docker.host.address}:${database.port}//var/tmp/datalakedb</db.url>
                   </systemPropertyVariables>
                 </configuration>

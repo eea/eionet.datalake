@@ -88,7 +88,7 @@ public class UploadsServiceIT {
         MultipartFile file = new MockMultipartFile("Testfile.txt", testData.getBytes());
 
         String newId = "fac61f06-8328-4490-846b-055bbc62fea6";
-        uploadsService.storeFile(file, newId, 10);
+        uploadsService.storeFile(file, newId);
 
         byte[] resultBuf = new byte[100];
 

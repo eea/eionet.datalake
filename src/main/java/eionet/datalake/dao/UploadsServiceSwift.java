@@ -123,7 +123,7 @@ public class UploadsServiceSwift implements UploadsService {
 
 // https://github.com/javaswift/joss/blob/master/src/main/java/org/javaswift/joss/model/StoredObject.java
     @Override
-    public void storeFile(MultipartFile myFile, String fileId, int fileTTL) throws IOException {
+    public void storeFile(MultipartFile myFile, String fileId) throws IOException {
         if (swiftUsername == null) {
             System.out.println("Swift username is not configured");
         }
@@ -146,7 +146,6 @@ public class UploadsServiceSwift implements UploadsService {
         }
         swiftObject.setMetadata(metadata);
         swiftObject.saveMetadata();
-        //swiftObject.setDeleteAt(Date date);
     }
 
 

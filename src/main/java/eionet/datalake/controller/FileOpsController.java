@@ -81,7 +81,6 @@ public class FileOpsController {
      */
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST)
     public String importFile(@RequestParam("file") MultipartFile myFile,
-                        @RequestParam("fileTTL") int fileTTL,
                         final RedirectAttributes redirectAttributes,
                         final HttpServletRequest request) throws IOException {
 
@@ -89,11 +88,7 @@ public class FileOpsController {
             redirectAttributes.addFlashAttribute("message", "Select a file to upload");
             return "redirect:fileupload";
         }
-        if (fileTTL > 90) {
-            redirectAttributes.addFlashAttribute("message", "Invalid expiration date");
-            return "redirect:fileupload";
-        }
-        String uuidName = storeFile(myFile, fileTTL);
+        String uuidName = storeFile(myFile);
         redirectAttributes.addFlashAttribute("uuid", uuidName);
         StringBuffer requestUrl = request.getRequestURL();
         redirectAttributes.addFlashAttribute("url", requestUrl.substring(0, requestUrl.length() - "/fileupload".length()));
@@ -106,18 +101,13 @@ public class FileOpsController {
      */
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST, params="ajaxupload=1")
     public void importFileWithAJAX(@RequestParam("file") MultipartFile myFile,
-                        @RequestParam("fileTTL") int fileTTL,
                         HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (myFile == null || myFile.getOriginalFilename() == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Select a file to upload");
             return;
         }
-        if (fileTTL > 90) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Invalid expiration date");
-            return;
-        }
-        String uuidName = storeFile(myFile, fileTTL);
+        String uuidName = storeFile(myFile);
         response.setContentType("text/xml");
         PrintWriter printer = response.getWriter();
         StringBuffer requestUrl = request.getRequestURL();
@@ -131,9 +121,9 @@ public class FileOpsController {
         response.flushBuffer();
     }
 
-    private String storeFile(MultipartFile myFile, int fileTTL) throws IOException {
+    private String storeFile(MultipartFile myFile) throws IOException {
         String uuidName = UUID.randomUUID().toString();
-        uploadsService.storeFile(myFile, uuidName, fileTTL);
+        uploadsService.storeFile(myFile, uuidName);
         return uuidName;
     }
 

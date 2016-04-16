@@ -68,11 +68,9 @@ public class UploadsServiceDBFiles implements UploadsService {
         this.storageService = storageService;
     }
 
-    public void storeFile(MultipartFile myFile, String uuidName, int fileTTL) throws IOException {
+    public void storeFile(MultipartFile myFile, String uuidName) throws IOException {
         storageService.save(myFile, uuidName);
         System.out.println("After storage save");
-        long now = System.currentTimeMillis();
-        Date expirationDate = new Date(now + fileTTL * 3600L * 24L * 1000L);
 
         Upload rec = new Upload();
         rec.setId(uuidName);

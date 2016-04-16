@@ -9,15 +9,12 @@
  * implied. See the License for the specific language governing
  * rights and limitations under the License.
  *
- * The Original Code is Web Questionnaires 2
+ * The Original Code is Datalake 1.0
  *
  * The Initial Owner of the Original Code is European Environment
- * Agency. Portions created by TripleDev are Copyright
- * (C) European Environment Agency.  All Rights Reserved.
+ * Agency.
  *
  * Contributor(s):
- *        Anton Dmitrijev
- *        Raptis Dimos
  */
 package eionet.datalake.controller;
 
