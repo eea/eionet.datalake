@@ -24,6 +24,17 @@
     </table>
     <input type="submit" value="Execute"/>
 </form>
+        <div th:if="${not #lists.isEmpty(results)}">
+          <table class="datatable">
+            <tbody th:remove="all-but-first">
+              <tr th:each="row : ${results}">
+                <th:block th:each="column : ${row}">
+                  <td th:text="${column}">Value</td>
+                </th:block>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </div>

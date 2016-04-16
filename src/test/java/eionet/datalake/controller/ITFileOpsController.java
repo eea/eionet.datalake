@@ -120,7 +120,7 @@ public class ITFileOpsController {
      */
     @Test
     public void downloadNotFound() throws Exception {
-        mockMvc.perform(get("/download/no-such-file"))
+        mockMvc.perform(get("/datasets/no-such-file/download"))
             .andExpect(status().isNotFound())
             .andExpect(view().name("filenotfound"));
     }

@@ -76,12 +76,14 @@ public class DatasetController {
     @RequestMapping(value = "/datasets/{uuid}/query", method = RequestMethod.POST)
     public String datasetQueryPost(
             @PathVariable("uuid") String fileId,
-            @RequestParam("query") String query, final Model model) throws IOException {
+            @RequestParam("query") String query, final Model model) throws Exception {
         Upload dataset = uploadsService.getById(fileId);
         model.addAttribute("uuid", fileId);
         model.addAttribute("query", query);
         model.addAttribute("dataset", dataset);
-        // FIXME: Run the query and put it into results.
+
+        List<List<String>> results = sqlService.executeSQLQuery(fileId, query);
+        model.addAttribute("results", results);
         return "datasetQuery";
     }
 
