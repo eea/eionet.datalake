@@ -4,6 +4,7 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.sql.Timestamp;
  
 import org.springframework.context.support.ClassPathXmlApplicationContext;
  
@@ -63,6 +64,9 @@ public class ITUploadsService {
         doc.setId(uuid);
         doc.setFilename("testfile.txt");
         doc.setUploader("testperson");
+        doc.setFamilyId("17ec5cef-677c-4808-a3fe-3bef6b8195a0");
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        doc.setUploadTime(ts);
         metadataService.save(doc);
     }
 

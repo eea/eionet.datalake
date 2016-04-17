@@ -1,22 +1,3 @@
-/*
- * The contents of this file are subject to the Mozilla Public
- * License Version 1.1 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS
- * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * rights and limitations under the License.
- *
- * The Original Code is Web Transfer 1.0
- *
- * The Initial Owner of the Original Code is European Environment
- * Agency. All Rights Reserved.
- *
- * Contributor(s):
- *        Søren Roug
- */
 package eionet.datalake.dao;
 
 import eionet.datalake.model.Upload;
@@ -25,7 +6,7 @@ import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Filenames;
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.logging.Log;
@@ -48,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
+ * Store a file and its meta data. Face to storage service and metadata service.
  */
 @Service
 public class UploadsServiceDBFiles implements UploadsService {
@@ -68,17 +50,20 @@ public class UploadsServiceDBFiles implements UploadsService {
         this.storageService = storageService;
     }
 
-    public void storeFile(MultipartFile myFile, String uuidName) throws IOException {
+    @Override
+    public void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException {
         storageService.save(myFile, uuidName);
-        System.out.println("After storage save");
-
         Upload rec = new Upload();
         rec.setId(uuidName);
         rec.setFilename(Filenames.removePath(myFile.getOriginalFilename()));
         rec.setContentType(myFile.getContentType());
         rec.setSize(myFile.getSize());
+        rec.setFamilyId(familyId);
         String userName = getUserName();
         rec.setUploader(userName);
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        rec.setUploadTime(ts);
+
         metadataService.save(rec);
         logger.info("Uploaded: " + myFile.getOriginalFilename() + " by " + userName);
     }
@@ -103,6 +88,7 @@ public class UploadsServiceDBFiles implements UploadsService {
     /**
      * Download a file.
      */
+    @Override
     public Upload getById(String fileId) throws IOException {
 
         Upload uploadRec;

@@ -19,9 +19,9 @@
  */
 package eionet.datalake.dao;
 
-import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,16 +48,23 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public void save(Upload upload) {
-        String query = "INSERT INTO datasets (id, filename, uploader, contenttype, filesize) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO datasets (id, filename, uploader, contenttype,"
+                + " filesize, familyId, uploaddate) VALUES (?, ?, ?, ?, ?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(query, upload.getId(), 
-            upload.getFilename(), upload.getUploader(),
-            upload.getContentType(), upload.getSize());
+        jdbcTemplate.update(query,
+                upload.getId(), 
+                upload.getFilename(),
+                upload.getUploader(),
+                upload.getContentType(),
+                upload.getSize(),
+                upload.getFamilyId(),
+                upload.getUploadTime()
+                );
     }
 
     @Override
     public Upload getById(String id) {
-        String query = "SELECT id, filename, uploader, contenttype, filesize FROM datasets WHERE id = ?";
+        String query = "SELECT id, filename, uploader, contenttype, filesize, familyId, uploaddate FROM datasets WHERE id = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         Upload uploadRec = jdbcTemplate.queryForObject(query, new Object[]{id}, new RowMapper<Upload>() {
@@ -70,13 +77,17 @@ public class MetadataServiceJdbc implements MetadataService {
                 uploadRec.setUploader(rs.getString("uploader"));
                 uploadRec.setContentType(rs.getString("contenttype"));
                 uploadRec.setSize(rs.getLong("filesize"));
+                uploadRec.setFamilyId(rs.getString("familyId"));
+                uploadRec.setUploadTime(rs.getTimestamp("uploaddate"));
                 return uploadRec;
             }
         });
-
         return uploadRec;
     }
 
+    /**
+     * Get all datasets, and only the attributes that are relevant.
+     */
     @Override
     public List<Upload> getAll() {
         String query = "SELECT id, filename, uploader, contenttype, filesize FROM datasets";

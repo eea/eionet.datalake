@@ -122,10 +122,21 @@ public class FileOpsController {
         response.flushBuffer();
     }
 
+    /*
+     * Store file with a generated unique id and unique family id.
+     */
     private String storeFile(MultipartFile myFile) throws IOException {
-        String uuidName = UniqueId.generateUniqueId();
-        uploadsService.storeFile(myFile, uuidName);
-        return uuidName;
+        String familyId = UniqueId.generateUniqueId();
+        return storeFile(myFile, familyId);
+    }
+
+    /*
+     * Store file with a generated unique id and specified family id.
+     */
+    private String storeFile(MultipartFile myFile, String familyID) throws IOException {
+        String uniqueId = UniqueId.generateUniqueId();
+        uploadsService.storeFile(myFile, uniqueId, familyID);
+        return uniqueId;
     }
 
     /**

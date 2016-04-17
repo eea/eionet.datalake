@@ -37,18 +37,12 @@ import eionet.datalake.model.Upload;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:spring-mvc-config.xml",
-        "classpath:spring-db-config.xml", "classpath:spring-uploadtest-config.xml"})
+        "classpath:spring-db-config.xml"})
 
 /**
  * Test the file operations.
  */
 public class UploadsServiceIT {
-
-    /*
-    @Configuration
-    @ComponentScan(basePackages = {"eionet.datalake.dao"})
-    static class TestConfiguration {}
-    */
 
     @Autowired
     private WebApplicationContext ctx;
@@ -58,37 +52,31 @@ public class UploadsServiceIT {
 
     @Test
     public void productionTest() throws Exception {
-        //ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-db-config.xml");
-
         UploadsService uploadsService = ctx.getBean("uploadsService", UploadsService.class);
         uploadAndDelete(uploadsService);
-        //ctx.close();
     }
 
+/*
     @Test
     public void swiftTest() throws Exception {
-        //ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-db-config.xml", "spring-uploadtest-config.xml");
-
         UploadsService uploadsService = ctx.getBean(UploadsServiceSwift.class);
         uploadAndDelete(uploadsService);
-        //ctx.close();
     }
 
     @Test
     public void dbTest() throws Exception {
-        //ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring-db-config.xml", "spring-uploadtest-config.xml");
-
         UploadsService uploadsService = ctx.getBean("uploadsServiceDB", UploadsServiceDBFiles.class);
         uploadAndDelete(uploadsService);
-        //ctx.close();
     }
+*/
 
     private void uploadAndDelete(UploadsService uploadsService) throws Exception {
         String testData = "ABCDEF";
         MultipartFile file = new MockMultipartFile("Testfile.txt", testData.getBytes());
 
         String newId = "fac61f06-8328-4490-846b-055bbc62fea6";
-        uploadsService.storeFile(file, newId);
+        String familyId = "a30ff61b-dad2-4e73-a419-555dce80c4bf";
+        uploadsService.storeFile(file, newId, familyId);
 
         byte[] resultBuf = new byte[100];
 

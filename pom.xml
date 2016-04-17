@@ -91,6 +91,7 @@
                 <version>2.19</version>
                 <configuration>
                   <systemPropertyVariables>
+                    <storage.dir>${project.build.directory}</storage.dir>
                     <swift.username>elefant</swift.username>
                     <swift.password></swift.password>
                     <swift.authurl>https://identity.stack.cloudvps.com/v2.0</swift.authurl>

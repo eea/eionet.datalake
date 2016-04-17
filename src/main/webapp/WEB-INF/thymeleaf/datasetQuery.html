@@ -8,7 +8,7 @@
       <div th:include="layout :: bannerFragment">
       </div>
       <div id="workarea">
-        <h1 th:text="'Query ' + ${uuid}">Page title here</h1>
+        <h1 th:text="'Query ' + ${dataset.filename}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
 <p>
 

@@ -23,7 +23,6 @@ import eionet.datalake.dao.UploadsService;
 import eionet.datalake.dao.SQLService;
 import eionet.datalake.model.Upload;
 import eionet.datalake.util.BreadCrumbs;
-import eionet.datalake.util.Humane;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class DatasetController {
     }
 
     /**
-     * Dataset query page
+     * Dataset query page.
      */
     @RequestMapping(value = "/datasets/{uuid}/query")
     public String datasetQuery(
@@ -71,7 +70,7 @@ public class DatasetController {
     }
 
     /**
-     * Dataset query page
+     * Dataset query page.
      */
     @RequestMapping(value = "/datasets/{uuid}/query", method = RequestMethod.POST)
     public String datasetQueryPost(
@@ -88,7 +87,7 @@ public class DatasetController {
     }
 
     /**
-     * Dataset
+     * Dataset.
      */
     @RequestMapping(value = "/datasets/{uuid}")
     public String datasetFactsheet(

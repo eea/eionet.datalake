@@ -8,17 +8,36 @@
       <div th:include="layout :: bannerFragment">
       </div>
       <div id="workarea">
-        <h1 th:text="${uuid}">Page title here</h1>
+        <div id="drop-operations">
+          <h2>Operations</h2>
+          <ul>
+            <li><a href="datasetQuery.html" th:href="@{'/datasets/' + ${uuid} + '/query'}">Query dataset</a></li>
+            <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
+          </ul>
+        </div>
+        <h1 th:text="${dataset.filename}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
-        <p>
-          Fact sheet for dataset
-        </p>
-        <ul>
-          <li><a href="datasetQuery.html" th:href="@{'/datasets/' + ${uuid} + '/query'}">Query dataset</a></li>
-          <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
-        </ul>
-        <h2>List of tables</h2>
-        <div th:if="${#lists.isEmpty(tables)}">Table is empty.</div>
+        <table class="datatable">
+          <tbody>
+            <tr>
+              <th scope="row">Filename</th><td th:text="${dataset.filename}">Dataset title</td>
+            </tr>
+            <tr>
+              <th scope="row">Identifier</th><td th:text="${uuid}">oNS4DCOv6ZDgSl5ehlC4ww</td>
+            </tr>
+            <tr>
+              <th scope="row">Content type</th><td th:text="${dataset.contentType}">image/gif</td>
+            </tr>
+            <tr>
+              <th scope="row">Size</th><td th:text="${dataset.humaneSize}">77 MB</td>
+            </tr>
+            <tr>
+              <th scope="row">Uploader</th><td th:text="${dataset.uploader}">heinlja</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>Tables</h2>
+        <p th:if="${#lists.isEmpty(tables)}">List is empty.</p>
         <div th:if="${not #lists.isEmpty(tables)}">
           <table class="datatable">
             <col style="width:20em"/>
