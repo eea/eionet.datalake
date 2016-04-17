@@ -10,10 +10,11 @@
      Use the maven goals: liquibase:update and liquibase:status
       Potentially with -Dliquibase.dropFirst=true
  -->
-  <property name="uniqueid.size" value="36"/> <!-- size of a UUID -->
+  <property name="uniqueid.size" value="22"/> <!-- size of a UUID is 36. Current key length is 22 -->
   <property name="userid.size" value="40"/>
 
   <changeSet author="roug" id="rev-1">
+    <comment>Dataset metadata</comment>
     <createTable tableName="datasets">
       <column name="id" type="varchar(${uniqueid.size})">
         <constraints primaryKey="true" nullable="false"/>
@@ -28,44 +29,31 @@
       <column name="filesize" type="bigint">
         <constraints nullable="false"/>
       </column>
-      <column name="familyId" type="varchar(${uniqueid.size})">
+      <column name="familyid" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
       <column name="uploaddate" type="DATETIME">
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <!--
     <modifySql dbms="mysql">
       <append value=" ENGINE=InnoDB DEFAULT CHARSET=utf8"/>
     </modifySql>
+    -->
+    <createIndex indexName="idx_familyid"
+        tableName="datasets"
+        unique="false">
+      <column name="familyid"/>
+    </createIndex>
   </changeSet>
 
   <changeSet id="rev-2" author="roug">
+    <comment>Authorisations</comment>
   <!--
     <preConditions onFail="MARK_RAN">
       <not>
         <tableExists tableName="authorities"/>
-      </not>
-    </preConditions>
-  -->
-    <createTable tableName="authorities">
-      <column name="username" type="varchar(${userid.size})">
-        <constraints nullable="false" primaryKey="true"/>
-      </column>
-      <column name="authority" type="varchar(40)">
-        <constraints nullable="false" primaryKey="true"/>
-      </column>
-    </createTable>
-    <modifySql dbms="mysql">
-      <append value=" ENGINE=InnoDB DEFAULT CHARSET=utf8"/>
-    </modifySql>
-  </changeSet>
-
-  <changeSet id="rev-3" author="roug">
-  <!--
-    <preConditions onFail="MARK_RAN">
-      <not>
-        <tableExists tableName="users"/>
       </not>
     </preConditions>
   -->
@@ -76,9 +64,42 @@
       <column name="password" type="varchar(40)"/>
       <column name="enabled" type="boolean"/>
     </createTable>
-    <modifySql dbms="mysql">
-      <append value=" ENGINE=InnoDB DEFAULT CHARSET=utf8"/>
-    </modifySql>
+
+    <createTable tableName="authorities">
+      <column name="username" type="varchar(${userid.size})">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="authority" type="varchar(40)">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="rev-3" author="roug">
+    <comment>Tests on datasets</comment>
+    <createTable tableName="datasettests">
+      <column name="testid" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="familyid" type="varchar(${uniqueid.size})">
+        <constraints nullable="false"/>
+      </column>
+      <column name="testtype" type="varchar(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="query" type="text">
+        <constraints nullable="false"/>
+      </column>
+      <column name="expectedresult" type="text"/>
+    </createTable>
+
+    <addForeignKeyConstraint
+        constraintName="fk_datasets_familyid"
+        baseTableName="datasettests"
+        baseColumnNames="familyid"
+        referencedTableName="datasets"
+        referencedColumnNames="familyid"
+        onDelete="CASCADE" onUpdate="CASCADE"/>
   </changeSet>
 
 </databaseChangeLog>

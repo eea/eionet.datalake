@@ -1,4 +1,22 @@
 
+#qaresult {
+border: 1px solid #aaa;
+font-size:120%;
+padding: 0.5em 1em;
+float: right;
+width: 10em;
+}
+
+#qaresult.success {
+background-color: #00E000;
+}
+#qaresult.failure {
+background-color: #F00000;
+}
+#qaresult.soso {
+background-color: #FFFF66;
+}
+
 progress:not([value]) {
   display: none;
 }

@@ -2,10 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head th:include="layout :: headerFragment">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="developer.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/application.css" />
   </head>
   <body>
     <div id="container">
       <div th:include="layout :: bannerFragment">
+        <div id="pagehead">
+          <div id="networktitle">Datalake</div>
+          <div id="sitetitle">European Environment Information and Observation Network</div>
+          <div id="sitetagline">Networking improving Europe's environment</div>
+        </div>
       </div>
       <div id="workarea">
         <div id="drop-operations">
@@ -13,10 +20,16 @@
           <ul>
             <li><a href="datasetQuery.html" th:href="@{'/datasets/' + ${uuid} + '/query'}">Query dataset</a></li>
             <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
+            <li><a href="view_tests.html" th:href="@{'/datasets/' + ${uuid} + '/qatests'}">Edit QA tests</a></li>
+            <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/newedition'}">Upload new edition</a></li>
+            <li><a href="view_tests.html" th:href="@{'/datasets/' + ${uuid} + '/runqa'}">Run all QA</a></li>
           </ul>
         </div>
         <h1 th:text="${dataset.filename}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
+        <div id="qaresult" class="success">
+        5 out of 5 QA tests successful!
+        </div>
         <table class="datatable">
           <tbody>
             <tr>
