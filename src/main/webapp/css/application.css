@@ -3,8 +3,8 @@
 border: 1px solid #aaa;
 font-size:120%;
 padding: 0.5em 1em;
-float: right;
-width: 10em;
+/*float: right;
+width: 10em;*/
 }
 
 #qaresult.success {

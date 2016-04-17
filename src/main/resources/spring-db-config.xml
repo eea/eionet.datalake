@@ -45,4 +45,8 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="qaTestService" class="eionet.datalake.dao.QATestServiceJdbc">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
 </beans>
