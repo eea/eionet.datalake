@@ -31,7 +31,7 @@
           <td><input type="checkbox" name="testId" th:name="testId" th:value="${qatest.testId}"/></td>
           <td th:text="${qatest.testType}">Table exists</td>
           <td th:text="${qatest.query}">T_DefaultProtocol</td>
-          <td th:text="${qatest.expectedResult">true</td>
+          <td th:text="${qatest.expectedResult}">true</td>
           <td>
             <input class="edit-button" type="button" value="Edit" href="existing_qatest.html" th:href="@{/qatests/existing(id=${qatest.testId})}" />
           </td>

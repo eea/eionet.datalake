@@ -34,7 +34,7 @@
             <li><a href="datasetQuery.html" th:href="@{'/datasets/' + ${uuid} + '/query'}">Query dataset</a></li>
             <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
             <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.familyId}}">Edit QA tests</a></li>
-            <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/newedition'}">Upload new edition</a></li>
+            <li><a href="fileupload.html" th:href="@{/fileupload(familyId=${dataset.familyId})}">Upload new edition</a></li>
             <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.familyId} + '/runqa'}">Run all QA</a></li>
           </ul>
         </div>

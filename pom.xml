@@ -471,6 +471,32 @@
                         </wait>
                       </run>
                     </image>
+<!--
+                    <image>
+                      <alias>newdb</alias>
+                      <name>mariadb:10.1</name>
+                      <run>
+                        <ports>
+                          <port>mariadb.port:3306</port>
+                        </ports>
+                        <env>
+                          <MYSQL_ROOT_PASSWORD>mayeceju</MYSQL_ROOT_PASSWORD>
+                          <MYSQL_DATABASE>datalake</MYSQL_DATABASE>
+                          <MYSQL_USER>datalake</MYSQL_USER>
+                          <MYSQL_PASSWORD>password</MYSQL_PASSWORD>
+                        </env>
+                        <cmd>mysqld</cmd>
+                        <wait>
+                          <tcp>
+                            <ports>
+                              <port>3306</port>
+                            </ports>
+                          </tcp>
+                          <time>60000</time>
+                        </wait>
+                      </run>
+                    </image>
+-->
                   </images>
 
                 </configuration>

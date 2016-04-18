@@ -1,22 +1,3 @@
-/*
- * The contents of this file are subject to the Mozilla Public
- * License Version 1.1 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS
- * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * rights and limitations under the License.
- *
- * The Original Code is Web Transfer 1.0
- *
- * The Initial Owner of the Original Code is European Environment
- * Agency. All Rights Reserved.
- *
- * Contributor(s):
- *        Søren Roug
- */
 package eionet.datalake.controller;
 
 import eionet.datalake.dao.UploadsService;
@@ -71,9 +52,10 @@ public class FileOpsController {
      * Form for uploading a file.
      */
     @RequestMapping(value = "/fileupload")
-    public String fileUpload(Model model) {
-        String pageTitle = "Transfer file";
+    public String fileUpload(Model model, @RequestParam(value = "familyId", required = false) String familyId) {
+        String pageTitle = "Upload dataset";
         model.addAttribute("title", pageTitle);
+        model.addAttribute("familyId", familyId);
         BreadCrumbs.set(model, pageTitle);
         return "fileupload";
     }
@@ -82,15 +64,18 @@ public class FileOpsController {
      * Upload file for datalake.
      */
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-    public String importFile(@RequestParam("file") MultipartFile myFile,
-                        final RedirectAttributes redirectAttributes,
-                        final HttpServletRequest request) throws IOException {
+    public String importFile(
+                @RequestParam("file") MultipartFile myFile,
+                @RequestParam(value = "familyId", required = false) String familyId,
+                final RedirectAttributes redirectAttributes,
+                final HttpServletRequest request) throws IOException {
 
         if (myFile == null || myFile.getOriginalFilename() == null) {
             redirectAttributes.addFlashAttribute("message", "Select a file to upload");
+            redirectAttributes.addFlashAttribute("familyId", familyId);
             return "redirect:fileupload";
         }
-        String uuidName = storeFile(myFile);
+        String uuidName = storeFile(myFile, familyId);
         redirectAttributes.addFlashAttribute("uuid", uuidName);
         StringBuffer requestUrl = request.getRequestURL();
         redirectAttributes.addFlashAttribute("url", requestUrl.substring(0, requestUrl.length() - "/fileupload".length()));
@@ -102,14 +87,16 @@ public class FileOpsController {
      * AJAX Upload file for datalake.
      */
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST, params="ajaxupload=1")
-    public void importFileWithAJAX(@RequestParam("file") MultipartFile myFile,
-                        HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void importFileWithAJAX(
+                @RequestParam("file") MultipartFile myFile,
+                @RequestParam(value = "familyId", required = false) String familyId,
+                HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (myFile == null || myFile.getOriginalFilename() == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Select a file to upload");
             return;
         }
-        String uuidName = storeFile(myFile);
+        String uuidName = storeFile(myFile, familyId);
         response.setContentType("text/xml");
         PrintWriter printer = response.getWriter();
         StringBuffer requestUrl = request.getRequestURL();
@@ -125,17 +112,21 @@ public class FileOpsController {
     /*
      * Store file with a generated unique id and unique family id.
      */
+    /*
     private String storeFile(MultipartFile myFile) throws IOException {
-        String familyId = UniqueId.generateUniqueId();
-        return storeFile(myFile, familyId);
+        return storeFile(myFile, null);
     }
+    */
 
     /*
      * Store file with a generated unique id and specified family id.
      */
-    private String storeFile(MultipartFile myFile, String familyID) throws IOException {
+    private String storeFile(MultipartFile myFile, String familyId) throws IOException {
+        if (familyId == null || "".equals(familyId)) {
+            familyId = UniqueId.generateUniqueId();
+        }
         String uniqueId = UniqueId.generateUniqueId();
-        uploadsService.storeFile(myFile, uniqueId, familyID);
+        uploadsService.storeFile(myFile, uniqueId, familyId);
         return uniqueId;
     }
 

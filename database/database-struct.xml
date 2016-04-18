@@ -15,7 +15,7 @@
 
   <changeSet author="roug" id="rev-1">
     <comment>Dataset metadata</comment>
-    <createTable tableName="datasets">
+    <createTable tableName="datasets"> <!-- Should be called editions -->
       <column name="id" type="varchar(${uniqueid.size})">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -32,7 +32,7 @@
       <column name="familyid" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
-      <column name="uploaddate" type="DATETIME">
+      <column name="uploaddate" type="datetime">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -102,4 +102,36 @@
         onDelete="CASCADE" onUpdate="CASCADE"/>
   </changeSet>
 
+  <changeSet id="rev-4" author="roug">
+    <comment>Families of datasets - should be called datasets</comment>
+    <createTable tableName="families">
+      <column name="familyid" type="varchar(${uniqueid.size})">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="keep" type="int" remarks="Generations to keep of uploaded editions. NULL is infinite">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="rev-5" author="roug">
+    <comment>Test results</comment>
+    <createTable tableName="testresults">
+      <column name="datasetid" type="varchar(${uniqueid.size})">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="testid" type="int" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="passed" type="boolean" remarks="True if test passed">
+        <constraints nullable="false"/>
+      </column>
+      <column name="testran" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="result" type="text">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

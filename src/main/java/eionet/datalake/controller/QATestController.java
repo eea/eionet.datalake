@@ -53,7 +53,7 @@ public class QATestController {
      * @param message
      * @return view name
      */
-    @RequestMapping("/{familyid}")
+    @RequestMapping({"/{familyid}", "/{familyid}/view"})
     public String viewQATests(Model model,
             @PathVariable("familyid") String familyId,
             @RequestParam(required = false) String message) {
@@ -67,19 +67,24 @@ public class QATestController {
     }
 
     /**
-     * Adds new user to database.
-     * @param user user name
+     * Adds new QA test to database. When TestId is null, then a new number is generated.
+     *
+     * @param qatest structure containing the QA test data, but not the familyid.
+     * @param familyId - FamilyId
      * @param redirectAttributes
      * @return view name or redirection
      */
     @RequestMapping("/{familyid}/add")
-    public String addQATest(QATest qatest, RedirectAttributes redirectAttributes) {
+    public String addQATest(QATest qatest,
+            @PathVariable("familyid") String familyId,
+            RedirectAttributes redirectAttributes) {
         String testtype = qatest.getTestType();
         if (testtype.trim().equals("")) {
             redirectAttributes.addFlashAttribute("message", "test type cannot be empty");
             return "redirect:view";
         }
 
+        qatest.setFamilyId(familyId);
         qaTestService.save(qatest);
         redirectAttributes.addFlashAttribute("message", "QA test added");
         return "redirect:view";
@@ -113,7 +118,7 @@ public class QATestController {
      * @param model - contains attributes for the view
      * @return view name
      */
-    @RequestMapping("/{scriptid}/edit")
+    @RequestMapping("/{testid}/edit")
     public String editUser(QATest qatest, BindingResult bindingResult, ModelMap model) {
         qaTestService.save(qatest);
         model.addAttribute("message", "Test " + qatest.getTestId() + " updated");

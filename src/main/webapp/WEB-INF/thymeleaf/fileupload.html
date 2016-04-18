@@ -15,6 +15,7 @@
           <div class="formrow">
             <label for="file">Select a file to upload:</label>
             <input type="file" name="file" id="file" onchange="fileSelected();"/>
+            <input type="hidden" name="familyId" th:value="${familyId}"/>
           </div>
           <div id="uploadprogress">
             <div id="fileName"></div>
