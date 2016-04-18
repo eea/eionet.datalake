@@ -1,15 +1,15 @@
 Datalake website
 ================
 
-This application makes it possible to upload MS-Access files and then query those with an SQL engine.
+This application makes it possible to upload MS-Access files and then query those with an SQL engine. You will be able to define SQL-based QA tests, that will give a quality score to the dataset. When you upload a new edition of the same dataset, then the QA tests will be run on the new file automatically.
 
 The application uses Liquibase to create and upgrade the database, and Thymeleaf as the templating engine.
 You can find the layout template at src/main/webapp/WEB-INF/thymeleaf/layout.html.
 
 Dependencies
 ------------
-* Tomcat 7
-* Java 1.7
+* Tomcat 8
+* Java 1.8
 * Spring 4
 * Thymeleaf 2.1.4
 * H2 Database Engine
@@ -38,10 +38,10 @@ Deployment of WAR file
 ----------------------
 The default configuration is to allow you to deploy to your own workstation directly. You install the target/datalake.war to Tomcat's webapps directory as ROOT.war. You can make it create an initial user with administrator rights by setting system properties to configure the application.
 
-On a CentOS system you can start Tomcat with the environment variable JAVA_OPTS set to some value or add lines to /etc/sysconfig/tomcat that looks like this:
+On a CentOS system you can start Tomcat with the environment variable CATALINA_OPTS set to some value or add lines to /etc/sysconfig/tomcat that looks like this:
 ```
-JAVA_OPTS="-Dcas.service=http://datalake.com -Dinitial.username=myname"
-JAVA_OPTS="$JAVA_OPTS -Ddb.url=jdbc:h2:tcp://localhost:8043//work/datalakedb -Dstorage.dir=/work -Dupload.dir=/work"
+CATALINA_OPTS="-Dcas.service=http://datalake.com -Dinitial.username=myname"
+CATALINA_OPTS="$CATALINA_OPTS -Ddb.url=jdbc:h2:tcp://localhost:8043//work/datalakedb -Dstorage.dir=/work -Dupload.dir=/work"
 ```
 These are the properties you can set:
 ```
@@ -51,8 +51,8 @@ db.username
 db.password
 storage.dir
 upload.dir
-initial.username # Not needed when integrated with CAS.
-initial.password
+initial.username
+initial.password # Not needed when integrated with CAS.
 cas.service
 cas.server.host
 ```
