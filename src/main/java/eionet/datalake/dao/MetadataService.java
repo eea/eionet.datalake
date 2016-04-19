@@ -40,6 +40,11 @@ public interface MetadataService {
     Upload getById(String id);
 
     /**
+     * Get all editions of same dataset.
+     */
+    List<Upload> getByFamilyId(String familyId);
+
+    /**
      * Delete metadata for file by Id.
      */
     void deleteById(String id);

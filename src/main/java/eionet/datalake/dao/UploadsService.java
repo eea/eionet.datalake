@@ -35,6 +35,11 @@ public interface UploadsService {
     void deleteFiles(List<String> ids) throws IOException;
 
     /**
+     * Get all editions of same dataset.
+     */
+    List<Upload> getByFamilyId(String familyId);
+
+    /**
      * Get a list of all files.
      */
     List<Upload> getAll();

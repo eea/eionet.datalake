@@ -3,17 +3,15 @@
 border: 1px solid #aaa;
 font-size:120%;
 padding: 0.5em 1em;
-/*float: right;
-width: 10em;*/
 }
 
-#qaresult.success {
+.success {
 background-color: #00E000;
 }
-#qaresult.failure {
+.failure {
 background-color: #F00000;
 }
-#qaresult.soso {
+.soso {
 background-color: #FFFF66;
 }
 

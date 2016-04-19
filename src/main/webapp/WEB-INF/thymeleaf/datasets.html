@@ -36,8 +36,8 @@
               </thead>
               <tbody th:remove="all-but-first">
                 <tr th:each="dataset : ${datasets}">
-                  <td><input type="checkbox" name="id" th:name="id" th:value="${dataset.id}"/>
-                  <td><a th:href="@{'/datasets/'+${dataset.id}}" href="#" th:title="'Factsheet of ' + ${dataset.id}" th:text="${#strings.substring(dataset.id, 0, 8)}">12345678</a></td>
+                  <td><input type="checkbox" name="editionId" th:name="editionid" th:value="${dataset.editionId}"/>
+                  <td><a th:href="@{'/datasets/'+${dataset.editionId}}" href="#" th:title="'Factsheet of ' + ${dataset.editionId}" th:text="${#strings.substring(dataset.editionId, 0, 8)}">12345678</a></td>
                   <td th:text="${dataset.filename}">Long realistic file name</td>
                   <td th:text="${dataset.humaneSize}">893 MB</td>
                   <td th:text="${dataset.uploader}">uploader</td>

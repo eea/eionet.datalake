@@ -10,13 +10,13 @@
      Use the maven goals: liquibase:update and liquibase:status
       Potentially with -Dliquibase.dropFirst=true
  -->
-  <property name="uniqueid.size" value="36"/> <!-- size of a UUID is 36. Current key length is 22 -->
+  <property name="uniqueid.size" value="22"/> <!-- size of a UUID is 36. Current key length is 22 -->
   <property name="userid.size" value="40"/>
 
   <changeSet author="roug" id="rev-1">
     <comment>Dataset metadata</comment>
     <createTable tableName="datasets"> <!-- Should be called editions -->
-      <column name="id" type="varchar(${uniqueid.size})">
+      <column name="editionId" type="varchar(${uniqueid.size})">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="filename" type="varchar(255)">
@@ -32,7 +32,7 @@
       <column name="familyid" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
-      <column name="uploaddate" type="datetime">
+      <column name="uploadtime" type="datetime">
         <constraints nullable="false"/>
       </column>
     </createTable>
@@ -117,10 +117,10 @@
   <changeSet id="rev-5" author="roug">
     <comment>Test results</comment>
     <createTable tableName="testresults">
-      <column name="datasetid" type="varchar(${uniqueid.size})">
+      <column name="testid" type="int" autoIncrement="true">
         <constraints nullable="false" primaryKey="true"/>
       </column>
-      <column name="testid" type="int" autoIncrement="true">
+      <column name="editionid" type="varchar(${uniqueid.size})">
         <constraints nullable="false" primaryKey="true"/>
       </column>
       <column name="passed" type="boolean" remarks="True if test passed">

@@ -32,7 +32,7 @@ import java.util.List;
 public class QATestController {
 
     /**
-     * Service for user management.
+     * Service for QA Test storage
      */
     @Autowired
     QATestService qaTestService;

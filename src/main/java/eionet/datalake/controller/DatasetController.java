@@ -1,30 +1,17 @@
-/*
- * The contents of this file are subject to the Mozilla Public
- * License Version 1.1 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS
- * IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
- * implied. See the License for the specific language governing
- * rights and limitations under the License.
- *
- * The Original Code is Web Transfer 1.0
- *
- * The Initial Owner of the Original Code is European Environment
- * Agency. All Rights Reserved.
- *
- * Contributor(s):
- *        Søren Roug
- */
 package eionet.datalake.controller;
 
-import eionet.datalake.dao.UploadsService;
 import eionet.datalake.dao.SQLService;
+import eionet.datalake.dao.QATestService;
+import eionet.datalake.dao.TestResultService;
+import eionet.datalake.dao.UploadsService;
+import eionet.datalake.model.QATest;
+import eionet.datalake.model.QATestType;
+import eionet.datalake.model.TestResult;
 import eionet.datalake.model.Upload;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
 import java.util.List;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 
 @Controller
+@RequestMapping("/datasets")
 public class DatasetController {
 
     @Autowired
@@ -46,7 +34,16 @@ public class DatasetController {
     @Autowired
     private SQLService sqlService;
 
-    @RequestMapping(value = "/datasets")
+    /**
+     * Service for QA Test storage
+     */
+    @Autowired
+    QATestService qaTestService;
+
+    @Autowired
+    private TestResultService testResultService;
+
+    @RequestMapping(value = "")
     public String listDatasets(Model model) {
         String pageTitle = "Dataset List";
 
@@ -60,7 +57,7 @@ public class DatasetController {
     /**
      * Dataset query page.
      */
-    @RequestMapping(value = "/datasets/{uuid}/query")
+    @RequestMapping(value = "/{uuid}/query")
     public String datasetQuery(
             @PathVariable("uuid") String fileId, final Model model) throws IOException {
         Upload dataset = uploadsService.getById(fileId);
@@ -72,7 +69,7 @@ public class DatasetController {
     /**
      * Dataset query page.
      */
-    @RequestMapping(value = "/datasets/{uuid}/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/{uuid}/query", method = RequestMethod.POST)
     public String datasetQueryPost(
             @PathVariable("uuid") String fileId,
             @RequestParam("query") String query, final Model model) throws Exception {
@@ -86,18 +83,99 @@ public class DatasetController {
         return "datasetQuery";
     }
 
+
     /**
      * Dataset.
      */
-    @RequestMapping(value = "/datasets/{uuid}")
+    @RequestMapping(value = "/{uuid}")
     public String datasetFactsheet(
             @PathVariable("uuid") String fileId, final Model model) throws Exception {
-        Upload dataset = uploadsService.getById(fileId);
-        List<String> tables = sqlService.metaTables(fileId);
         model.addAttribute("uuid", fileId);
+        Upload dataset = uploadsService.getById(fileId);
         model.addAttribute("dataset", dataset);
+        List<Upload> otherEditions = uploadsService.getByFamilyId(dataset.getFamilyId());
+        model.addAttribute("otherEditions", otherEditions);
+        List<String> tables = sqlService.metaTables(fileId);
         model.addAttribute("tables", tables);
+        List<TestResult> results = testResultService.getByEditionId(fileId);
+        model.addAttribute("testresults", results);
+        int successes = 0;
+        int failures = 0;
+        int numTests = 0;
+        for (TestResult result : results) {
+            numTests++;
+            if (result.getPassed() == Boolean.TRUE) successes++; else failures++;
+        }
+        model.addAttribute("successes", successes);
+        model.addAttribute("failures", failures);
+        model.addAttribute("numTests", numTests);
         return "datasetFactsheet";
     }
 
+    /**
+     * Create some QA tests for the dataset.
+     */
+    @RequestMapping(value = "/{uuid}/adddefaulttests")
+    public String createQAtests(
+            @PathVariable("uuid") String fileId, final Model model) throws Exception {
+        Upload dataset = uploadsService.getById(fileId);
+        List<String> tables = sqlService.metaTables(fileId);
+        QATest qatest = new QATest();
+        String familyId = dataset.getFamilyId();
+        for (String table : tables) {
+            qatest.setTestId(null);
+            qatest.setFamilyId(familyId);
+            qatest.setTestType(QATestType.tableExists.name());
+            qatest.setQuery(table);
+            qatest.setExpectedResult("true");
+            qaTestService.save(qatest);
+        }
+//      model.addAttribute("uuid", fileId);
+//      model.addAttribute("dataset", dataset);
+//      model.addAttribute("tables", tables);
+        return "redirect:/qatests/" + familyId;
+    }
+
+    /**
+     * Run the QA tests on a dataset.
+     * 1. Get the QA tests.
+     * 2. Run the tableExists tests and add the results to the database.
+     * TODO
+     */
+    @RequestMapping(value = "/{uuid}/runqa")
+    public String runQAOnEdition(@PathVariable("uuid") String fileId, final Model model) throws Exception {
+        Upload dataset = uploadsService.getById(fileId);
+        String familyId = dataset.getFamilyId();
+        List<QATest> qatests = qaTestService.getByFamilyId(familyId);
+        runTableExistsTests(qatests, dataset);
+        return "redirect:/datasets/" + fileId;
+    }
+
+    /**
+     * Run the table exists test by getting a list of tables from the dataset.
+     */
+    private void runTableExistsTests(List<QATest> qatests, Upload dataset) throws Exception {
+        List<String> tables = sqlService.metaTables(dataset.getEditionId());
+        HashMap<String, Boolean> pool = new HashMap<String, Boolean>();
+        for (String table : tables) {
+            pool.put(table.toUpperCase(), Boolean.valueOf(false));
+        }
+        TestResult result = new TestResult();
+        String tableExists = QATestType.tableExists.name();
+        for (QATest qatest : qatests) {
+            if (!tableExists.equals(qatest.getTestType())) {
+                continue;
+            }
+            result.setEditionId(dataset.getEditionId());
+            result.setTestId(qatest.getTestId());
+            if (pool.containsKey(qatest.getQuery().trim().toUpperCase())) {
+                result.setPassed(true);
+                result.setResult("");
+            } else {
+                result.setPassed(false);
+                result.setResult(qatest.getQuery().trim() + " not found");
+            }
+            testResultService.replace(result);
+        }
+    }
 }

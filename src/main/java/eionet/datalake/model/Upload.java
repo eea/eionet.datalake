@@ -29,7 +29,7 @@ import java.sql.Timestamp;
  */
 public class Upload {
 
-    private String id;
+    private String editionId;
     private String filename;
     private String uploader;
     private String contentType;
@@ -40,12 +40,12 @@ public class Upload {
     /** The upload time determines which edition is the newest. */
     private Timestamp uploadTime;
 
-    public String getId() {
-        return id;
+    public String getEditionId() {
+        return editionId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEditionId(String editionId) {
+        this.editionId = editionId;
     }
 
     public String getFilename() {
@@ -80,11 +80,11 @@ public class Upload {
         this.uploadTime = uploadTime;
     }
 
-    public long getSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setSize(final long size) {
+    public void setFileSize(final long size) {
         this.fileSize = size;
     }
 

@@ -20,12 +20,15 @@
         </div>
       </div>
       <div id="rightcolumn" class="quickjumps" th:fragment="rightcolumn">
-        <div id="qaresult" class="success">
-        5 out of 5 QA tests successful!
+        <div id="qaresult" th:class="${successes} gt 0 and ${successes} == ${numTests} ? 'success':'failure'" class="success">
+        <span th:text="${successes}">5</span> out of <span th:text="${numTests}">5</span> QA tests successful!
         </div>
         <h2>Other editions</h2>
-        <p><strong><a href="#">2009-04-29</a>:</strong> CDDA 2009.mdb</p>
-        <p><strong><a href="#">2008-10-18</a>:</strong> CDDA 2008.mdb</p>
+        <div th:remove="all-but-first">
+          <p th:each="other : ${otherEditions}"><strong><a th:href="@{'/datasets/' + ${other.editionId}}"
+          th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy')}" href="#">2009-04-29</a>:</strong> <span th:text="${other.filename}">CDDA 2009.mdb</span></p>
+          <p><strong><a href="#">2008-10-18</a>:</strong> CDDA 2008.mdb</p>
+        </div>
       </div>
       <div id="workarea">
         <div id="drop-operations">
@@ -35,7 +38,8 @@
             <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
             <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.familyId}}">Edit QA tests</a></li>
             <li><a href="fileupload.html" th:href="@{/fileupload(familyId=${dataset.familyId})}">Upload new edition</a></li>
-            <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.familyId} + '/runqa'}">Run all QA</a></li>
+            <li><a href="view_qatests.html" th:href="@{'/datasets/' + ${uuid} + '/runqa'}">Run all QA</a></li>
+            <li><a href="datasetFactsheet.html" th:href="@{'/datasets/' + ${uuid} + '/adddefaulttests'}">Add default QA</a></li>
           </ul>
         </div>
         <h1 th:text="${dataset.filename}">Page title here</h1>
@@ -57,8 +61,38 @@
             <tr>
               <th scope="row">Uploader</th><td th:text="${dataset.uploader}">heinlja</td>
             </tr>
+            <tr>
+              <th scope="row">Date of upload</th><td th:text="${#dates.format(dataset.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}">19-Apr-2016 18:47:35</td>
+            </tr>
           </tbody>
         </table>
+
+        <div th:if="${not #lists.isEmpty(testresults)}">
+          <h2>QA results</h2>
+          <table class="datatable">
+            <col style="width:2em"/>
+            <col style="width:3em"/>
+            <col style="width:12em"/>
+            <col style="width:15em"/>
+            <thead>
+              <tr>
+                <th scope="col">Test ID</th>
+                <th scope="col">Pass</th>
+                <th scope="col">Date</th>
+                <th scope="col">Message</th>
+              </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+              <tr th:each="result : ${testresults}" th:class="${result.passed}? 'success':'failure'">
+                <td th:text="${result.testId}">19</td>
+                <td th:text="${result.passed}">true</td>
+                <td th:text="${#dates.format(result.testRan, 'dd-MMM-yyyy HH:mm:ss')}">9-Apr-2016 19:35:25</td>
+                <td th:text="${result.result}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <h2>Tables</h2>
         <p th:if="${#lists.isEmpty(tables)}">List is empty.</p>
         <div th:if="${not #lists.isEmpty(tables)}">

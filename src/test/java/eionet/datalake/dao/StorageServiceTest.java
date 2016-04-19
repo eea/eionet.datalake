@@ -38,7 +38,7 @@ public class StorageServiceTest {
         String testData = "ABCDEF";
         MultipartFile file = new MockMultipartFile("Testfile.txt", testData.getBytes());
 
-        String newId = "fac61f06-8328-4490-846b-055bbc62fea6";
+        String newId = "datalake--remove--file";
         storageService.save(file, newId);
         //assertNotNull(newId);
 

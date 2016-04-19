@@ -74,8 +74,8 @@ public class UploadsServiceIT {
         String testData = "ABCDEF";
         MultipartFile file = new MockMultipartFile("Testfile.txt", testData.getBytes());
 
-        String newId = "fac61f06-8328-4490-846b-055bbc62fea6";
-        String familyId = "a30ff61b-dad2-4e73-a419-555dce80c4bf";
+        String newId = "datalake--remove--file";
+        String familyId = "datalake-remove-family";
         uploadsService.storeFile(file, newId, familyId);
 
         byte[] resultBuf = new byte[100];

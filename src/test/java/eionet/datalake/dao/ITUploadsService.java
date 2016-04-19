@@ -44,15 +44,15 @@ public class ITUploadsService {
     @Test
     public void simpleTest() throws Exception {
 
-        String uuid1 = "b1dd4c8e-18b4-445c-bc75-d373dad22c40";
+        String uuid1 = "pmuwddf2f6adsmu01ipzoa";
         createRecord(uuid1);
-        String uuid2 = "62c8a681-bf6f-4d88-878c-a2e92ea310e1";
+        String uuid2 = "okc1xpbpjquoq-nbeji0hq";
         createRecord(uuid2);
 
         //Read
         Upload doc1 = metadataService.getById(uuid1);
         assertNotNull(doc1);
-        assertEquals(uuid1, doc1.getId());
+        assertEquals(uuid1, doc1.getEditionId());
          
         //Get All
         List<Upload> docList = metadataService.getAll();
@@ -61,10 +61,10 @@ public class ITUploadsService {
  
     private void createRecord(String uuid) throws Exception {
         Upload doc = new Upload();
-        doc.setId(uuid);
+        doc.setEditionId(uuid);
         doc.setFilename("testfile.txt");
         doc.setUploader("testperson");
-        doc.setFamilyId("17ec5cef-677c-4808-a3fe-3bef6b8195a0");
+        doc.setFamilyId("tukz0x0sdluyqce5l1c_hq");
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         doc.setUploadTime(ts);
         metadataService.save(doc);

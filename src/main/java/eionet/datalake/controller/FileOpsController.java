@@ -154,8 +154,7 @@ public class FileOpsController {
 
         Upload uploadRec = uploadsService.getById(fileId);
         response.setContentType("application/octet-stream");
-        //response.setContentLength(uploadRec.getSize()); // Too small - max 2.1 GB.
-        response.setHeader("Content-Length", Long.toString(uploadRec.getSize()));
+        response.setHeader("Content-Length", Long.toString(uploadRec.getFileSize()));
         response.setHeader("Content-Disposition", "attachment; filename=" + uploadRec.getFilename());
 
         InputStream is = uploadRec.getContentAsStream();
@@ -174,12 +173,12 @@ public class FileOpsController {
     /**
      * Delete files by uuid.
      *
-     * @param ids - list of uuids
+     * @param editionIds - list of uuids
      */
     @RequestMapping(value = "/deletefiles", method = RequestMethod.POST)
-    public String deleteFiles(@RequestParam("id") List<String> ids,
+    public String deleteFiles(@RequestParam("editionid") List<String> editionIds,
             final RedirectAttributes redirectAttributes) throws IOException {
-        uploadsService.deleteFiles(ids);
+        uploadsService.deleteFiles(editionIds);
         redirectAttributes.addFlashAttribute("message", "File(s) deleted");
         return "redirect:/";
     }

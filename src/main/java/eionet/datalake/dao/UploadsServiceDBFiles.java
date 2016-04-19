@@ -54,10 +54,10 @@ public class UploadsServiceDBFiles implements UploadsService {
     public void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException {
         storageService.save(myFile, uuidName);
         Upload rec = new Upload();
-        rec.setId(uuidName);
+        rec.setEditionId(uuidName);
         rec.setFilename(Filenames.removePath(myFile.getOriginalFilename()));
         rec.setContentType(myFile.getContentType());
-        rec.setSize(myFile.getSize());
+        rec.setFileSize(myFile.getSize());
         rec.setFamilyId(familyId);
         String userName = getUserName();
         rec.setUploader(userName);
@@ -113,6 +113,11 @@ public class UploadsServiceDBFiles implements UploadsService {
             metadataService.deleteById(fileId);
             storageService.deleteById(fileId);
         }
+    }
+
+    @Override
+    public List<Upload> getByFamilyId(String familyId) {
+        return metadataService.getByFamilyId(familyId);
     }
 
     @Override
