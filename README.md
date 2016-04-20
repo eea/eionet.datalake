@@ -3,6 +3,8 @@ Datalake website
 
 This application makes it possible to upload MS-Access files and then query those with an SQL engine. You will be able to define SQL-based QA tests, that will give a quality score to the dataset. When you upload a new edition of the same dataset, then the QA tests will be run on the new file automatically.
 
+Potentially, the system can be integrated with automatic uploads from IDM3 tools as their datasets get created as a result of the FME process. This will provide a "Jenkins" functionality for datasets.
+
 The application uses Liquibase to create and upgrade the database, and Thymeleaf as the templating engine.
 You can find the layout template at src/main/webapp/WEB-INF/thymeleaf/layout.html.
 
