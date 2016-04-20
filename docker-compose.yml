@@ -1,0 +1,17 @@
+
+service:
+  image: dockerrepo.eionet.europa.eu:5000/eionet/datalake:latest
+  ports:
+  - "4590:8080"
+  labels:
+    io.rancher.scheduler.affinity:host_label: publicip=178.239.183.132
+  environment:
+    CATALINA_OPTS: "-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://178.239.183.132:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb"
+  links:
+  - database
+
+database:
+  image: dockerrepo.eionet.europa.eu:5000/eionet/transfer-db
+# labels:
+#   io.rancher.container.start_once: true
+
