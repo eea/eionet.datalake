@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Service to store metadata for datasets using JDBC.
+ * Service to store metadata for editions using JDBC.
  */
 @Service
 public class MetadataServiceJdbc implements MetadataService {
@@ -30,7 +30,7 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public void save(Upload upload) {
-        String query = "INSERT INTO datasets (editionid, filename, uploader, contenttype,"
+        String query = "INSERT INTO editions (editionid, filename, uploader, contenttype,"
                 + " filesize, familyId, uploadtime) VALUES (?, ?, ?, ?, ?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query,
@@ -46,7 +46,7 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public Upload getById(String editionId) {
-        String query = "SELECT editionid, filename, uploader, contenttype, filesize, familyid, uploadtime FROM datasets WHERE editionid = ?";
+        String query = "SELECT editionid, filename, uploader, contenttype, filesize, familyid, uploadtime FROM editions WHERE editionid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Upload>(Upload.class), editionId);
@@ -72,17 +72,17 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public List<Upload> getByFamilyId(String familyId) {
-        String query = "SELECT editionid, filename, uploader, contenttype, filesize, familyid, uploadtime FROM datasets WHERE familyid = ?";
+        String query = "SELECT editionid, filename, uploader, contenttype, filesize, familyid, uploadtime FROM editions WHERE familyid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<Upload>(Upload.class), familyId);
     }
 
     /**
-     * Get all datasets, and only the attributes that are relevant.
+     * Get all editions, and only the attributes that are relevant.
      */
     @Override
     public List<Upload> getAll() {
-        String query = "SELECT editionid, filename, uploader, contenttype, filesize FROM datasets";
+        String query = "SELECT editionid, filename, uploader, contenttype, filesize FROM editions";
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<Upload>(Upload.class));
@@ -90,14 +90,14 @@ public class MetadataServiceJdbc implements MetadataService {
 
     @Override
     public void deleteById(String editionId) {
-        String query = "DELETE FROM datasets WHERE editionid = ?";
+        String query = "DELETE FROM editions WHERE editionid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query, editionId);
     }
 
     @Override
     public void deleteAll() {
-        String query = "DELETE FROM datasets";
+        String query = "DELETE FROM editions";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query);
     }

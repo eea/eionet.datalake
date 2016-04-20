@@ -56,7 +56,7 @@ public class ITUploadsController {
         this.mockMvc.perform(get("/datasets"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("breadcrumbs"))
-                .andExpect(model().attributeExists("datasets"))
+                .andExpect(model().attributeExists("editions"))
                 .andExpect(view().name("datasets"));
     }
 }

@@ -47,8 +47,8 @@ public class DatasetController {
     public String listDatasets(Model model) {
         String pageTitle = "Dataset List";
 
-        List<Upload> datasets = uploadsService.getAll();
-        model.addAttribute("datasets", datasets);
+        List<Upload> editions = uploadsService.getAll();
+        model.addAttribute("editions", editions);
         model.addAttribute("title", pageTitle);
         BreadCrumbs.set(model, pageTitle);
         return "datasets";

@@ -15,7 +15,7 @@
 
   <changeSet author="roug" id="rev-1">
     <comment>Dataset metadata</comment>
-    <createTable tableName="datasets"> <!-- Should be called editions -->
+    <createTable tableName="editions">
       <column name="editionId" type="varchar(${uniqueid.size})">
         <constraints primaryKey="true" nullable="false"/>
       </column>
@@ -42,7 +42,7 @@
     </modifySql>
     -->
     <createIndex indexName="idx_familyid"
-        tableName="datasets"
+        tableName="editions"
         unique="false">
       <column name="familyid"/>
     </createIndex>
@@ -94,10 +94,10 @@
     </createTable>
 
     <addForeignKeyConstraint
-        constraintName="fk_datasets_familyid"
+        constraintName="fk_editions_familyid"
         baseTableName="qatests"
         baseColumnNames="familyid"
-        referencedTableName="datasets"
+        referencedTableName="editions"
         referencedColumnNames="familyid"
         onDelete="CASCADE" onUpdate="CASCADE"/>
   </changeSet>
@@ -108,6 +108,7 @@
       <column name="familyid" type="varchar(${uniqueid.size})">
         <constraints nullable="false" primaryKey="true"/>
       </column>
+      <column name="title" type="varchar(255)"/>
       <column name="keep" type="int" remarks="Generations to keep of uploaded editions. NULL is infinite">
         <constraints nullable="true"/>
       </column>

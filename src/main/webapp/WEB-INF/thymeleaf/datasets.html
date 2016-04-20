@@ -15,9 +15,9 @@
         </div>
       </div>
       <div id="workarea">
-        <h1 th:text="${title}">Datasets</h1>
-        <div th:if="${#lists.isEmpty(datasets)}">Table is empty.</div>
-        <div th:if="${not #lists.isEmpty(datasets)}">
+        <h1 th:text="${title}">Dataset editions</h1>
+        <div th:if="${#lists.isEmpty(editions)}">Table is empty.</div>
+        <div th:if="${not #lists.isEmpty(editions)}">
           <form action="#" th:action="@{/deletefiles}" method="POST">
             <table class="datatable" style="width:100%">
               <col style="width:1em"/>
@@ -35,7 +35,7 @@
                 </tr>
               </thead>
               <tbody th:remove="all-but-first">
-                <tr th:each="dataset : ${datasets}">
+                <tr th:each="dataset : ${editions}">
                   <td><input type="checkbox" name="editionId" th:name="editionid" th:value="${dataset.editionId}"/>
                   <td><a th:href="@{'/datasets/'+${dataset.editionId}}" href="#" th:title="'Factsheet of ' + ${dataset.editionId}" th:text="${#strings.substring(dataset.editionId, 0, 8)}">12345678</a></td>
                   <td th:text="${dataset.filename}">Long realistic file name</td>
