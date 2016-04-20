@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Service to store metadata for datasets using JDBC.
@@ -21,11 +22,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class QATestServiceJdbc implements QATestService {
 
+    @Autowired
     private DataSource dataSource;
 
+/*
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+*/
 
     @Override
     public void save(QATest qatestRec) {

@@ -1,24 +1,33 @@
 package eionet.datalake.dao;
  
-import java.util.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.sql.Timestamp;
- 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
- 
-import eionet.datalake.model.Upload;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import eionet.datalake.model.Edition;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(locations = {"classpath:spring-mvc-config.xml", "classpath:spring-db-config.xml"})
 public class ITUploadsService {
  
+    @Autowired
     private MetadataService metadataService;
 
     private ClassPathXmlApplicationContext ctx;
@@ -50,17 +59,17 @@ public class ITUploadsService {
         createRecord(uuid2);
 
         //Read
-        Upload doc1 = metadataService.getById(uuid1);
+        Edition doc1 = metadataService.getById(uuid1);
         assertNotNull(doc1);
         assertEquals(uuid1, doc1.getEditionId());
          
         //Get All
-        List<Upload> docList = metadataService.getAll();
+        List<Edition> docList = metadataService.getAll();
         assertEquals(2, docList.size());
     }
  
     private void createRecord(String uuid) throws Exception {
-        Upload doc = new Upload();
+        Edition doc = new Edition();
         doc.setEditionId(uuid);
         doc.setFilename("testfile.txt");
         doc.setUploader("testperson");

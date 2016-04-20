@@ -31,7 +31,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="uploadsService" class="eionet.datalake.dao.UploadsServiceDBFiles"/>
+    <bean id="editionsService" class="eionet.datalake.dao.EditionsServiceDBFiles"/>
 
     <bean id="storageService" class="eionet.datalake.dao.StorageServiceFiles">
         <property name="storageDir" value="${storage.dir}" />
@@ -45,8 +45,9 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+<!--
     <bean id="qaTestService" class="eionet.datalake.dao.QATestServiceJdbc">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
+-->
 </beans>

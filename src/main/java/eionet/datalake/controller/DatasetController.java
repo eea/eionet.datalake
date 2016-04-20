@@ -3,11 +3,11 @@ package eionet.datalake.controller;
 import eionet.datalake.dao.SQLService;
 import eionet.datalake.dao.QATestService;
 import eionet.datalake.dao.TestResultService;
-import eionet.datalake.dao.UploadsService;
+import eionet.datalake.dao.EditionsService;
 import eionet.datalake.model.QATest;
 import eionet.datalake.model.QATestType;
 import eionet.datalake.model.TestResult;
-import eionet.datalake.model.Upload;
+import eionet.datalake.model.Edition;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DatasetController {
 
     @Autowired
-    private UploadsService uploadsService;
+    private EditionsService editionsService;
 
     @Autowired
     private SQLService sqlService;
@@ -47,7 +47,7 @@ public class DatasetController {
     public String listDatasets(Model model) {
         String pageTitle = "Dataset List";
 
-        List<Upload> editions = uploadsService.getAll();
+        List<Edition> editions = editionsService.getAll();
         model.addAttribute("editions", editions);
         model.addAttribute("title", pageTitle);
         BreadCrumbs.set(model, pageTitle);
@@ -60,7 +60,7 @@ public class DatasetController {
     @RequestMapping(value = "/{uuid}/query")
     public String datasetQuery(
             @PathVariable("uuid") String fileId, final Model model) throws IOException {
-        Upload dataset = uploadsService.getById(fileId);
+        Edition dataset = editionsService.getById(fileId);
         model.addAttribute("uuid", fileId);
         model.addAttribute("dataset", dataset);
         return "datasetQuery";
@@ -73,7 +73,7 @@ public class DatasetController {
     public String datasetQueryPost(
             @PathVariable("uuid") String fileId,
             @RequestParam("query") String query, final Model model) throws Exception {
-        Upload dataset = uploadsService.getById(fileId);
+        Edition dataset = editionsService.getById(fileId);
         model.addAttribute("uuid", fileId);
         model.addAttribute("query", query);
         model.addAttribute("dataset", dataset);
@@ -91,9 +91,9 @@ public class DatasetController {
     public String datasetFactsheet(
             @PathVariable("uuid") String fileId, final Model model) throws Exception {
         model.addAttribute("uuid", fileId);
-        Upload dataset = uploadsService.getById(fileId);
+        Edition dataset = editionsService.getById(fileId);
         model.addAttribute("dataset", dataset);
-        List<Upload> otherEditions = uploadsService.getByFamilyId(dataset.getFamilyId());
+        List<Edition> otherEditions = editionsService.getByFamilyId(dataset.getFamilyId());
         model.addAttribute("otherEditions", otherEditions);
         List<String> tables = sqlService.metaTables(fileId);
         model.addAttribute("tables", tables);
@@ -118,7 +118,7 @@ public class DatasetController {
     @RequestMapping(value = "/{uuid}/adddefaulttests")
     public String createQAtests(
             @PathVariable("uuid") String fileId, final Model model) throws Exception {
-        Upload dataset = uploadsService.getById(fileId);
+        Edition dataset = editionsService.getById(fileId);
         List<String> tables = sqlService.metaTables(fileId);
         QATest qatest = new QATest();
         String familyId = dataset.getFamilyId();
@@ -144,7 +144,7 @@ public class DatasetController {
      */
     @RequestMapping(value = "/{uuid}/runqa")
     public String runQAOnEdition(@PathVariable("uuid") String fileId, final Model model) throws Exception {
-        Upload dataset = uploadsService.getById(fileId);
+        Edition dataset = editionsService.getById(fileId);
         String familyId = dataset.getFamilyId();
         List<QATest> qatests = qaTestService.getByFamilyId(familyId);
         runTableExistsTests(qatests, dataset);
@@ -154,7 +154,7 @@ public class DatasetController {
     /**
      * Run the table exists test by getting a list of tables from the dataset.
      */
-    private void runTableExistsTests(List<QATest> qatests, Upload dataset) throws Exception {
+    private void runTableExistsTests(List<QATest> qatests, Edition dataset) throws Exception {
         List<String> tables = sqlService.metaTables(dataset.getEditionId());
         HashMap<String, Boolean> pool = new HashMap<String, Boolean>();
         for (String table : tables) {

@@ -19,7 +19,7 @@
  */
 package eionet.datalake.controller;
 
-import eionet.datalake.dao.UploadsService;
+import eionet.datalake.dao.EditionsService;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Humane;
 import org.springframework.stereotype.Controller;
@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class SimplePageController {
 
     @Autowired
-    private UploadsService uploadsService;
+    private EditionsService editionsService;
 
     /**
      * Frontpage.
@@ -56,7 +56,7 @@ public class SimplePageController {
     @RequestMapping(value = "/about")
     public String about(Model model) {
         String title = "About";
-        long freeSpace = uploadsService.getFreeSpace();
+        long freeSpace = editionsService.getFreeSpace();
         model.addAttribute("freespace", Humane.humaneSize(freeSpace));
         model.addAttribute("title", title);
         BreadCrumbs.set(model, title);

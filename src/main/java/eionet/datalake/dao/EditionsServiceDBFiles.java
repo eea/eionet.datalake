@@ -1,6 +1,6 @@
 package eionet.datalake.dao;
 
-import eionet.datalake.model.Upload;
+import eionet.datalake.model.Edition;
 import eionet.datalake.controller.FileNotFoundException;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Filenames;
@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * Store a file and its meta data. Face to storage service and metadata service.
  */
 @Service
-public class UploadsServiceDBFiles implements UploadsService {
+public class EditionsServiceDBFiles implements EditionsService {
 
     @Autowired
     private MetadataService metadataService;
@@ -40,7 +40,7 @@ public class UploadsServiceDBFiles implements UploadsService {
     @Autowired
     private StorageService storageService;
 
-    private Log logger = LogFactory.getLog(UploadsServiceDBFiles.class);
+    private Log logger = LogFactory.getLog(EditionsServiceDBFiles.class);
 
     public void setMetadataService(MetadataService metadataService) {
         this.metadataService = metadataService;
@@ -53,7 +53,7 @@ public class UploadsServiceDBFiles implements UploadsService {
     @Override
     public void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException {
         storageService.save(myFile, uuidName);
-        Upload rec = new Upload();
+        Edition rec = new Edition();
         rec.setEditionId(uuidName);
         rec.setFilename(Filenames.removePath(myFile.getOriginalFilename()));
         rec.setContentType(myFile.getContentType());
@@ -89,9 +89,9 @@ public class UploadsServiceDBFiles implements UploadsService {
      * Download a file.
      */
     @Override
-    public Upload getById(String fileId) throws IOException {
+    public Edition getById(String fileId) throws IOException {
 
-        Upload uploadRec;
+        Edition uploadRec;
         try {
             uploadRec = metadataService.getById(fileId);
         } catch (Exception e) {
@@ -116,12 +116,12 @@ public class UploadsServiceDBFiles implements UploadsService {
     }
 
     @Override
-    public List<Upload> getByFamilyId(String familyId) {
+    public List<Edition> getByFamilyId(String familyId) {
         return metadataService.getByFamilyId(familyId);
     }
 
     @Override
-    public List<Upload> getAll() {
+    public List<Edition> getAll() {
         return metadataService.getAll();
     }
 

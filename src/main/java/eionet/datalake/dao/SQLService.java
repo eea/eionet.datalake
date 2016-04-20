@@ -56,7 +56,7 @@ public class SQLService {
 
     private void openConnection(String fileId) throws Exception {
         Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-        connection = DriverManager.getConnection("jdbc:ucanaccess://" + storageDir + "/" + fileId, "", "");
+        connection = DriverManager.getConnection("jdbc:ucanaccess://" + storageDir + "/" + fileId + ";memory=false");
     }
 
     private void closeConnection() throws Exception {

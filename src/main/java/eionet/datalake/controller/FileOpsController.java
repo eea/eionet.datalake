@@ -1,7 +1,7 @@
 package eionet.datalake.controller;
 
-import eionet.datalake.dao.UploadsService;
-import eionet.datalake.model.Upload;
+import eionet.datalake.dao.EditionsService;
+import eionet.datalake.model.Edition;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Filenames;
 import eionet.datalake.util.UniqueId;
@@ -44,7 +44,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class FileOpsController {
 
     @Autowired
-    private UploadsService uploadsService;
+    private EditionsService editionsService;
 
     private Log logger = LogFactory.getLog(FileOpsController.class);
 
@@ -126,7 +126,7 @@ public class FileOpsController {
             familyId = UniqueId.generateUniqueId();
         }
         String uniqueId = UniqueId.generateUniqueId();
-        uploadsService.storeFile(myFile, uniqueId, familyId);
+        editionsService.storeFile(myFile, uniqueId, familyId);
         return uniqueId;
     }
 
@@ -152,7 +152,7 @@ public class FileOpsController {
     public void downloadFile(
         @PathVariable("file_name") String fileId, HttpServletResponse response) throws IOException {
 
-        Upload uploadRec = uploadsService.getById(fileId);
+        Edition uploadRec = editionsService.getById(fileId);
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Length", Long.toString(uploadRec.getFileSize()));
         response.setHeader("Content-Disposition", "attachment; filename=" + uploadRec.getFilename());
@@ -178,7 +178,7 @@ public class FileOpsController {
     @RequestMapping(value = "/deletefiles", method = RequestMethod.POST)
     public String deleteFiles(@RequestParam("editionid") List<String> editionIds,
             final RedirectAttributes redirectAttributes) throws IOException {
-        uploadsService.deleteFiles(editionIds);
+        editionsService.deleteFiles(editionIds);
         redirectAttributes.addFlashAttribute("message", "File(s) deleted");
         return "redirect:/";
     }

@@ -22,7 +22,7 @@ package eionet.datalake.dao;
 import java.util.List;
 import java.util.Date;
 
-import eionet.datalake.model.Upload;
+import eionet.datalake.model.Edition;
 
 /**
  * Service to store metadata for uploaded files.
@@ -32,17 +32,17 @@ public interface MetadataService {
     /**
      * Save the metadata for an upload.
      */
-    void save(Upload upload);
+    void save(Edition upload);
 
     /**
      * Fetch the metadata for one upload.
      */
-    Upload getById(String id);
+    Edition getById(String id);
 
     /**
      * Get all editions of same dataset.
      */
-    List<Upload> getByFamilyId(String familyId);
+    List<Edition> getByFamilyId(String familyId);
 
     /**
      * Delete metadata for file by Id.
@@ -52,7 +52,7 @@ public interface MetadataService {
     /**
      * Get all records.
      */
-    List<Upload> getAll();
+    List<Edition> getAll();
 
     /**
      * Delete all metadata for all uploads. Mainly used for testing.

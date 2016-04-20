@@ -32,7 +32,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import eionet.datalake.model.Upload;
+import eionet.datalake.model.Edition;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -42,7 +42,7 @@ import eionet.datalake.model.Upload;
 /**
  * Test the file operations.
  */
-public class UploadsServiceIT {
+public class EditionsServiceIT {
 
     @Autowired
     private WebApplicationContext ctx;
@@ -52,44 +52,44 @@ public class UploadsServiceIT {
 
     @Test
     public void productionTest() throws Exception {
-        UploadsService uploadsService = ctx.getBean("uploadsService", UploadsService.class);
-        uploadAndDelete(uploadsService);
+        EditionsService editionsService = ctx.getBean("editionsService", EditionsService.class);
+        uploadAndDelete(editionsService);
     }
 
 /*
     @Test
     public void swiftTest() throws Exception {
-        UploadsService uploadsService = ctx.getBean(UploadsServiceSwift.class);
-        uploadAndDelete(uploadsService);
+        EditionsService editionsService = ctx.getBean(EditionsServiceSwift.class);
+        uploadAndDelete(editionsService);
     }
 
     @Test
     public void dbTest() throws Exception {
-        UploadsService uploadsService = ctx.getBean("uploadsServiceDB", UploadsServiceDBFiles.class);
-        uploadAndDelete(uploadsService);
+        EditionsService editionsService = ctx.getBean("editionsServiceDB", EditionsServiceDBFiles.class);
+        uploadAndDelete(editionsService);
     }
 */
 
-    private void uploadAndDelete(UploadsService uploadsService) throws Exception {
+    private void uploadAndDelete(EditionsService editionsService) throws Exception {
         String testData = "ABCDEF";
         MultipartFile file = new MockMultipartFile("Testfile.txt", testData.getBytes());
 
         String newId = "datalake--remove--file";
         String familyId = "datalake-remove-family";
-        uploadsService.storeFile(file, newId, familyId);
+        editionsService.storeFile(file, newId, familyId);
 
         byte[] resultBuf = new byte[100];
 
-        Upload upload = uploadsService.getById(newId);
+        Edition upload = editionsService.getById(newId);
         InputStream infp = upload.getContentAsStream();
         infp.read(resultBuf);
         infp.close();
         assertEquals((byte) 0, resultBuf[6]);
         assertEquals(new String(resultBuf, 0, 6, Charset.forName("US-ASCII")), testData);
-        assertTrue(uploadsService.deleteById(newId));
+        assertTrue(editionsService.deleteById(newId));
 
         //exception.expect(IOException.class);
         // Can't delete twice.
-        assertFalse(uploadsService.deleteById(newId));
+        assertFalse(editionsService.deleteById(newId));
     }
 }

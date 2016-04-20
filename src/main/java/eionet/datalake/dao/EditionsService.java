@@ -1,6 +1,6 @@
 package eionet.datalake.dao;
 
-import eionet.datalake.model.Upload;
+import eionet.datalake.model.Edition;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * Backend service for storing uploads with metadata.
  */
-public interface UploadsService {
+public interface EditionsService {
 
     /**
      * Save file and metadata.
@@ -18,7 +18,7 @@ public interface UploadsService {
     /**
      * Download a file.
      */
-    Upload getById(String fileId) throws IOException;
+    Edition getById(String fileId) throws IOException;
 
     /**
      * Delete file by uuid.
@@ -37,12 +37,12 @@ public interface UploadsService {
     /**
      * Get all editions of same dataset.
      */
-    List<Upload> getByFamilyId(String familyId);
+    List<Edition> getByFamilyId(String familyId);
 
     /**
      * Get a list of all files.
      */
-    List<Upload> getAll();
+    List<Edition> getAll();
 
     /**
      * Method to show the user the max upload size.
