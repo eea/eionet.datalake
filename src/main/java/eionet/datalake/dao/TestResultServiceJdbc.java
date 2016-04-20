@@ -67,7 +67,10 @@ public class TestResultServiceJdbc implements TestResultService {
      */
     @Override
     public List<TestResult> getByEditionId(String editionId) {
-        String query = "SELECT testid, editionid, passed, testran, result FROM testresults WHERE editionid = ?";
+        String query = "SELECT testresults.testid, editionid, passed, testran,"
+                + " result, testType, query FROM testresults"
+                + " JOIN qatests ON testresults.testid=qatests.testid"
+                + " WHERE editionid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<TestResult>(TestResult.class), editionId);

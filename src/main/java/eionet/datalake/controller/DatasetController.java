@@ -8,6 +8,7 @@ import eionet.datalake.model.QATest;
 import eionet.datalake.model.QATestType;
 import eionet.datalake.model.TestResult;
 import eionet.datalake.model.Edition;
+import eionet.datalake.service.QATestRunService;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
 import java.util.List;
@@ -38,10 +39,13 @@ public class DatasetController {
      * Service for QA Test storage
      */
     @Autowired
-    QATestService qaTestService;
+    private QATestService qaTestService;
 
     @Autowired
     private TestResultService testResultService;
+
+    @Autowired
+    private QATestRunService qaTestRunService;
 
     @RequestMapping(value = "")
     public String listDatasets(Model model) {
@@ -138,44 +142,10 @@ public class DatasetController {
 
     /**
      * Run the QA tests on a dataset.
-     * 1. Get the QA tests.
-     * 2. Run the tableExists tests and add the results to the database.
-     * TODO
      */
     @RequestMapping(value = "/{uuid}/runqa")
     public String runQAOnEdition(@PathVariable("uuid") String fileId, final Model model) throws Exception {
-        Edition dataset = editionsService.getById(fileId);
-        String familyId = dataset.getFamilyId();
-        List<QATest> qatests = qaTestService.getByFamilyId(familyId);
-        runTableExistsTests(qatests, dataset);
+        qaTestRunService.runQAOnEdition(fileId);
         return "redirect:/datasets/" + fileId;
-    }
-
-    /**
-     * Run the table exists test by getting a list of tables from the dataset.
-     */
-    private void runTableExistsTests(List<QATest> qatests, Edition dataset) throws Exception {
-        List<String> tables = sqlService.metaTables(dataset.getEditionId());
-        HashMap<String, Boolean> pool = new HashMap<String, Boolean>();
-        for (String table : tables) {
-            pool.put(table.toUpperCase(), Boolean.valueOf(false));
-        }
-        TestResult result = new TestResult();
-        String tableExists = QATestType.tableExists.name();
-        for (QATest qatest : qatests) {
-            if (!tableExists.equals(qatest.getTestType())) {
-                continue;
-            }
-            result.setEditionId(dataset.getEditionId());
-            result.setTestId(qatest.getTestId());
-            if (pool.containsKey(qatest.getQuery().trim().toUpperCase())) {
-                result.setPassed(true);
-                result.setResult("");
-            } else {
-                result.setPassed(false);
-                result.setResult(qatest.getQuery().trim() + " not found");
-            }
-            testResultService.replace(result);
-        }
     }
 }

@@ -12,6 +12,8 @@ public class TestResult {
     private Boolean passed;
     private Timestamp testRan;
     private String result;
+    private String testType;
+    private String query;
 
     public String getEditionId() {
         return editionId;
@@ -52,4 +54,21 @@ public class TestResult {
     public void setResult(String result) {
         this.result = result;
     }
+
+    public String getTestType() {
+        return testType;
+    }
+
+    public void setTestType(String testType) {
+        this.testType = testType;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
 }

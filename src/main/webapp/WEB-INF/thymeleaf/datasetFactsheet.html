@@ -70,23 +70,25 @@
         <div th:if="${not #lists.isEmpty(testresults)}">
           <h2>QA results</h2>
           <table class="datatable">
-            <col style="width:2em"/>
             <col style="width:3em"/>
-            <col style="width:12em"/>
+            <col style="width:3em"/>
+            <col style="width:11em"/>
+            <col style="width:15em"/>
             <col style="width:15em"/>
             <thead>
               <tr>
-                <th scope="col">Test ID</th>
+                <th scope="col">Type</th>
                 <th scope="col">Pass</th>
-                <th scope="col">Date</th>
+                <th scope="col">Query</th>
                 <th scope="col">Message</th>
               </tr>
             </thead>
             <tbody th:remove="all-but-first">
               <tr th:each="result : ${testresults}" th:class="${result.passed}? 'success':'failure'">
-                <td th:text="${result.testId}">19</td>
+                <td th:text="${result.testType}">19</td>
                 <td th:text="${result.passed}">true</td>
-                <td th:text="${#dates.format(result.testRan, 'dd-MMM-yyyy HH:mm:ss')}">9-Apr-2016 19:35:25</td>
+                <!--<td th:text="${#dates.format(result.testRan, 'dd-MMM-yyyy HH:mm:ss')}">9-Apr-2016 19:35:25</td>-->
+                <td th:text="${result.query}"></td>
                 <td th:text="${result.result}"></td>
               </tr>
             </tbody>
