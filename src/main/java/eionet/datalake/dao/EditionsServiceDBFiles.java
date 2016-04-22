@@ -51,14 +51,14 @@ public class EditionsServiceDBFiles implements EditionsService {
     }
 
     @Override
-    public void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException {
+    public void storeFile(MultipartFile myFile, String uuidName, String datasetId) throws IOException {
         storageService.save(myFile, uuidName);
         Edition rec = new Edition();
         rec.setEditionId(uuidName);
         rec.setFilename(Filenames.removePath(myFile.getOriginalFilename()));
         rec.setContentType(myFile.getContentType());
         rec.setFileSize(myFile.getSize());
-        rec.setFamilyId(familyId);
+        rec.setDatasetId(datasetId);
         String userName = getUserName();
         rec.setUploader(userName);
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -116,6 +116,11 @@ public class EditionsServiceDBFiles implements EditionsService {
     }
 
     @Override
+    public void updateQAScore(String editionId, int countTests, int countFailures) {
+        metadataService.updateQAScore(editionId, countTests, countFailures);
+    }
+
+    @Override
     public List<Edition> getByFamilyId(String familyId) {
         return metadataService.getByFamilyId(familyId);
     }
@@ -131,4 +136,3 @@ public class EditionsServiceDBFiles implements EditionsService {
     }
 
 }
-

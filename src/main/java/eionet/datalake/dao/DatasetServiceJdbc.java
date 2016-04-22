@@ -30,7 +30,7 @@ public class DatasetServiceJdbc implements DatasetService {
         String query = "INSERT INTO datasets (datasetid, title, latestedition) VALUES (?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query,
-                datasetRec.getFamilyId(),
+                datasetRec.getDatasetId(),
                 datasetRec.getTitle(),
                 datasetRec.getLatestEdition()
                 );
@@ -71,7 +71,7 @@ public class DatasetServiceJdbc implements DatasetService {
      */
     @Override
     public List<Dataset> getAll() {
-        String query = "SELECT datasetid, title, latestedition, uploadtime FROM datasets"
+        String query = "SELECT datasetid, title, latestedition, uploadtime, counttests, countfailures FROM datasets"
                 + " JOIN editions ON editionid=latestedition";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<Dataset>(Dataset.class));

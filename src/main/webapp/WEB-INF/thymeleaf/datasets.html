@@ -27,7 +27,7 @@
               <thead>
                 <tr>
                   <th scope="col"></th>
-                  <th scope="col">Identifier</th>
+                  <th scope="col">QA score</th>
                   <th scope="col">Title</th>
                   <th scope="col">Last upload</th>
                 </tr>
@@ -35,8 +35,11 @@
               <tbody th:remove="all-but-first">
                 <tr th:each="dataset : ${datasets}">
                   <td><input type="checkbox" name="datasetId" th:name="datasetid" th:value="${dataset.datasetId}"/>
-                  <td><a th:href="@{'/datasets/'+${dataset.latestEdition}}" href="#" th:title="'Latest edition of ' + ${dataset.title}" th:text="${#strings.substring(dataset.latestEdition, 0, 8)}">12345678</a></td>
-                  <td th:text="${dataset.title}">Long realistic title</td>
+                  <td
+                  th:class="${dataset.countTests} gt 0 ? (${dataset.countFailures} == 0 ? 'success':'failure') : 'notests'" class="success"
+                  th:text="${dataset.countTests - dataset.countFailures} + ' out of ' + ${dataset.countTests}">5 out of 8</td>
+                  <td><a th:href="@{'/datasets/'+${dataset.latestEdition}}" href="#" th:title="'Latest edition of ' + ${dataset.title}"
+                       th:text="${dataset.title}">Long realistic title</a></td>
                   <td th:text="${#dates.format(dataset.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}">19-Apr-2016 18:47:35</td>
                   </td>
                 </tr>

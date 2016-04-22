@@ -15,6 +15,8 @@ public interface MetadataService {
      */
     void save(Edition upload);
 
+    void updateQAScore(String editionId, int countTests, int countFailures);
+
     /**
      * Fetch the metadata for one upload.
      */

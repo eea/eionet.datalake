@@ -13,6 +13,7 @@ import eionet.datalake.model.TestResult;
 import eionet.datalake.service.QATestRunService;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,12 @@ public class DatasetController {
      */
     @RequestMapping(value = "/{uuid}/query")
     public String datasetQuery(
-            @PathVariable("uuid") String fileId, final Model model) throws IOException {
+            @PathVariable("uuid") String fileId, final Model model) throws IOException, SQLException {
         Edition dataset = editionsService.getById(fileId);
         model.addAttribute("uuid", fileId);
         model.addAttribute("dataset", dataset);
+        List<String> tables = sqlService.metaTables(fileId);
+        model.addAttribute("tables", tables);
         return "datasetQuery";
     }
 
@@ -108,16 +111,6 @@ public class DatasetController {
         model.addAttribute("tables", tables);
         List<TestResult> results = testResultService.getByEditionId(fileId);
         model.addAttribute("testresults", results);
-        int successes = 0;
-        int failures = 0;
-        int numTests = 0;
-        for (TestResult result : results) {
-            numTests++;
-            if (result.getPassed() == Boolean.TRUE) successes++; else failures++;
-        }
-        model.addAttribute("successes", successes);
-        model.addAttribute("failures", failures);
-        model.addAttribute("numTests", numTests);
         return "datasetFactsheet";
     }
 

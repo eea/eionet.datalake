@@ -14,7 +14,7 @@
         </div>
       </div>
       <div id="workarea">
-        <h1 th:text="'Query ' + ${dataset.filename}">Page title here</h1>
+        <h1 th:text="'SQL queries on ' + ${dataset.filename}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
 <p>
 
@@ -24,12 +24,31 @@
         <tr>
             <th scope="row"><label for="query">Query</label></th>
             <td>
-                <textarea cols="70" rows="10" name="query" id="query"></textarea>
+                <textarea cols="80" rows="10" name="query" id="query"></textarea>
             </td>
         </tr>
     </table>
     <input type="submit" value="Execute"/>
 </form>
+        <div th:if="${#lists.isEmpty(results)}">
+          <h2>Tables</h2>
+          <div th:if="${not #lists.isEmpty(tables)}">
+            <table class="datatable">
+              <col style="width:20em"/> 
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                </tr>
+              </thead>
+              <tbody th:remove="all-but-first">
+                <tr th:each="table : ${tables}">
+                  <td th:text="${table}">Long realistic table name</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div th:if="${not #lists.isEmpty(results)}">
           <table class="datatable">
             <tbody th:remove="all-but-first">

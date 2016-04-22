@@ -15,6 +15,8 @@ public class Dataset {
 
     /* The following are stored in the editions table. */
     private Timestamp uploadTime;
+    private Integer countTests;
+    private Integer countFailures;
 
 
     public String getDatasetId() {
@@ -74,4 +76,21 @@ public class Dataset {
     public void setUploadTime(Timestamp uploadTime) {
         this.uploadTime = uploadTime;
     }
+
+    public Integer getCountTests() {
+        return countTests;
+    }
+
+    public void setCountTests(Integer countTests) {
+        this.countTests = countTests;
+    }
+
+    public Integer getCountFailures() {
+        return countFailures;
+    }
+
+    public void setCountFailures(Integer countFailures) {
+        this.countFailures = countFailures;
+    }
+
 }

@@ -20,6 +20,8 @@ public class Edition {
     private String datasetId;
     /** The upload time determines which edition is the newest. */
     private Timestamp uploadTime;
+    private Integer countTests;
+    private Integer countFailures;
 
     public String getEditionId() {
         return editionId;
@@ -93,6 +95,22 @@ public class Edition {
     @Deprecated
     public void setFamilyId(String datasetId) {
         this.datasetId = datasetId;
+    }
+
+    public Integer getCountTests() {
+        return countTests;
+    }
+
+    public void setCountTests(Integer countTests) {
+        this.countTests = countTests;
+    }
+
+    public Integer getCountFailures() {
+        return countFailures;
+    }
+
+    public void setCountFailures(Integer countFailures) {
+        this.countFailures = countFailures;
     }
 
     /**

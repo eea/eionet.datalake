@@ -15,6 +15,8 @@ public interface EditionsService {
      */
     void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException;
 
+    void updateQAScore(String editionId, int countTests, int countFailures);
+
     /**
      * Download a file.
      */

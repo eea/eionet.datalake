@@ -9,6 +9,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
 
+    <security:http pattern="/api/**" security="none"/> <!-- To bypass csrf -->
     <security:http entry-point-ref="casEntryPoint" pattern="/**" use-expressions="true" auto-config="false">
         <security:intercept-url pattern="/login" access="isAuthenticated()"/>
         <security:intercept-url pattern="/fileupload" access="isAuthenticated()" />

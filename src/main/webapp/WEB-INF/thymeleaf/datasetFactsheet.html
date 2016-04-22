@@ -20,8 +20,9 @@
         </div>
       </div>
       <div id="rightcolumn" class="quickjumps" th:fragment="rightcolumn">
-        <div id="qaresult" th:class="${successes} gt 0 ? (${successes} == ${numTests} ? 'success':'failure') : 'notests'" class="success">
-        <span th:text="${successes}">5</span> out of <span th:text="${numTests}">5</span> QA tests successful!
+        <div id="qaresult" class="success"
+            th:class="${dataset.countTests} gt 0 ? (${dataset.countFailures} == 0 ? 'success':'failure') : 'notests'">
+        <span th:text="${dataset.countFailures}">3</span> out of <span th:text="${dataset.countTests}">5</span> QA tests failed
         </div>
         <h2>Other editions</h2>
         <div th:remove="all-but-first">

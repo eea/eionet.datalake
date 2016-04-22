@@ -13,8 +13,25 @@
   <property name="uniqueid.size" value="22"/> <!-- size of a UUID is 36. Current key length is 22 -->
   <property name="userid.size" value="40"/>
 
-  <changeSet author="roug" id="rev-1">
-    <comment>Dataset metadata</comment>
+  <changeSet id="rev-1" author="roug">
+    <comment>Datasets - abstract group of editions</comment>
+
+    <createTable tableName="datasets">
+      <column name="datasetid" type="varchar(${uniqueid.size})">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="title" type="varchar(255)"/>
+      <column name="keep" type="int" remarks="Generations to keep of uploaded editions. NULL is infinite">
+        <constraints nullable="true"/>
+      </column>
+      <column name="keepFailures" type="int" remarks="Generations to keep of uploaded editions with failed QA. NULL is infinite">
+        <constraints nullable="true"/>
+      </column>
+      <column name="latestedition" type="varchar(${uniqueid.size})">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
     <createTable tableName="editions">
       <column name="editionId" type="varchar(${uniqueid.size})">
         <constraints primaryKey="true" nullable="false"/>
@@ -35,12 +52,14 @@
       <column name="uploadtime" type="datetime">
         <constraints nullable="false"/>
       </column>
+      <column name="counttests" type="int" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="countfailures" type="int" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
-    <!--
-    <modifySql dbms="mysql">
-      <append value=" ENGINE=InnoDB DEFAULT CHARSET=utf8"/>
-    </modifySql>
-    -->
+
     <createIndex indexName="idx_familyid"
         tableName="editions"
         unique="false">
@@ -50,13 +69,6 @@
 
   <changeSet id="rev-2" author="roug">
     <comment>Authorisations</comment>
-  <!--
-    <preConditions onFail="MARK_RAN">
-      <not>
-        <tableExists tableName="authorities"/>
-      </not>
-    </preConditions>
-  -->
     <createTable tableName="users">
       <column name="username" type="varchar(${userid.size})">
         <constraints nullable="false" primaryKey="true"/>
@@ -100,29 +112,7 @@
         referencedTableName="editions"
         referencedColumnNames="familyid"
         onDelete="CASCADE" onUpdate="CASCADE"/>
-  </changeSet>
 
-  <changeSet id="rev-4" author="roug">
-    <comment>Datasets - abstract group of editions</comment>
-    <createTable tableName="datasets">
-      <column name="datasetid" type="varchar(${uniqueid.size})">
-        <constraints nullable="false" primaryKey="true"/>
-      </column>
-      <column name="title" type="varchar(255)"/>
-      <column name="keep" type="int" remarks="Generations to keep of uploaded editions. NULL is infinite">
-        <constraints nullable="true"/>
-      </column>
-      <column name="keepFailures" type="int" remarks="Generations to keep of uploaded editions with failed QA. NULL is infinite">
-        <constraints nullable="true"/>
-      </column>
-      <column name="latestedition" type="varchar(${uniqueid.size})">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="rev-5" author="roug">
-    <comment>Test results</comment>
     <createTable tableName="testresults">
       <column name="testid" type="int" autoIncrement="true">
         <constraints nullable="false" primaryKey="true"/>
@@ -142,7 +132,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="rev-6" author="roug">
+  <changeSet id="rev-4" author="roug">
     <comment>Create a table to store API keys to be used authentication for external end points.
       Table will have following fields:
       - IDENTIFIER: a unique identifier for the api key

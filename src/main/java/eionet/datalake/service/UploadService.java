@@ -50,6 +50,7 @@ public class UploadService {
 
     /**
      * Handle an upload. If there is no datasetId, then create one.
+     * FIXME: If there is a datasetId, then it must already exist the database.
      */
     public String uploadFile(MultipartFile myFile, String datasetId) throws IOException {
         String editionId = UniqueId.generateUniqueId();
@@ -58,10 +59,16 @@ public class UploadService {
             datasetId = UniqueId.generateUniqueId();
             knownDataset = false;
             Dataset datasetRec = new Dataset();
-            datasetRec.setFamilyId(datasetId);
-            String datasetTitle = Filenames.removePath(myFile.getOriginalFilename());
-            if (datasetTitle.toLowerCase().endsWith(".mdb") || datasetTitle.toLowerCase().endsWith(".accdb")) {
-                datasetTitle = datasetTitle.substring(0, datasetTitle.lastIndexOf("."));
+            datasetRec.setDatasetId(datasetId);
+            String fileName = myFile.getOriginalFilename();
+            String datasetTitle;
+            if (fileName == null || "".equals(fileName)) {
+                datasetTitle = "Unnamed dataset";
+            } else {
+                datasetTitle = Filenames.removePath(myFile.getOriginalFilename());
+                if (datasetTitle.toLowerCase().endsWith(".mdb") || datasetTitle.toLowerCase().endsWith(".accdb")) {
+                    datasetTitle = datasetTitle.substring(0, datasetTitle.lastIndexOf("."));
+                }
             }
             datasetRec.setTitle(datasetTitle);
             datasetRec.setLatestEdition(editionId);
