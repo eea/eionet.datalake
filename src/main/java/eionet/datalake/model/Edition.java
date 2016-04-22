@@ -17,7 +17,7 @@ public class Edition {
     private long fileSize;
     private InputStream content;
     /** All editions of the same dataset has the same family id. */
-    private String familyId;
+    private String datasetId;
     /** The upload time determines which edition is the newest. */
     private Timestamp uploadTime;
 
@@ -77,12 +77,22 @@ public class Edition {
         this.content = content;
     }
 
-    public String getFamilyId() {
-        return familyId;
+    public String getDatasetId() {
+        return datasetId;
     }
 
-    public void setFamilyId(String familyId) {
-        this.familyId = familyId;
+    public void setDatasetId(String datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    @Deprecated
+    public String getFamilyId() {
+        return datasetId;
+    }
+
+    @Deprecated
+    public void setFamilyId(String datasetId) {
+        this.datasetId = datasetId;
     }
 
     /**

@@ -20,13 +20,15 @@
         </div>
       </div>
       <div id="rightcolumn" class="quickjumps" th:fragment="rightcolumn">
-        <div id="qaresult" th:class="${successes} gt 0 and ${successes} == ${numTests} ? 'success':'failure'" class="success">
+        <div id="qaresult" th:class="${successes} gt 0 ? (${successes} == ${numTests} ? 'success':'failure') : 'notests'" class="success">
         <span th:text="${successes}">5</span> out of <span th:text="${numTests}">5</span> QA tests successful!
         </div>
         <h2>Other editions</h2>
         <div th:remove="all-but-first">
-          <p th:each="other : ${otherEditions}"><strong><a th:href="@{'/datasets/' + ${other.editionId}}"
-          th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy')}" href="#">2009-04-29</a>:</strong> <span th:text="${other.filename}">CDDA 2009.mdb</span></p>
+          <p th:each="other : ${otherEditions}" th:class="${other.editionId} == ${uuid} ? 'currentedition' : ''"><strong><a
+              th:href="@{'/datasets/' + ${other.editionId}}"
+              th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}"
+              href="#">2009-04-29</a></strong><br/><span th:text="${other.filename}">CDDA 2009.mdb</span></p>
           <p><strong><a href="#">2008-10-18</a>:</strong> CDDA 2008.mdb</p>
         </div>
       </div>

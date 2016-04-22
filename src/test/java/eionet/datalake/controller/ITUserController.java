@@ -65,15 +65,15 @@ public class ITUserController extends AbstractContextControllerTests {
 
     @Test
     public void addNewUser() throws Exception {
-        addUserWith(TEST_USER, UserRole.ROLE_NOEXPIRATION);
+        addUserWith(TEST_USER, UserRole.ROLE_UPLOADER);
 
-        assertUserHasOnlyOneRole(TEST_USER, UserRole.ROLE_NOEXPIRATION);
+        assertUserHasOnlyOneRole(TEST_USER, UserRole.ROLE_UPLOADER);
     }
 
     @Test
     public void changeUserRole() throws Exception {
-        addUserWith(TEST_USER, UserRole.ROLE_NOEXPIRATION);
-        assertUserHasOnlyOneRole(TEST_USER, UserRole.ROLE_NOEXPIRATION);
+        addUserWith(TEST_USER, UserRole.ROLE_UPLOADER);
+        assertUserHasOnlyOneRole(TEST_USER, UserRole.ROLE_UPLOADER);
 
         editUserTo(TEST_USER, UserRole.ROLE_ADMIN);
         assertUserHasOnlyOneRole(TEST_USER, UserRole.ROLE_ADMIN);

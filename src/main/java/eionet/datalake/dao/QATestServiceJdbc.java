@@ -73,6 +73,13 @@ public class QATestServiceJdbc implements QATestService {
     }
 
     @Override
+    public void deleteTests(List<String> testIds) {
+        for (String testId : testIds) {
+            deleteById(testId);
+        }
+    }
+
+    @Override
     public void deleteAll() {
         String query = "DELETE FROM qatests";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);

@@ -1,18 +1,20 @@
 package eionet.datalake.controller;
 
-import eionet.datalake.dao.SQLService;
-import eionet.datalake.dao.QATestService;
-import eionet.datalake.dao.TestResultService;
+import eionet.datalake.dao.DatasetService;
 import eionet.datalake.dao.EditionsService;
+import eionet.datalake.dao.QATestService;
+import eionet.datalake.dao.SQLService;
+import eionet.datalake.dao.TestResultService;
+import eionet.datalake.model.Dataset;
+import eionet.datalake.model.Edition;
 import eionet.datalake.model.QATest;
 import eionet.datalake.model.QATestType;
 import eionet.datalake.model.TestResult;
-import eionet.datalake.model.Edition;
 import eionet.datalake.service.QATestRunService;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/datasets")
 public class DatasetController {
+
+    @Autowired
+    private DatasetService datasetService;
 
     @Autowired
     private EditionsService editionsService;
@@ -51,8 +56,8 @@ public class DatasetController {
     public String listDatasets(Model model) {
         String pageTitle = "Dataset List";
 
-        List<Edition> editions = editionsService.getAll();
-        model.addAttribute("editions", editions);
+        List<Dataset> datasets = datasetService.getAll();
+        model.addAttribute("datasets", datasets);
         model.addAttribute("title", pageTitle);
         BreadCrumbs.set(model, pageTitle);
         return "datasets";
@@ -97,7 +102,7 @@ public class DatasetController {
         model.addAttribute("uuid", fileId);
         Edition dataset = editionsService.getById(fileId);
         model.addAttribute("dataset", dataset);
-        List<Edition> otherEditions = editionsService.getByFamilyId(dataset.getFamilyId());
+        List<Edition> otherEditions = editionsService.getByFamilyId(dataset.getDatasetId());
         model.addAttribute("otherEditions", otherEditions);
         List<String> tables = sqlService.metaTables(fileId);
         model.addAttribute("tables", tables);
@@ -125,7 +130,7 @@ public class DatasetController {
         Edition dataset = editionsService.getById(fileId);
         List<String> tables = sqlService.metaTables(fileId);
         QATest qatest = new QATest();
-        String familyId = dataset.getFamilyId();
+        String familyId = dataset.getDatasetId();
         for (String table : tables) {
             qatest.setTestId(null);
             qatest.setFamilyId(familyId);

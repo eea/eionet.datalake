@@ -1,10 +1,11 @@
 package eionet.datalake.controller;
 
 import eionet.datalake.dao.EditionsService;
+import eionet.datalake.model.Dataset;
 import eionet.datalake.model.Edition;
+import eionet.datalake.service.UploadService;
 import eionet.datalake.util.BreadCrumbs;
 import eionet.datalake.util.Filenames;
-import eionet.datalake.util.UniqueId;
 import java.io.InputStream;
 //import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,6 +46,9 @@ public class FileOpsController {
 
     @Autowired
     private EditionsService editionsService;
+
+    @Autowired
+    private UploadService uploadService;
 
     private Log logger = LogFactory.getLog(FileOpsController.class);
 
@@ -122,12 +126,7 @@ public class FileOpsController {
      * Store file with a generated unique id and specified family id.
      */
     private String storeFile(MultipartFile myFile, String familyId) throws IOException {
-        if (familyId == null || "".equals(familyId)) {
-            familyId = UniqueId.generateUniqueId();
-        }
-        String uniqueId = UniqueId.generateUniqueId();
-        editionsService.storeFile(myFile, uniqueId, familyId);
-        return uniqueId;
+        return uploadService.uploadFile(myFile, familyId);
     }
 
     /**

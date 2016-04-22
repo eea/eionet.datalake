@@ -103,14 +103,20 @@
   </changeSet>
 
   <changeSet id="rev-4" author="roug">
-    <comment>Families of datasets - should be called datasets</comment>
-    <createTable tableName="families">
-      <column name="familyid" type="varchar(${uniqueid.size})">
+    <comment>Datasets - abstract group of editions</comment>
+    <createTable tableName="datasets">
+      <column name="datasetid" type="varchar(${uniqueid.size})">
         <constraints nullable="false" primaryKey="true"/>
       </column>
       <column name="title" type="varchar(255)"/>
       <column name="keep" type="int" remarks="Generations to keep of uploaded editions. NULL is infinite">
         <constraints nullable="true"/>
+      </column>
+      <column name="keepFailures" type="int" remarks="Generations to keep of uploaded editions with failed QA. NULL is infinite">
+        <constraints nullable="true"/>
+      </column>
+      <column name="latestedition" type="varchar(${uniqueid.size})">
+        <constraints nullable="false"/>
       </column>
     </createTable>
   </changeSet>
@@ -135,4 +141,29 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="rev-6" author="roug">
+    <comment>Create a table to store API keys to be used authentication for external end points.
+      Table will have following fields:
+      - IDENTIFIER: a unique identifier for the api key
+      - SCOPE: a free format scope field (e.g. vocabulary, dataelements)
+      - KEY_VALUE: a value for api key (expected to be unique)
+      - REMOTE_ADDR: remote host address or ip address (if applicable)
+      - EXPIRES: API expiration date (if applicable)
+      - NOTES: notes for admin
+    </comment>
+    <createTable tableName="apikeys">
+      <column name="identifier" type="varchar(100)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="scope" type="varchar(100)"/>
+      <column name="key_value" type="varchar(255)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="remote_addr" type="varchar(64)"/>
+      <column name="expires" type="datetime"/>
+      <column name="notes" type="varchar(255)"/>
+    </createTable>
+  </changeSet>
+
 </databaseChangeLog>

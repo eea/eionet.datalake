@@ -35,12 +35,12 @@ public class SQLService {
         this.storageDir = storageDir;
     }
 
-    private void openConnection(String fileId) throws Exception {
-        Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+    private void openConnection(String fileId) throws SQLException {
+        //Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
         connection = DriverManager.getConnection("jdbc:ucanaccess://" + storageDir + "/" + fileId + ";memory=false");
     }
 
-    private void closeConnection() throws Exception {
+    private void closeConnection() throws SQLException {
         connection.close();
         connection = null;
     }
@@ -89,18 +89,18 @@ public class SQLService {
      * Get tables from database via metadata query.
      * @param args - unused.
      */
-    public List<String> metaTables(String fileId) throws Exception {
+    public List<String> metaTables(String fileId) throws SQLException {
         return getTablesByType(fileId, "TABLE");
     }
     /**
      * Get views from database via metadata query.
      * @param args - unused.
      */
-    public List<String> metaViews(String fileId) throws Exception {
+    public List<String> metaViews(String fileId) throws SQLException {
         return getTablesByType(fileId, "VIEW");
     }
 
-    private List<String> getTablesByType(String fileId, String tableType) throws Exception {
+    private List<String> getTablesByType(String fileId, String tableType) throws SQLException {
         String catalogPattern = null;
         String schemaPattern = null;
 
@@ -119,7 +119,7 @@ public class SQLService {
         return tableList;
     }
 
-    private List<String> getIndexByTable(String fileId, String table) throws Exception {
+    private List<String> getIndexByTable(String fileId, String table) throws SQLException {
         String catalogPattern = null;
         String schemaPattern = null;
 

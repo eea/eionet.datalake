@@ -16,6 +16,7 @@
       <div id="workarea">
         <h1>Dataset QA</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
+<form action="#" th:action="@{'/qatests/' + ${familyId} + '/deletetests'}" method="POST">
 <table class="datatable">
   <thead>
     <tr>
@@ -28,12 +29,12 @@
   </thead>
   <tbody th:remove="all-but-first">
       <tr th:each="qatest : ${qatests}">
-          <td><input type="checkbox" name="testId" th:name="testId" th:value="${qatest.testId}"/></td>
+          <td><input type="checkbox" name="testid" th:name="testid" th:value="${qatest.testId}"/></td>
           <td th:text="${qatest.testType}">Table exists</td>
           <td th:text="${qatest.query}">T_DefaultProtocol</td>
           <td th:text="${qatest.expectedResult}">true</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="existing_qatest.html" th:href="@{/qatests/existing(id=${qatest.testId})}" />
+            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" th:href="@{/qatests/{familyId}/edit(testid=${qatest.testId})}" />
           </td>
       </tr>
       <tr>
@@ -42,7 +43,7 @@
           <td>SELECT CASE WHEN count(*) &gt; 1000 THEN 1 ELSE 0 END FROM TABLE</td>
           <td>1</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="existing_qatest.html"/>
+            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html"/>
           </td>
       </tr>
       <tr>
@@ -51,12 +52,13 @@
           <td>T_DefaultProtocol.IsSSL</td>
           <td>false</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="existing_qatest.html" />
+            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" />
           </td>
       </tr>
   </tbody>
 </table>
 <div><input type="submit" value="Delete"/></div>
+</form>
 
 <h2>Add new test</h2>
 <form action="#" th:action="@{'/qatests/' + ${familyId} + '/add'}" th:object="${newqatest}" method="post">
@@ -79,7 +81,7 @@
         </tr>
         <tr>
             <th scope="row"><label for="expected">Expected</label></th>
-            <td><input type="text" size="16" value="0" th:field="*{expectedResult}" /></td>
+            <td><input type="text" size="16" value="true" th:field="*{expectedResult}" /></td>
         </tr>
     </table>
     <input type="submit" value="Add QA test"/>

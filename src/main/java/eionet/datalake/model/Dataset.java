@@ -1,13 +1,47 @@
 package eionet.datalake.model;
 
+import java.sql.Timestamp;
+
 /**
  * Datasets.
  */
 public class Dataset {
 
-    private String familyId;
+    private String datasetId;
     private String title;
     private Integer keep;
+    private Integer keepFailures;
+    private String latestEdition;
+
+    /* The following are stored in the editions table. */
+    private Timestamp uploadTime;
+
+
+    public String getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(String datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    @Deprecated
+    public String getFamilyId() {
+        return datasetId;
+    }
+
+    @Deprecated
+    public void setFamilyId(String datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Integer getKeep() {
         return keep;
@@ -17,19 +51,27 @@ public class Dataset {
         this.keep = keep;
     }
 
-    public String getFamilyId() {
-        return familyId;
+    public Integer getKeepFailures() {
+        return keepFailures;
     }
 
-    public void setFamilyId(String familyId) {
-        this.familyId = familyId;
+    public void setKeepFailures(Integer keepFailures) {
+        this.keepFailures = keepFailures;
     }
 
-    public String getTitle() {
-        return title;
+    public String getLatestEdition() {
+        return latestEdition;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLatestEdition(String latestEdition) {
+        this.latestEdition = latestEdition;
+    }
+
+    public Timestamp getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Timestamp uploadTime) {
+        this.uploadTime = uploadTime;
     }
 }

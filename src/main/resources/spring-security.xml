@@ -12,7 +12,7 @@
     <security:http entry-point-ref="casEntryPoint" pattern="/**" use-expressions="true" auto-config="false">
         <security:intercept-url pattern="/login" access="isAuthenticated()"/>
         <security:intercept-url pattern="/fileupload" access="isAuthenticated()" />
-        <security:intercept-url pattern="/uploads" access="hasRole('ADMIN')" />
+        <security:intercept-url pattern="/datasets" access="isAuthenticated()" />
         <security:intercept-url pattern="/users/**" access="hasRole('ADMIN')"/>
         <security:intercept-url pattern="/**" access="permitAll()"/>
         <security:custom-filter position="CAS_FILTER" ref="casFilter" />

@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,6 +62,7 @@ public class QATestController {
         model.addAttribute("familyId", familyId);
         model.addAttribute("qatests", qaTestService.getByFamilyId(familyId));
         QATest newQATest = new QATest();
+        newQATest.setExpectedResult("true");
         model.addAttribute("newqatest", newQATest);
         if(message != null) model.addAttribute("message", message);
         return "view_qatests";
@@ -98,16 +100,18 @@ public class QATestController {
      * @param message
      * @return view name
      */
-    @RequestMapping("/{testid}/existing")
-    public String existingQATest(Model model,
-            @PathVariable("testid") String testId,
+    @RequestMapping("/{familyid}/edit")
+    public String editQATest(Model model,
+            @PathVariable("familyid") String familyId,
+            @RequestParam("testid") String testId,
             @RequestParam(required = false) String message) {
-        model.addAttribute("testid", testId);
+        model.addAttribute("familyId", familyId);
         BreadCrumbs.set(model, "Modify QA Test");
         QATest qatest = qaTestService.getById(testId);
+        model.addAttribute("qatest", qatest);
 
         if (message != null) model.addAttribute("message", message);
-        return "existing_qatest";
+        return "qatest_edit";
     }
 
     /**
@@ -118,8 +122,10 @@ public class QATestController {
      * @param model - contains attributes for the view
      * @return view name
      */
-    @RequestMapping("/{testid}/edit")
-    public String editUser(QATest qatest, BindingResult bindingResult, ModelMap model) {
+    @RequestMapping(value = "/{familyid}/edit", method = RequestMethod.POST)
+    public String editUser(
+            QATest qatest,
+            BindingResult bindingResult, ModelMap model) {
         qaTestService.save(qatest);
         model.addAttribute("message", "Test " + qatest.getTestId() + " updated");
         return "redirect:view";
@@ -138,4 +144,20 @@ public class QATestController {
         model.addAttribute("message", "QA test " + testId + " deleted ");
         return "redirect:view";
     }
+
+    /**
+     * Delete files by uuid.
+     *
+     * @param testIds - list of tests to delete
+     */
+    @RequestMapping(value = "/{familyid}/deletetests", method = RequestMethod.POST)
+    public String deleteFiles(
+            @PathVariable("familyid") String familyId,
+            @RequestParam("testid") List<String> testIds,
+            final RedirectAttributes redirectAttributes) {
+        qaTestService.deleteTests(testIds);
+        redirectAttributes.addFlashAttribute("message", "Tests(s) deleted");
+        return "redirect:/qatests/" + familyId;
+    }
+
 }

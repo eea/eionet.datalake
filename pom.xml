@@ -302,6 +302,11 @@
             <artifactId>h2</artifactId>
             <version>1.4.190</version>
         </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>1.4.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -436,7 +441,12 @@
                       </build>
                       <run>
                         <env>
-                          <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://localhost:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb</CATALINA_OPTS>
+                          <!-- <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://localhost:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb</CATALINA_OPTS> -->
+                          <CATALINA_OPTS>-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom
+                          -Dcas.service=http://localhost:4590
+                          -Ddb.driver=org.mariadb.jdbc.Driver
+                          -Ddb.url=jdbc:mariadb://database/datalake -Ddb.username=datalake -Ddb.password=password
+                          </CATALINA_OPTS>
                         </env>
                         <!-- Assign dynamically mapped ports to maven variables (which can be reused in integration tests) -->
                         <ports>
@@ -458,6 +468,7 @@
                       </run>
                     </image>
 
+<!--
                     <image>
                       <alias>database</alias>
                       <name>dockerrepo.eionet.europa.eu:5000/eionet/transfer-db</name>
@@ -471,13 +482,13 @@
                         </wait>
                       </run>
                     </image>
-<!--
+-->
                     <image>
-                      <alias>newdb</alias>
+                      <alias>database</alias>
                       <name>mariadb:10.1</name>
                       <run>
                         <ports>
-                          <port>mariadb.port:3306</port>
+                          <port>database.port:3306</port>
                         </ports>
                         <env>
                           <MYSQL_ROOT_PASSWORD>mayeceju</MYSQL_ROOT_PASSWORD>
@@ -485,7 +496,7 @@
                           <MYSQL_USER>datalake</MYSQL_USER>
                           <MYSQL_PASSWORD>password</MYSQL_PASSWORD>
                         </env>
-                        <cmd>mysqld</cmd>
+                        <cmd>mysqld --character-set-server=utf8 --collation-server=utf8_general_ci</cmd>
                         <wait>
                           <tcp>
                             <ports>
@@ -496,7 +507,6 @@
                         </wait>
                       </run>
                     </image>
--->
                   </images>
 
                 </configuration>
@@ -527,7 +537,11 @@
                 <version>2.19</version>
                 <configuration>
                   <systemPropertyVariables>
-                    <db.url>jdbc:h2:tcp://${docker.host.address}:${database.port}//var/tmp/datalakedb</db.url>
+                    <db.driver>org.mariadb.jdbc.Driver</db.driver>
+                    <db.url>jdbc:mariadb://${docker.host.address}:${database.port}/datalake</db.url>
+                    <db.username>datalake</db.username>
+                    <db.password>password</db.password>
+                    <!-- <db.url>jdbc:h2:tcp://${docker.host.address}:${database.port}//var/tmp/datalakedb</db.url> -->
                   </systemPropertyVariables>
                 </configuration>
                 <executions>

@@ -15,32 +15,29 @@
         </div>
       </div>
       <div id="workarea">
-        <h1 th:text="${title}">Dataset editions</h1>
-        <div th:if="${#lists.isEmpty(editions)}">Table is empty.</div>
-        <div th:if="${not #lists.isEmpty(editions)}">
-          <form action="#" th:action="@{/deletefiles}" method="POST">
+        <h1 th:text="${title}">Datasets</h1>
+        <div th:if="${#lists.isEmpty(datasets)}">Table is empty.</div>
+        <div th:if="${not #lists.isEmpty(datasets)}">
+          <form action="#" th:action="@{/delete}" method="POST">
             <table class="datatable" style="width:100%">
               <col style="width:1em"/>
               <col style="width:6em"/>
               <col/>
-              <col style="width:5em"/>
-              <col/>
+              <col style="width:12em"/>
               <thead>
                 <tr>
                   <th scope="col"></th>
                   <th scope="col">Identifier</th>
-                  <th scope="col">File name</th>
-                  <th scope="col">Size</th>
-                  <th scope="col">Uploader</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Last upload</th>
                 </tr>
               </thead>
               <tbody th:remove="all-but-first">
-                <tr th:each="dataset : ${editions}">
-                  <td><input type="checkbox" name="editionId" th:name="editionid" th:value="${dataset.editionId}"/>
-                  <td><a th:href="@{'/datasets/'+${dataset.editionId}}" href="#" th:title="'Factsheet of ' + ${dataset.editionId}" th:text="${#strings.substring(dataset.editionId, 0, 8)}">12345678</a></td>
-                  <td th:text="${dataset.filename}">Long realistic file name</td>
-                  <td th:text="${dataset.humaneSize}">893 MB</td>
-                  <td th:text="${dataset.uploader}">uploader</td>
+                <tr th:each="dataset : ${datasets}">
+                  <td><input type="checkbox" name="datasetId" th:name="datasetid" th:value="${dataset.datasetId}"/>
+                  <td><a th:href="@{'/datasets/'+${dataset.latestEdition}}" href="#" th:title="'Latest edition of ' + ${dataset.title}" th:text="${#strings.substring(dataset.latestEdition, 0, 8)}">12345678</a></td>
+                  <td th:text="${dataset.title}">Long realistic title</td>
+                  <td th:text="${#dates.format(dataset.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}">19-Apr-2016 18:47:35</td>
                   </td>
                 </tr>
                 <tr>
@@ -48,7 +45,6 @@
                   <td>88888</td>
                   <td>Filename.txt</td>
                   <td>2992929</td>
-                  <td>johnny</td>
                 </tr>
               </tbody>
             </table>

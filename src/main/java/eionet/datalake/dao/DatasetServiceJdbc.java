@@ -27,35 +27,54 @@ public class DatasetServiceJdbc implements DatasetService {
 
     @Override
     public void save(Dataset datasetRec) {
-        String query = "INSERT INTO families (familyid, title, keep) VALUES (?, ?, ?)";
+        String query = "INSERT INTO datasets (datasetid, title, latestedition) VALUES (?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query,
                 datasetRec.getFamilyId(),
                 datasetRec.getTitle(),
-                datasetRec.getKeep()
+                datasetRec.getLatestEdition()
                 );
     }
 
     @Override
-    public Dataset getById(String familyId) {
-        String query = "SELECT familyid, title, keep FROM families WHERE familyid = ?";
+    public Dataset getById(String datasetId) {
+        String query = "SELECT datasetid, title, keep FROM datasets WHERE datasetid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        Dataset datasetRec = jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Dataset>(Dataset.class), familyId);
+        Dataset datasetRec = jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Dataset>(Dataset.class), datasetId);
         return datasetRec;
     }
 
     @Override
-    public void deleteById(String familyId) {
-        String query = "DELETE FROM families WHERE familyid = ?";
+    public void deleteById(String datasetId) {
+        String query = "DELETE FROM datasets WHERE datasetid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(query, familyId);
+        jdbcTemplate.update(query, datasetId);
     }
 
     @Override
     public void deleteAll() {
-        String query = "DELETE FROM families";
+        String query = "DELETE FROM datasets";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query);
     }
+
+    @Override
+    public void updateToLatest(String datasetId) {
+        String update = "UPDATE datasets SET latestedition= (SELECT editionId FROM editions WHERE familyid=? ORDER BY uploadtime DESC LIMIT 1) WHERE datasetid=?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update(update, datasetId, datasetId);
+    }
+
+    /**
+     * Get all editions, and only the attributes that are relevant.
+     */
+    @Override
+    public List<Dataset> getAll() {
+        String query = "SELECT datasetid, title, latestedition, uploadtime FROM datasets"
+                + " JOIN editions ON editionid=latestedition";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<Dataset>(Dataset.class));
+    }
+
 }

@@ -29,4 +29,11 @@ public interface DatasetService {
      * Delete all metadata for all qa tests. Mainly used for testing.
      */
     void deleteAll();
+
+    /**
+     * Updates the latestedition field in datasets to the latest edition uploaded.
+     */
+    void updateToLatest(String datasetId);
+
+    List<Dataset> getAll();
 }

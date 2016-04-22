@@ -25,6 +25,8 @@ public interface QATestService {
      */
     void deleteById(String id);
 
+    void deleteTests(List<String> testIds);
+
     /**
      * Get all records.
      */

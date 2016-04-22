@@ -52,11 +52,11 @@ public class ITUploadsController {
     }
 
     @Test
-    public void testAbout() throws Exception {
+    public void testDatasets() throws Exception {
         this.mockMvc.perform(get("/datasets"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("breadcrumbs"))
-                .andExpect(model().attributeExists("editions"))
+                .andExpect(model().attributeExists("datasets"))
                 .andExpect(view().name("datasets"));
     }
 }

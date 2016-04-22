@@ -58,6 +58,14 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
+
+        // Load the database driver we use for the MS-Access datasets
+        try {
+            Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+        } catch (ClassNotFoundException e) {
+            logger.fatal("U Can Access driver not loaded");
+            //TODO: abort the webapp here.
+        }
     }
 
 }

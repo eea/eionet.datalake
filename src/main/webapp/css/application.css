@@ -6,13 +6,17 @@ padding: 0.5em 1em;
 }
 
 .success {
-background-color: #00E000;
+background-color: #00F000;
 }
 .failure {
 background-color: #F00000;
 }
-.soso {
+.notests {
 background-color: #FFFF66;
+}
+
+.currentedition {
+background-color: #AAA;
 }
 
 progress:not([value]) {
