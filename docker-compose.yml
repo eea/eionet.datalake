@@ -6,12 +6,43 @@ service:
   labels:
     io.rancher.scheduler.affinity:host_label: publicip=178.239.183.132
   environment:
-    CATALINA_OPTS: "-Dinitial.username=roug -Djava.security.egd=file:/dev/./urandom -Dcas.service=http://178.239.183.132:4590 -Ddb.url=jdbc:h2:tcp://database:1521//var/tmp/datalakedb"
+    CATALINA_OPTS: |
+      -Dinitial.username=roug
+      -Djava.security.egd=file:/dev/./urandom
+      -Dcas.service=http://178.239.183.132:4590
+      -Ddb.driver=org.mariadb.jdbc.Driver
+      -Ddb.url=jdbc:mariadb://dbservice/datalake
+      -Ddb.username=datalake
+      -Ddb.password=yubetisaqe
   links:
-  - database
+  - dbservice
+# volumes:
+# - datalake_files:/var/tmp:z
 
-database:
-  image: dockerrepo.eionet.europa.eu:5000/eionet/transfer-db
-# labels:
-#   io.rancher.container.start_once: true
+dbservice:
+  image: mariadb:10.1
+  environment:
+  - MYSQL_ROOT_PASSWORD=mayeceju
+  - MYSQL_DATABASE=datalake
+  - MYSQL_USER=datalake
+  - MYSQL_PASSWORD=yubetisaqe
+  command:
+  - mysqld
+  - --character-set-server=utf8
+  - --collation-server=utf8_general_ci
+  labels:
+    io.rancher.sidekicks: dbdata
+  volumes_from:
+  - dbdata
+
+#
+# Use the storage pool
+#
+dbdata:
+  image: tianon/true
+  volumes:
+  - /var/lib/mysql
+# - datalake_mysql:/var/lib/mysql:z
+  labels:
+    io.rancher.container.start_once: "true"
 
