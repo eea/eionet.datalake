@@ -31,7 +31,7 @@ public class MetadataServiceJdbc implements MetadataService {
     @Override
     public void save(Edition upload) {
         String query = "INSERT INTO editions (editionid, filename, uploader, contenttype,"
-                + " filesize, familyid, uploadtime) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + " filesize, datasetid, uploadtime) VALUES (?, ?, ?, ?, ?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query,
                 upload.getEditionId(), 
@@ -39,7 +39,7 @@ public class MetadataServiceJdbc implements MetadataService {
                 upload.getUploader(),
                 upload.getContentType(),
                 upload.getFileSize(),
-                upload.getFamilyId(),
+                upload.getDatasetId(),
                 upload.getUploadTime()
                 );
     }
@@ -54,16 +54,16 @@ public class MetadataServiceJdbc implements MetadataService {
     @Override
     public Edition getById(String editionId) {
         String query = "SELECT editionid, filename, uploader, contenttype, filesize,"
-                + " familyid, uploadtime, counttests, countfailures FROM editions WHERE editionid = ?";
+                + " datasetid, uploadtime, counttests, countfailures FROM editions WHERE editionid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Edition>(Edition.class), editionId);
     }
 
     @Override
-    public List<Edition> getByFamilyId(String datasetId) {
+    public List<Edition> getByDatasetId(String datasetId) {
         String query = "SELECT editionid, filename, uploader, contenttype,"
-                + " filesize, familyid, uploadtime, counttests, countfailures"
-                + " FROM editions WHERE familyid = ?"
+                + " filesize, datasetid, uploadtime, counttests, countfailures"
+                + " FROM editions WHERE datasetid = ?"
                 + " ORDER BY uploadtime DESC";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<Edition>(Edition.class), datasetId);

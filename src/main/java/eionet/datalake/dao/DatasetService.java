@@ -36,4 +36,6 @@ public interface DatasetService {
     void updateToLatest(String datasetId);
 
     List<Dataset> getAll();
+
+    void update(Dataset datasetRec);
 }

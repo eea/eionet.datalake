@@ -6,7 +6,7 @@ package eionet.datalake.model;
 public class QATest {
 
     private Integer testId;
-    private String familyId;
+    private String datasetId;
     private String testType;
     private String query;
     private String expectedResult;
@@ -19,12 +19,12 @@ public class QATest {
         this.testId = testId;
     }
 
-    public String getFamilyId() {
-        return familyId;
+    public String getDatasetId() {
+        return datasetId;
     }
 
-    public void setFamilyId(String familyId) {
-        this.familyId = familyId;
+    public void setDatasetId(String datasetId) {
+        this.datasetId = datasetId;
     }
 
     public String getTestType() {

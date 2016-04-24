@@ -56,10 +56,10 @@ public class FileOpsController {
      * Form for uploading a file.
      */
     @RequestMapping(value = "/fileupload")
-    public String fileUpload(Model model, @RequestParam(value = "familyId", required = false) String familyId) {
+    public String fileUpload(Model model, @RequestParam(value = "datasetId", required = false) String datasetId) {
         String pageTitle = "Upload dataset";
         model.addAttribute("title", pageTitle);
-        model.addAttribute("familyId", familyId);
+        model.addAttribute("datasetId", datasetId);
         BreadCrumbs.set(model, pageTitle);
         return "fileupload";
     }
@@ -70,17 +70,17 @@ public class FileOpsController {
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST)
     public String importFile(
                 @RequestParam("file") MultipartFile myFile,
-                @RequestParam(value = "familyId", required = false) String familyId,
+                @RequestParam(value = "datasetId", required = false) String datasetId,
                 final RedirectAttributes redirectAttributes,
                 final HttpServletRequest request) throws IOException {
 
         if (myFile == null || myFile.getOriginalFilename() == null) {
             redirectAttributes.addFlashAttribute("message", "Select a file to upload");
-            redirectAttributes.addFlashAttribute("familyId", familyId);
+            redirectAttributes.addFlashAttribute("datasetId", datasetId);
             return "redirect:fileupload";
         }
-        String uuidName = storeFile(myFile, familyId);
-        redirectAttributes.addFlashAttribute("uuid", uuidName);
+        String editionId = storeFile(myFile, datasetId);
+        redirectAttributes.addFlashAttribute("editionId", editionId);
         StringBuffer requestUrl = request.getRequestURL();
         redirectAttributes.addFlashAttribute("url", requestUrl.substring(0, requestUrl.length() - "/fileupload".length()));
         return "redirect:fileupload";
@@ -93,28 +93,28 @@ public class FileOpsController {
     @RequestMapping(value = "/fileupload", method = RequestMethod.POST, params="ajaxupload=1")
     public void importFileWithAJAX(
                 @RequestParam("file") MultipartFile myFile,
-                @RequestParam(value = "familyId", required = false) String familyId,
+                @RequestParam(value = "datasetId", required = false) String datasetId,
                 HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (myFile == null || myFile.getOriginalFilename() == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,"Select a file to upload");
             return;
         }
-        String uuidName = storeFile(myFile, familyId);
+        String editionId = storeFile(myFile, datasetId);
         response.setContentType("text/xml");
         PrintWriter printer = response.getWriter();
         StringBuffer requestUrl = request.getRequestURL();
         String url = requestUrl.substring(0, requestUrl.length() - "/fileupload".length());
         printer.println("<?xml version='1.0'?>");
         printer.println("<package>");
-        printer.println("<datasetLink>" + url + "/datasets/" + uuidName + "</datasetLink>");
+        printer.println("<editionLink>" + url + "/editions/" + editionId + "</editionLink>");
         printer.println("</package>");
         printer.flush();
         response.flushBuffer();
     }
 
     /*
-     * Store file with a generated unique id and unique family id.
+     * Store file with a generated unique id and unique dataset id.
      */
     /*
     private String storeFile(MultipartFile myFile) throws IOException {
@@ -123,10 +123,10 @@ public class FileOpsController {
     */
 
     /*
-     * Store file with a generated unique id and specified family id.
+     * Store file with a generated unique id and specified dataset id.
      */
-    private String storeFile(MultipartFile myFile, String familyId) throws IOException {
-        return uploadService.uploadFile(myFile, familyId);
+    private String storeFile(MultipartFile myFile, String datasetId) throws IOException {
+        return uploadService.uploadFile(myFile, datasetId);
     }
 
     /**
@@ -165,14 +165,14 @@ public class FileOpsController {
     @RequestMapping(value = "/delete/{file_name}")
     public String deleteFile(
         @PathVariable("file_name") String fileId, final Model model) throws IOException {
-        model.addAttribute("uuid", fileId);
+        model.addAttribute("editionId", fileId);
         return "deleteConfirmation";
     }
 
     /**
-     * Delete files by uuid.
+     * Delete files by editionId.
      *
-     * @param editionIds - list of uuids
+     * @param editionIds - list of editionIds
      */
     @RequestMapping(value = "/deletefiles", method = RequestMethod.POST)
     public String deleteFiles(@RequestParam("editionid") List<String> editionIds,

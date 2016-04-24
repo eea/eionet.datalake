@@ -38,11 +38,25 @@ public class DatasetServiceJdbc implements DatasetService {
 
     @Override
     public Dataset getById(String datasetId) {
-        String query = "SELECT datasetid, title, keep FROM datasets WHERE datasetid = ?";
+        String query = "SELECT datasets.datasetid, title, keep, keepFailures, latestEdition, rdfconfiguration,"
+                + " counttests, countfailures, filename FROM datasets"
+                + " JOIN editions ON editionid=latestedition"
+                + " WHERE datasets.datasetid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         Dataset datasetRec = jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Dataset>(Dataset.class), datasetId);
         return datasetRec;
+    }
+
+    /**
+     * Get all editions, and only the attributes that are relevant.
+     */
+    @Override
+    public List<Dataset> getAll() {
+        String query = "SELECT datasets.datasetid, title, latestedition, uploadtime, counttests, countfailures, filename FROM datasets"
+                + " JOIN editions ON editionid=latestedition";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<Dataset>(Dataset.class));
     }
 
     @Override
@@ -61,20 +75,21 @@ public class DatasetServiceJdbc implements DatasetService {
 
     @Override
     public void updateToLatest(String datasetId) {
-        String update = "UPDATE datasets SET latestedition= (SELECT editionId FROM editions WHERE familyid=? ORDER BY uploadtime DESC LIMIT 1) WHERE datasetid=?";
+        String update = "UPDATE datasets SET latestedition = (SELECT editionId FROM editions WHERE datasetid=? ORDER BY uploadtime DESC LIMIT 1) WHERE datasetid=?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(update, datasetId, datasetId);
     }
 
-    /**
-     * Get all editions, and only the attributes that are relevant.
-     */
     @Override
-    public List<Dataset> getAll() {
-        String query = "SELECT datasetid, title, latestedition, uploadtime, counttests, countfailures FROM datasets"
-                + " JOIN editions ON editionid=latestedition";
+    public void update(Dataset datasetRec) {
+        String update = "UPDATE datasets SET title = ?, keep = ?, keepFailures = ?, rdfConfiguration = ? WHERE datasetid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<Dataset>(Dataset.class));
+        jdbcTemplate.update(update,
+                datasetRec.getTitle(),
+                datasetRec.getKeep(),
+                datasetRec.getKeepFailures(),
+                datasetRec.getRdfConfiguration(),
+                datasetRec.getDatasetId());
     }
 
 }

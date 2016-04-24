@@ -25,7 +25,7 @@ public interface MetadataService {
     /**
      * Get all editions of same dataset.
      */
-    List<Edition> getByFamilyId(String familyId);
+    List<Edition> getByDatasetId(String datasetId);
 
     /**
      * Delete metadata for file by Id.

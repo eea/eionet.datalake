@@ -33,12 +33,12 @@ public class QATestServiceJdbc implements QATestService {
 
     @Override
     public void save(QATest qatestRec) {
-        String query = "INSERT INTO qatests (testid, familyid, testtype, query, expectedresult)"
+        String query = "INSERT INTO qatests (testid, datasetid, testtype, query, expectedresult)"
                 + " VALUES (?, ?, ?, ?, ?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(query,
                 qatestRec.getTestId(), 
-                qatestRec.getFamilyId(),
+                qatestRec.getDatasetId(),
                 qatestRec.getTestType(),
                 qatestRec.getQuery(),
                 qatestRec.getExpectedResult()
@@ -47,7 +47,7 @@ public class QATestServiceJdbc implements QATestService {
 
     @Override
     public QATest getById(String testId) {
-        String query = "SELECT testid, familyid, testtype, query, expectedresult FROM qatests WHERE testid = ?";
+        String query = "SELECT testid, datasetid, testtype, query, expectedresult FROM qatests WHERE testid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         QATest qatestRec = jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<QATest>(QATest.class), testId);
@@ -55,14 +55,14 @@ public class QATestServiceJdbc implements QATestService {
     }
 
     /**
-     * Get all qatests for a family.
+     * Get all qatests for a dataset.
      */
     @Override
-    public List<QATest> getByFamilyId(String familyId) {
-        String query = "SELECT testid, familyid, testtype, query, expectedresult FROM qatests WHERE familyid = ?";
+    public List<QATest> getByDatasetId(String datasetId) {
+        String query = "SELECT testid, datasetid, testtype, query, expectedresult FROM qatests WHERE datasetid = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<QATest>(QATest.class), familyId);
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<QATest>(QATest.class), datasetId);
     }
 
     @Override

@@ -16,7 +16,7 @@
       <div id="workarea">
         <h1>Dataset QA</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
-<form action="#" th:action="@{'/qatests/' + ${familyId} + '/deletetests'}" method="POST">
+<form action="#" th:action="@{'/qatests/' + ${datasetId} + '/deletetests'}" method="POST">
 <table class="datatable">
   <thead>
     <tr>
@@ -34,7 +34,7 @@
           <td th:text="${qatest.query}">T_DefaultProtocol</td>
           <td th:text="${qatest.expectedResult}">true</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" th:href="@{/qatests/{familyId}/edit(testid=${qatest.testId})}" />
+            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" th:href="@{/qatests/{datasetId}/edit(testid=${qatest.testId})}" />
           </td>
       </tr>
       <tr>
@@ -61,7 +61,7 @@
 </form>
 
 <h2>Add new test</h2>
-<form action="#" th:action="@{'/qatests/' + ${familyId} + '/add'}" th:object="${newqatest}" method="post">
+<form action="#" th:action="@{'/qatests/' + ${datasetId} + '/add'}" th:object="${newqatest}" method="post">
     <table class="datatable">
         <tr>
             <th scope="row"><label for="testType">Type</label></th>

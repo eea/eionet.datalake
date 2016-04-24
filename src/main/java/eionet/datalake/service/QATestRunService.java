@@ -52,7 +52,7 @@ public class QATestRunService {
         List<QATest> qatests = new ArrayList<QATest>();
         try {
             String datasetId = edition.getDatasetId();
-            qatests = qaTestService.getByFamilyId(datasetId);
+            qatests = qaTestService.getByDatasetId(datasetId);
             countFailures = runTableExistsTests(qatests, edition);
             countFailures += runSQLCheckTests(qatests, edition);
         } catch (SQLException e) {

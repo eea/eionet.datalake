@@ -30,6 +30,7 @@
       <column name="latestedition" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
+      <column name="rdfconfiguration" type="text" remarks="The configuration for RDFExport"/>
     </createTable>
 
     <createTable tableName="editions">
@@ -46,7 +47,7 @@
       <column name="filesize" type="bigint">
         <constraints nullable="false"/>
       </column>
-      <column name="familyid" type="varchar(${uniqueid.size})">
+      <column name="datasetid" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
       <column name="uploadtime" type="datetime">
@@ -60,10 +61,10 @@
       </column>
     </createTable>
 
-    <createIndex indexName="idx_familyid"
+    <createIndex indexName="idx_datasetid"
         tableName="editions"
         unique="false">
-      <column name="familyid"/>
+      <column name="datasetid"/>
     </createIndex>
   </changeSet>
 
@@ -93,7 +94,7 @@
       <column name="testid" type="int" autoIncrement="true">
         <constraints nullable="false" primaryKey="true"/>
       </column>
-      <column name="familyid" type="varchar(${uniqueid.size})">
+      <column name="datasetid" type="varchar(${uniqueid.size})">
         <constraints nullable="false"/>
       </column>
       <column name="testtype" type="varchar(20)">
@@ -106,11 +107,11 @@
     </createTable>
 
     <addForeignKeyConstraint
-        constraintName="fk_editions_familyid"
+        constraintName="fk_editions_datasetid"
         baseTableName="qatests"
-        baseColumnNames="familyid"
+        baseColumnNames="datasetid"
         referencedTableName="editions"
-        referencedColumnNames="familyid"
+        referencedColumnNames="datasetid"
         onDelete="CASCADE" onUpdate="CASCADE"/>
 
     <createTable tableName="testresults">

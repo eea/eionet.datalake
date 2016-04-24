@@ -12,11 +12,13 @@ public class Dataset {
     private Integer keep;
     private Integer keepFailures;
     private String latestEdition;
+    private String rdfConfiguration;
 
     /* The following are stored in the editions table. */
     private Timestamp uploadTime;
     private Integer countTests;
     private Integer countFailures;
+    private String filename;
 
 
     public String getDatasetId() {
@@ -69,6 +71,15 @@ public class Dataset {
         this.latestEdition = latestEdition;
     }
 
+    public String getRdfConfiguration() {
+        return rdfConfiguration;
+    }
+
+    public void setRdfConfiguration(String rdfConfiguration) {
+        this.rdfConfiguration = rdfConfiguration;
+    }
+
+    /* The following are stored in the editions table. */
     public Timestamp getUploadTime() {
         return uploadTime;
     }
@@ -91,6 +102,14 @@ public class Dataset {
 
     public void setCountFailures(Integer countFailures) {
         this.countFailures = countFailures;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
 }

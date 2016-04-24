@@ -20,14 +20,10 @@
         </div>
       </div>
       <div id="rightcolumn" class="quickjumps" th:fragment="rightcolumn">
-        <div id="qaresult" class="success"
-            th:class="${dataset.countTests} gt 0 ? (${dataset.countFailures} == 0 ? 'success':'failure') : 'notests'">
-        <span th:text="${dataset.countFailures}">3</span> out of <span th:text="${dataset.countTests}">5</span> QA tests failed
-        </div>
-        <h2>Other editions</h2>
+        <h2>Editions</h2>
         <div th:remove="all-but-first">
-          <p th:each="other : ${otherEditions}" th:class="${other.editionId} == ${uuid} ? 'currentedition' : ''"><strong><a
-              th:href="@{'/datasets/' + ${other.editionId}}"
+          <p th:each="other : ${otherEditions}"><strong><a
+              th:href="@{'/editions/' + ${other.editionId}}"
               th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}"
               href="#">2009-04-29</a></strong><br/><span th:text="${other.filename}">CDDA 2009.mdb</span></p>
           <p><strong><a href="#">2008-10-18</a>:</strong> CDDA 2008.mdb</p>
@@ -37,84 +33,40 @@
         <div id="drop-operations">
           <h2>Operations</h2>
           <ul>
-            <li><a href="datasetQuery.html" th:href="@{'/datasets/' + ${uuid} + '/query'}">Query dataset</a></li>
-            <li><a href="#" th:href="@{'/datasets/' + ${uuid} + '/download'}">Download dataset</a></li>
-            <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.familyId}}">Edit QA tests</a></li>
-            <li><a href="fileupload.html" th:href="@{/fileupload(familyId=${dataset.familyId})}">Upload new edition</a></li>
-            <li><a href="view_qatests.html" th:href="@{'/datasets/' + ${uuid} + '/runqa'}">Run all QA</a></li>
-            <li><a href="datasetFactsheet.html" th:href="@{'/datasets/' + ${uuid} + '/adddefaulttests'}">Add default QA</a></li>
+            <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.datasetId}}">Edit QA tests</a></li>
+            <li><a href="fileupload.html" th:href="@{/fileupload(datasetId=${dataset.datasetId})}">Upload new edition</a></li>
+            <li><a href="datasetEdit.html" th:href="@{'/datasets/' + ${dataset.datasetId} + '/edit'}">Edit metadata</a></li>
           </ul>
         </div>
-        <h1 th:text="${dataset.filename}">Page title here</h1>
+        <h1 th:text="${dataset.title}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
         <table class="datatable">
           <tbody>
             <tr>
-              <th scope="row">Filename</th><td th:text="${dataset.filename}">Dataset title</td>
+              <th scope="row">Title</th><td th:text="${dataset.title}">Dataset title</td>
             </tr>
             <tr>
-              <th scope="row">Identifier</th><td th:text="${uuid}">oNS4DCOv6ZDgSl5ehlC4ww</td>
+              <th scope="row">Identifier</th><td th:text="${dataset.datasetId}">oNS4DCOv6ZDgSl5ehlC4ww</td>
             </tr>
             <tr>
-              <th scope="row">Content type</th><td th:text="${dataset.contentType}">image/gif</td>
+              <th scope="row">Latest edition</th><td><a href="editionFactsheet.html"
+                  th:href="@{'/editions/' + ${dataset.latestEdition}}"
+                  th:text="${dataset.filename}">is9UjqqjYVALXoMkjku23</a></td>
             </tr>
             <tr>
-              <th scope="row">Size</th><td th:text="${dataset.humaneSize}">77 MB</td>
+              <th scope="row">Generations to keep</th><td th:text="${dataset.keep}?: 'No limit'">77</td>
             </tr>
             <tr>
-              <th scope="row">Uploader</th><td th:text="${dataset.uploader}">heinlja</td>
+              <th scope="row">QA Failures to keep</th><td th:text="${dataset.keepFailures}?: 'No limit'">5</td>
             </tr>
+            <!--
             <tr>
               <th scope="row">Date of upload</th><td th:text="${#dates.format(dataset.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}">19-Apr-2016 18:47:35</td>
             </tr>
+            -->
           </tbody>
         </table>
 
-        <div th:if="${not #lists.isEmpty(testresults)}">
-          <h2>QA results</h2>
-          <table class="datatable">
-            <col style="width:3em"/>
-            <col style="width:3em"/>
-            <col style="width:11em"/>
-            <col style="width:15em"/>
-            <col style="width:15em"/>
-            <thead>
-              <tr>
-                <th scope="col">Type</th>
-                <th scope="col">Pass</th>
-                <th scope="col">Query</th>
-                <th scope="col">Message</th>
-              </tr>
-            </thead>
-            <tbody th:remove="all-but-first">
-              <tr th:each="result : ${testresults}" th:class="${result.passed}? 'success':'failure'">
-                <td th:text="${result.testType}">19</td>
-                <td th:text="${result.passed}">true</td>
-                <!--<td th:text="${#dates.format(result.testRan, 'dd-MMM-yyyy HH:mm:ss')}">9-Apr-2016 19:35:25</td>-->
-                <td th:text="${result.query}"></td>
-                <td th:text="${result.result}"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2>Tables</h2>
-        <p th:if="${#lists.isEmpty(tables)}">List is empty.</p>
-        <div th:if="${not #lists.isEmpty(tables)}">
-          <table class="datatable">
-            <col style="width:20em"/>
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-              </tr>
-            </thead>
-            <tbody th:remove="all-but-first">
-              <tr th:each="table : ${tables}">
-                <td th:text="${table}">Long realistic table name</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
     <!-- container -->

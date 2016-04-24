@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SQLService {
 
+    private final String PREFIX = "jdbc:ucanaccess://";
+    private final String MODIFIERS = ";memory=false";
+
     /** Active database connection. */
     private Connection connection;
 
@@ -35,12 +38,21 @@ public class SQLService {
         this.storageDir = storageDir;
     }
 
-    private void openConnection(String fileId) throws SQLException {
-        //Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-        connection = DriverManager.getConnection("jdbc:ucanaccess://" + storageDir + "/" + fileId + ";memory=false");
+    public Connection getConnection(String fileId) throws SQLException {
+        openConnection(fileId);
+        return connection;
     }
 
-    private void closeConnection() throws SQLException {
+    private void openConnection(String fileId) throws SQLException {
+        //Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+        connection = DriverManager.getConnection(createConnectionString(fileId));
+    }
+
+    public String createConnectionString(String fileId) {
+        return PREFIX + storageDir + "/" + fileId + MODIFIERS;
+    }
+
+    public void closeConnection() throws SQLException {
         connection.close();
         connection = null;
     }

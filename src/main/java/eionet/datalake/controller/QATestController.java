@@ -54,13 +54,13 @@ public class QATestController {
      * @param message
      * @return view name
      */
-    @RequestMapping({"/{familyid}", "/{familyid}/view"})
+    @RequestMapping({"/{datasetid}", "/{datasetid}/view"})
     public String viewQATests(Model model,
-            @PathVariable("familyid") String familyId,
+            @PathVariable("datasetid") String datasetId,
             @RequestParam(required = false) String message) {
         BreadCrumbs.set(model, "QA Tests");
-        model.addAttribute("familyId", familyId);
-        model.addAttribute("qatests", qaTestService.getByFamilyId(familyId));
+        model.addAttribute("datasetId", datasetId);
+        model.addAttribute("qatests", qaTestService.getByDatasetId(datasetId));
         QATest newQATest = new QATest();
         newQATest.setExpectedResult("true");
         model.addAttribute("newqatest", newQATest);
@@ -71,14 +71,14 @@ public class QATestController {
     /**
      * Adds new QA test to database. When TestId is null, then a new number is generated.
      *
-     * @param qatest structure containing the QA test data, but not the familyid.
-     * @param familyId - FamilyId
+     * @param qatest structure containing the QA test data, but not the datasetid.
+     * @param datasetId - DatasetId
      * @param redirectAttributes
      * @return view name or redirection
      */
-    @RequestMapping("/{familyid}/add")
+    @RequestMapping("/{datasetid}/add")
     public String addQATest(QATest qatest,
-            @PathVariable("familyid") String familyId,
+            @PathVariable("datasetid") String datasetId,
             RedirectAttributes redirectAttributes) {
         String testtype = qatest.getTestType();
         if (testtype.trim().equals("")) {
@@ -86,7 +86,7 @@ public class QATestController {
             return "redirect:view";
         }
 
-        qatest.setFamilyId(familyId);
+        qatest.setDatasetId(datasetId);
         qaTestService.save(qatest);
         redirectAttributes.addFlashAttribute("message", "QA test added");
         return "redirect:view";
@@ -100,12 +100,12 @@ public class QATestController {
      * @param message
      * @return view name
      */
-    @RequestMapping("/{familyid}/edit")
+    @RequestMapping("/{datasetid}/edit")
     public String editQATest(Model model,
-            @PathVariable("familyid") String familyId,
+            @PathVariable("datasetid") String datasetId,
             @RequestParam("testid") String testId,
             @RequestParam(required = false) String message) {
-        model.addAttribute("familyId", familyId);
+        model.addAttribute("datasetId", datasetId);
         BreadCrumbs.set(model, "Modify QA Test");
         QATest qatest = qaTestService.getById(testId);
         model.addAttribute("qatest", qatest);
@@ -122,7 +122,7 @@ public class QATestController {
      * @param model - contains attributes for the view
      * @return view name
      */
-    @RequestMapping(value = "/{familyid}/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/{datasetid}/edit", method = RequestMethod.POST)
     public String editUser(
             QATest qatest,
             BindingResult bindingResult, ModelMap model) {
@@ -150,14 +150,14 @@ public class QATestController {
      *
      * @param testIds - list of tests to delete
      */
-    @RequestMapping(value = "/{familyid}/deletetests", method = RequestMethod.POST)
+    @RequestMapping(value = "/{datasetid}/deletetests", method = RequestMethod.POST)
     public String deleteFiles(
-            @PathVariable("familyid") String familyId,
+            @PathVariable("datasetid") String datasetId,
             @RequestParam("testid") List<String> testIds,
             final RedirectAttributes redirectAttributes) {
         qaTestService.deleteTests(testIds);
         redirectAttributes.addFlashAttribute("message", "Tests(s) deleted");
-        return "redirect:/qatests/" + familyId;
+        return "redirect:/qatests/" + datasetId;
     }
 
 }

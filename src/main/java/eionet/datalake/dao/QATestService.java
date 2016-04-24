@@ -30,7 +30,7 @@ public interface QATestService {
     /**
      * Get all records.
      */
-    List<QATest> getByFamilyId(String familyId);
+    List<QATest> getByDatasetId(String datasetId);
 
     /**
      * Delete all metadata for all qa tests. Mainly used for testing.

@@ -13,7 +13,7 @@ public interface EditionsService {
     /**
      * Save file and metadata.
      */
-    void storeFile(MultipartFile myFile, String uuidName, String familyId) throws IOException;
+    void storeFile(MultipartFile myFile, String uuidName, String datasetId) throws IOException;
 
     void updateQAScore(String editionId, int countTests, int countFailures);
 
@@ -39,7 +39,7 @@ public interface EditionsService {
     /**
      * Get all editions of same dataset.
      */
-    List<Edition> getByFamilyId(String familyId);
+    List<Edition> getByDatasetId(String datasetId);
 
     /**
      * Get a list of all files.

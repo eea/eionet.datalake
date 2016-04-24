@@ -15,7 +15,7 @@
           <div class="formrow">
             <label for="file">Select a file to upload:</label>
             <input type="file" name="file" id="file" onchange="fileSelected();"/>
-            <input type="hidden" name="familyId" th:value="${familyId}"/>
+            <input type="hidden" name="datasetId" th:value="${datasetId}"/>
           </div>
           <div id="uploadprogress">
             <div id="fileName"></div>
@@ -28,13 +28,13 @@
             <input type="submit" id="submitbutton" onclick="return uploadFile()" value="Upload" />
           </div>
         </form>
-        <div id="uploadcomplete" th:style="${uuid}? 'display:block' : ''">
+        <div id="uploadcomplete" th:style="${editionId}? 'display:block' : ''">
           <h1>File successfully uploaded</h1>
           <p>
           Your file is uploaded now and you can query it.
           </p>
           <p>
-          <a id="factsheetLink" href="#" th:href="@{'/datasets/' + ${uuid}}">Dataset factsheet</a>
+          <a id="factsheetLink" href="#">Dataset factsheet</a>
           </p>
           <p>
           Return to <a href="index.html" th:href="@{/}">Home</a>.
@@ -122,9 +122,9 @@
         /* This event is raised when the server sends back a response */
         var xmlDocument = evt.target.responseXML;
 
-        //var downloadLink = xmlDocument.documentElement.getElementsByTagName("downloadLink")[0];
-        //var downloadchild = document.getElementById('downloadlink');
-        //downloadchild.firstChild.nodeValue = downloadLink.firstChild.nodeValue;
+        var editionLink = xmlDocument.documentElement.getElementsByTagName("editionLink")[0];
+        var editionchild = document.getElementById('factsheetLink');
+        editionchild.href = editionLink.firstChild.nodeValue;
         document.getElementById('uploadprogress').style.display = "none";
         document.getElementById('uploadcomplete').style.display = "block";
         document.getElementById('submitbutton').value = "Upload";

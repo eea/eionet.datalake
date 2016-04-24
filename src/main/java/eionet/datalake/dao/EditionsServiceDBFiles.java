@@ -121,8 +121,8 @@ public class EditionsServiceDBFiles implements EditionsService {
     }
 
     @Override
-    public List<Edition> getByFamilyId(String familyId) {
-        return metadataService.getByFamilyId(familyId);
+    public List<Edition> getByDatasetId(String datasetId) {
+        return metadataService.getByDatasetId(datasetId);
     }
 
     @Override

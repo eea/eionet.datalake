@@ -16,7 +16,7 @@ public class Edition {
     private String contentType;
     private long fileSize;
     private InputStream content;
-    /** All editions of the same dataset has the same family id. */
+    /** All editions of the same dataset has the same dataset id. */
     private String datasetId;
     /** The upload time determines which edition is the newest. */
     private Timestamp uploadTime;
