@@ -30,8 +30,10 @@
             <td><input type="text" size="16" value="4" th:field="*{keepFailures}"/></td>
         </tr>
         <tr>
-            <th scope="row"><label for="rdfconf">RDF script</label></th>
-            <td><textarea cols="60" rows="15" id="rdfconf" th:field="*{rdfConfiguration}">select count(*) from table</textarea></td>
+            <th scope="column" colspan="2"><label for="rdfconf">RDF script</label></th>
+        </tr>
+        <tr>
+            <td colspan="2"><textarea cols="80" rows="25" id="rdfconf" th:field="*{rdfConfiguration}">table.query = SELECT id FROM table</textarea></td>
         </tr>
     </table>
     <input type="hidden" name="datasetId" th:value="*{datasetId}"/>

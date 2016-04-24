@@ -73,7 +73,7 @@ public class ITUploadsService {
         doc.setEditionId(uuid);
         doc.setFilename("testfile.txt");
         doc.setUploader("testperson");
-        doc.setFamilyId("tukz0x0sdluyqce5l1c_hq");
+        doc.setDatasetId("tukz0x0sdluyqce5l1c_hq");
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         doc.setUploadTime(ts);
         metadataService.save(doc);

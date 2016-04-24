@@ -10,22 +10,30 @@ import eionet.datalake.model.Edition;
 import eionet.datalake.model.QATest;
 import eionet.datalake.model.QATestType;
 import eionet.datalake.model.TestResult;
+import eionet.datalake.service.ExtractRDFService;
 import eionet.datalake.service.QATestRunService;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 /**
- * Controller for dataset pages.
+ * Controller for dataset editions.
  */
 
 @Controller
@@ -52,6 +60,9 @@ public class EditionController {
 
     @Autowired
     private QATestRunService qaTestRunService;
+
+    @Autowired
+    private ExtractRDFService extractRDFService;
 
     /**
      * Actually show datasets - not editions.
@@ -149,4 +160,51 @@ public class EditionController {
         qaTestRunService.runQAOnEdition(fileId);
         return "redirect:/editions/" + fileId;
     }
+
+    /**
+     * Download a file.
+     */
+    @RequestMapping(value = "/{editionId}/download", method = RequestMethod.GET)
+    public void downloadFile(
+        @PathVariable("editionId") String editionId, HttpServletResponse response) throws IOException {
+
+        Edition editionRec = editionsService.getById(editionId);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Length", Long.toString(editionRec.getFileSize()));
+        response.setHeader("Content-Disposition", "attachment; filename=" + editionRec.getFilename());
+
+        InputStream is = editionRec.getContentAsStream();
+        org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
+        is.close();
+    }
+
+    /**
+     * Download a file.
+     */
+    @RequestMapping(value = "/{editionId}/rdf", method = RequestMethod.GET)
+    public void exportRdf(
+            @PathVariable("editionId") String editionId,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, SQLException {
+
+        Edition editionRec = editionsService.getById(editionId);
+        response.setContentType("application/rdf+xml");
+        //response.setHeader("Content-Length", Long.toString(editionRec.getFileSize()));
+        response.setHeader("Content-Disposition", "attachment; filename=" + editionId + ".rdf");
+        StringBuffer requestUrl = request.getRequestURL();
+        String baseUri = requestUrl.substring(0, requestUrl.length() - "rdf".length());
+        String vocabularyUri = requestUrl.substring(0, requestUrl.length() - 26) + editionRec.getDatasetId() + "/";
+        Dataset dataset = datasetService.getById(editionRec.getDatasetId());
+        String script = dataset.getRdfConfiguration();
+        extractRDFService.generateRDF(response.getOutputStream(), editionId, baseUri, vocabularyUri, script);
+        response.flushBuffer();
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND) //, reason = "File not found")
+    public String filenotFoundError(HttpServletRequest req, Exception exception) {
+        return "filenotfound";
+    }
+
 }

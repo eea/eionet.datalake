@@ -9,6 +9,7 @@ import eionet.datalake.util.Filenames;
 import eionet.datalake.util.UniqueId;
 import eionet.rdfexport.ExploreDB;
 import eionet.rdfexport.GenerateRDF;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -62,15 +63,16 @@ public class ExtractRDFService {
      * Destroys the props content.
      */
     private String extractProperties(Properties props) throws IOException {
-        StringWriter w = new StringWriter();
+        //StringWriter w = new StringWriter();
+        ByteArrayOutputStream w = new ByteArrayOutputStream();
         for (String key : props.stringPropertyNames()) {
             if (key.startsWith("sqldialect.")) {
                 props.remove(key);
                 continue;
             }
         }
-        props.store(w,null);
-        return w.toString();
+        props.store(w, "Automatically generated");
+        return w.toString("ISO-8859-1");
     }
 
     /**

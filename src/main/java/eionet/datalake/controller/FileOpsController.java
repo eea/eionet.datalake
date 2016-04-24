@@ -147,7 +147,8 @@ public class FileOpsController {
     /**
      * Download a file.
      */
-    @RequestMapping(value = "/datasets/{file_name}/download", method = RequestMethod.GET)
+    /*
+    @RequestMapping(value = "/editions/{file_name}/download", method = RequestMethod.GET)
     public void downloadFile(
         @PathVariable("file_name") String fileId, HttpServletResponse response) throws IOException {
 
@@ -161,6 +162,7 @@ public class FileOpsController {
         response.flushBuffer();
         is.close();
     }
+    */
 
     @RequestMapping(value = "/delete/{file_name}")
     public String deleteFile(
