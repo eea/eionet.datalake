@@ -192,4 +192,27 @@ public class DatasetController {
         is.close();
     }
 
+    /**
+     * Download a file in RDF format.
+     * TODO: Don't generate if the client asks if it has changed since a given timestamp and it hasn't
+     */
+    @RequestMapping(value = "/{datasetId}/rdf", method = RequestMethod.GET)
+    public void exportRdf(
+            @PathVariable("datasetId") String datasetId,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException, SQLException {
+
+        Edition editionRec = editionsService.getLatestGood(datasetId);
+        response.setContentType("application/rdf+xml");
+        //response.setHeader("Content-Length", Long.toString(editionRec.getFileSize()));
+        response.setHeader("Content-Disposition", "attachment; filename=" + datasetId + ".rdf");
+        StringBuffer requestUrl = request.getRequestURL();
+        String baseUri = requestUrl.substring(0, requestUrl.length() - "rdf".length());
+        String vocabularyUri = requestUrl.substring(0, requestUrl.length() - 26) + editionRec.getDatasetId() + "/";
+        Dataset dataset = datasetService.getById(datasetId);
+        String script = dataset.getRdfConfiguration();
+        extractRDFService.generateRDF(response.getOutputStream(), datasetId, baseUri, vocabularyUri, script);
+        response.flushBuffer();
+    }
+
 }

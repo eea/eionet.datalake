@@ -9,12 +9,14 @@
       </div>
       <div id="workarea">
 
-<h1>Modify dataset</h1>
-<div id="operations">
-    <ul>
-        <li><a href="datasetFactsheet.html" th:href="@{'/datasets/' + ${datasetId}}" >Back to dataset</a></li>
-    </ul>
-</div>
+        <h1>Modify dataset</h1>
+        <div id="drop-operations">
+          <h2>Operations</h2>
+          <ul>
+            <li><a href="datasetFactsheet.html" th:href="@{'/datasets/' + ${datasetId}}" >Back to dataset</a></li>
+            <li><a href="datasetFactsheet.html" th:href="@{'/datasets/' + ${datasetId} + '/addrdf'}" >Generate RDF config</a></li>
+          </ul>
+       </div>
 <form action="datasetEdit.html" th:action="@{'/datasets/' + ${datasetId} + '/edit'}" th:object="${dataset}" method="POST">
     <table class="datatable">
         <tr>
