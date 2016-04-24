@@ -181,6 +181,7 @@ public class EditionController {
 
     /**
      * Download a file.
+     * TODO: Don't generate if the client asks if it has changed since a given timestamp and it hasn't
      */
     @RequestMapping(value = "/{editionId}/rdf", method = RequestMethod.GET)
     public void exportRdf(

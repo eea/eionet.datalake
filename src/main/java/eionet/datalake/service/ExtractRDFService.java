@@ -61,6 +61,7 @@ public class ExtractRDFService {
     /**
      * Convert the properties hashmap to a string.
      * Destroys the props content.
+     * Replaces literal "\n" with backslash+newline
      */
     private String extractProperties(Properties props) throws IOException {
         //StringWriter w = new StringWriter();
@@ -72,7 +73,7 @@ public class ExtractRDFService {
             }
         }
         props.store(w, "Automatically generated");
-        return w.toString("ISO-8859-1");
+        return w.toString("ISO-8859-1").replace("\\n", "\\\n");
     }
 
     /**
