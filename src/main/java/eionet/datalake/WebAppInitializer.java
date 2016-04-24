@@ -1,5 +1,6 @@
 package eionet.datalake;
 
+import eionet.datalake.dao.SQLService;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -8,12 +9,11 @@ import javax.servlet.ServletRegistration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
-import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
-
 
 /**
  * Initialise DispatcherServlet.
@@ -61,7 +61,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         // Load the database driver we use for the MS-Access datasets
         try {
-            Class driverClass = Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Class driverClass = Class.forName(SQLService.MDB_DRIVER);
         } catch (ClassNotFoundException e) {
             logger.fatal("U Can Access driver not loaded");
             //TODO: abort the webapp here.

@@ -23,8 +23,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SQLService {
 
-    private final String PREFIX = "jdbc:ucanaccess://";
-    private final String MODIFIERS = ";memory=false";
+    public static final String MDB_DRIVER = "net.ucanaccess.jdbc.UcanaccessDriver";
+    private static final String PREFIX = "jdbc:ucanaccess://";
+    private static final String MODIFIERS = ";memory=false";
 
     /** Active database connection. */
     private Connection connection;

@@ -165,9 +165,8 @@ public class DatasetController {
             HttpServletRequest request) throws IOException, SQLException {
         Dataset dataset = datasetService.getById(datasetId);
         StringBuffer requestUrl = request.getRequestURL();
-        String baseURI = requestUrl.substring(0, requestUrl.length() - "addrdf".length());
-        String vocabulary = baseURI;
-        String newRdf = extractRDFService.generateRDFConfig(dataset.getLatestEdition(), baseURI, vocabulary);
+        //String baseURI = requestUrl.substring(0, requestUrl.length() - "addrdf".length());
+        String newRdf = extractRDFService.generateRDFConfig(dataset.getLatestEdition());
         dataset.setRdfConfiguration(newRdf);
         datasetService.update(dataset);
         return "redirect:edit";

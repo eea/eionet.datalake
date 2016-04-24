@@ -11,8 +11,10 @@ import eionet.rdfexport.ExploreDB;
 import eionet.rdfexport.GenerateRDF;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Properties;
@@ -40,25 +42,35 @@ public class ExtractRDFService {
 
     /**
      */
-    public String generateRDFConfig(String datasetId, String baseURI, String vocabulary) throws IOException, SQLException {
+    public String generateRDFConfig(String datasetId) throws IOException, SQLException {
         Connection connection = sqlService.getConnection(datasetId);
-        //FIXME: load default properties first.
         Properties props = new Properties();
+        // Provide backup template from JAR file
+        InputStream inStream = ExtractRDFService.class.getResourceAsStream("/explore.properties");
+        try {
+            props.load(inStream);
+        } finally {
+            inStream.close();
+        }
         ExploreDB dbExplorer = new ExploreDB(connection, props);
         dbExplorer.discoverTables(true);
         return extractProperties(props);
     }
 
-    private String extractProperties(Properties props) {
-        StringBuffer buf = new StringBuffer();
+    /**
+     * Convert the properties hashmap to a string.
+     * Destroys the props content.
+     */
+    private String extractProperties(Properties props) throws IOException {
+        StringWriter w = new StringWriter();
         for (String key : props.stringPropertyNames()) {
             if (key.startsWith("sqldialect.")) {
                 props.remove(key);
                 continue;
             }
-            buf.append(props.getProperty(key));
         }
-        return buf.toString();
+        props.store(w,null);
+        return w.toString();
     }
 
     /**
