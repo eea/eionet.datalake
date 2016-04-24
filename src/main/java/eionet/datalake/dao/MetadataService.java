@@ -28,6 +28,11 @@ public interface MetadataService {
     List<Edition> getByDatasetId(String datasetId);
 
     /**
+     * Get the latest edition with 0 failures.
+     */
+    Edition getLatestGood(String datasetId);
+
+    /**
      * Delete metadata for file by Id.
      */
     void deleteById(String id);

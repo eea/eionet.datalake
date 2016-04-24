@@ -126,6 +126,18 @@ public class EditionsServiceDBFiles implements EditionsService {
     }
 
     @Override
+    public Edition getLatestGood(String datasetId) throws IOException {
+        Edition uploadRec;
+        try {
+            uploadRec = metadataService.getLatestGood(datasetId);
+        } catch (Exception e) {
+            throw new FileNotFoundException(datasetId);
+        }
+        uploadRec.setContentStream(storageService.getById(uploadRec.getEditionId()));
+        return uploadRec;
+    }
+
+    @Override
     public List<Edition> getAll() {
         return metadataService.getAll();
     }

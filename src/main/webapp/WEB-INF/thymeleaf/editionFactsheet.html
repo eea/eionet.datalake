@@ -38,7 +38,7 @@
           <h2>Operations</h2>
           <ul>
             <li><a href="editionQuery.html" th:href="@{'/editions/' + ${editionId} + '/query'}">Query dataset</a></li>
-            <li><a href="#" th:href="@{'/editions/' + ${editionId} + '/download'}">Download dataset</a></li>
+            <li><a href="#" th:href="@{'/editions/' + ${editionId} + '/download'}">Download edition</a></li>
             <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.datasetId}}">Edit QA tests</a></li>
             <li><a href="fileupload.html" th:href="@{/fileupload(datasetId=${dataset.datasetId})}">Upload new edition</a></li>
             <li><a href="view_qatests.html" th:href="@{'/editions/' + ${editionId} + '/runqa'}">Run all QA</a></li>

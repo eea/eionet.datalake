@@ -12,10 +12,12 @@ import eionet.datalake.service.ExtractRDFService;
 import eionet.datalake.service.QATestRunService;
 import eionet.datalake.util.BreadCrumbs;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -171,4 +173,23 @@ public class DatasetController {
         datasetService.update(dataset);
         return "redirect:edit";
     }
+
+    /**
+     * Download latest good edition.
+     */
+    @RequestMapping(value = "/{datasetId}/download", method = RequestMethod.GET)
+    public void downloadFile(
+        @PathVariable("datasetId") String datasetId, HttpServletResponse response) throws IOException {
+
+        Edition editionRec = editionsService.getLatestGood(datasetId);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Length", Long.toString(editionRec.getFileSize()));
+        response.setHeader("Content-Disposition", "attachment; filename=" + editionRec.getFilename());
+
+        InputStream is = editionRec.getContentAsStream();
+        org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
+        is.close();
+    }
+
 }

@@ -42,6 +42,11 @@ public interface EditionsService {
     List<Edition> getByDatasetId(String datasetId);
 
     /**
+     * Get the latest edition with 0 failures.
+     */
+    Edition getLatestGood(String datasetId) throws IOException;
+
+    /**
      * Get a list of all files.
      */
     List<Edition> getAll();

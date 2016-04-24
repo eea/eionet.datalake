@@ -70,6 +70,19 @@ public class MetadataServiceJdbc implements MetadataService {
     }
 
     /**
+     * FIXME: This can return 0 results.
+     * FIXME: False positive if the QA tests have not been run on this edition.
+     */
+    @Override
+    public Edition getLatestGood(String datasetId) {
+        String query = "SELECT editionid, filename, filesize, counttests, countfailures"
+                + " FROM editions WHERE countfailures = 0 AND datasetid = ?"
+                + " ORDER BY uploadtime DESC LIMIT 1";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.queryForObject(query, new BeanPropertyRowMapper<Edition>(Edition.class), datasetId);
+    }
+
+    /**
      * Get all editions, and only the attributes that are relevant.
      */
     @Override
