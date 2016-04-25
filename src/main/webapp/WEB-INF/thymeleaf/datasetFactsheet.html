@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="developer.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/application.css" />
   </head>
-  <body  class="threecolumns">
+  <body>
     <div id="container">
       <div th:replace="layout :: bannerFragment">
         <div id="pagehead">
@@ -17,16 +17,6 @@
         </div>
         <div id="leftcolumn">
         Something in left column.
-        </div>
-      </div>
-      <div id="rightcolumn" class="quickjumps" th:fragment="rightcolumn">
-        <h2>Editions</h2>
-        <div th:remove="all-but-first">
-          <p th:each="other : ${otherEditions}"><strong><a
-              th:href="@{'/editions/' + ${other.editionId}}"
-              th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}"
-              href="#">2009-04-29</a></strong><br/><span th:text="${other.filename}">CDDA 2009.mdb</span></p>
-          <p><strong><a href="#">2008-10-18</a>:</strong> CDDA 2008.mdb</p>
         </div>
       </div>
       <div id="workarea">
@@ -69,6 +59,34 @@
           </tbody>
         </table>
 
+        <h2>Editions</h2>
+        <table class="datatable">
+          <thead>
+            <tr>
+              <th scope="col">Uploaded</th>
+              <th scope="col">Title</th>
+              <th scope="col">Tests</th>
+              <th scope="col">Failures</th>
+            </tr>
+          </thead>
+          <tbody th:remove="all-but-first">
+            <tr th:each="other : ${otherEditions}" th:class="${other.countTests} gt 0 ? (${other.countFailures} == 0 ? 'success':'failure') : 'notests'" class="success">
+              <td th:text="${#dates.format(other.uploadTime, 'dd-MMM-yyyy HH:mm:ss')}">2009-04-29</td>
+              <td><a
+                th:href="@{'/editions/' + ${other.editionId}}" href="#"
+                th:text="${other.filename}">CDDA 2009.mdb</a>
+              </td>
+              <td th:text="${other.countTests}">9</td>
+              <td th:text="${other.countFailures}">0</td>
+            </tr>
+            <tr>
+              <td><a href="#">2008-10-18</a></td>
+              <td>CDDA 2008.mdb</td>
+              <td>9</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <!-- container -->
