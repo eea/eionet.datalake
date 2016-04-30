@@ -14,6 +14,14 @@ public final class UniqueId {
     private UniqueId() {
     }
 
+    public static String generateDatasetId() {
+        return generateUniqueId();
+    }
+
+    public static String generateEditionId() {
+        return generateUniqueId();
+    }
+
     /**
      * Generate Unique ID. Shorter ids, but requires Java 8.
      * The string is lower-cased. This removes some uniqueness.
@@ -35,12 +43,10 @@ public final class UniqueId {
     }
 
     /**
-     * Generate Unique ID. A UUID as a string is 36 characters.
+     * Generate API key. A UUID as a string is 36 characters.
      */
-    /*
-    public static String generateUniqueId() {
+    public static String generateAPIKey() {
         return UUID.randomUUID().toString();
     }
-    */
 
 }

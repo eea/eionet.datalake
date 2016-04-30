@@ -1,6 +1,7 @@
 package eionet.datalake.service;
 
 import eionet.datalake.dao.SQLService;
+import eionet.datalake.dao.JackcessService;
 import eionet.datalake.dao.QATestService;
 import eionet.datalake.dao.TestResultService;
 import eionet.datalake.dao.EditionsService;
@@ -28,6 +29,9 @@ public class QATestRunService {
     private EditionsService editionsService;
 
     @Autowired
+    private JackcessService jackcessService;
+
+    @Autowired
     private SQLService sqlService;
 
     /**
@@ -50,14 +54,14 @@ public class QATestRunService {
         Edition edition = editionsService.getById(editionId);
         int countFailures = 0;
         List<QATest> qatests = new ArrayList<QATest>();
-        try {
+//      try {
             String datasetId = edition.getDatasetId();
             qatests = qaTestService.getByDatasetId(datasetId);
             countFailures = runTableExistsTests(qatests, edition);
             countFailures += runSQLCheckTests(qatests, edition);
-        } catch (SQLException e) {
+//      } catch (SQLException e) {
            //
-        }
+//      }
         int countTests = qatests.size();
         editionsService.updateQAScore(editionId, countTests, countFailures);
     }
@@ -65,9 +69,9 @@ public class QATestRunService {
     /**
      * Run the table exists test by getting a list of tables from the edition.
      */
-    private int runTableExistsTests(List<QATest> qatests, Edition edition) throws SQLException {
+    private int runTableExistsTests(List<QATest> qatests, Edition edition) throws IOException {
         int countFailures = 0;
-        List<String> tables = sqlService.metaTables(edition.getEditionId());
+        List<String> tables = jackcessService.metaTables(edition.getEditionId());
         HashMap<String, Boolean> pool = new HashMap<String, Boolean>();
         for (String table : tables) {
             pool.put(table.toUpperCase(), Boolean.valueOf(false));

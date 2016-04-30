@@ -157,4 +157,26 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="rev-5" author="roug">
+    <comment>Table to store names of tables, views, columns and indexes</comment>
+    <createTable tableName="characteristics">
+      <column name="editionid" type="varchar(${uniqueid.size})">
+        <constraints nullable="false"/>
+      </column>
+      <column name="scope" type="char(1)" remarks="T = table, V = view, C = column, I = index"/>
+      <column name="level1" type="varchar(100)" remarks="table or view name">
+        <constraints nullable="false"/>
+      </column>
+      <column name="level2" type="varchar(100)" remarks="column or index name">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+    <createIndex indexName="idx_chars_editionid"
+        tableName="characteristics"
+        unique="false">
+      <column name="editionid"/>
+    </createIndex>
+
+  </changeSet>
+
 </databaseChangeLog>

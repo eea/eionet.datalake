@@ -14,6 +14,11 @@
         </div>
       </div>
       <div id="workarea">
+        <div id="operations">
+          <ul>
+            <li><a href="editionFactsheet.html" th:href="@{'/editions/' + ${editionId}}" >Back to edition</a></li>
+          </ul>
+        </div>
         <h1 th:text="'SQL queries on ' + ${dataset.filename}">Page title here</h1>
         <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
 <p>
@@ -31,18 +36,21 @@
     <input type="submit" value="Execute"/>
 </form>
         <div th:if="${#lists.isEmpty(results)}">
-          <h2>Tables</h2>
-          <div th:if="${not #lists.isEmpty(tables)}">
+          <h2>Tables &amp; columns</h2>
+          <div th:if="${not #lists.isEmpty(columns)}">
             <table class="datatable">
-              <col style="width:20em"/> 
+              <col style="width:20em"/>
+              <col/>
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
+                  <th scope="col">Table</th>
+                  <th scope="col">Columns</th>
                 </tr>
               </thead>
               <tbody th:remove="all-but-first">
-                <tr th:each="table : ${tables}">
-                  <td th:text="${table}">Long realistic table name</td>
+                <tr th:each="tableCol : ${columns}">
+                  <td th:text="${tableCol.key}">Long realistic table name</td>
+                  <td th:text="${#strings.listJoin(tableCol.value, ', ')}">col1, col2, col3, col4</td>
                 </tr>
               </tbody>
             </table>

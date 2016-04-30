@@ -14,10 +14,11 @@ service:
       -Ddb.url=jdbc:mariadb://dbservice/datalake
       -Ddb.username=datalake
       -Ddb.password=yubetisaqe
+      -Djava.io.tmpdir=/var/tmp
   links:
   - dbservice
-# volumes:
-# - datalake_files:/var/tmp:z
+  volumes:
+  - /var/local/datalake/files:/var/tmp:z
 
 dbservice:
   image: mariadb:10.1
@@ -41,7 +42,7 @@ dbservice:
 dbdata:
   image: tianon/true
   volumes:
-  - /var/lib/mysql
+  - /var/local/datalake/mysql:/var/lib/mysql:z
 # - datalake_mysql:/var/lib/mysql:z
   labels:
     io.rancher.container.start_once: "true"

@@ -103,19 +103,22 @@
           </table>
         </div>
 
-        <h2>Tables</h2>
-        <p th:if="${#lists.isEmpty(tables)}">List is empty.</p>
-        <div th:if="${not #lists.isEmpty(tables)}">
+        <h2>Tables &amp; columns</h2>
+        <p th:if="${#lists.isEmpty(columns)}">List is empty.</p>
+        <div th:if="${not #lists.isEmpty(columns)}">
           <table class="datatable">
             <col style="width:20em"/>
+            <col/>
             <thead>
               <tr>
-                <th scope="col">Name</th>
+                <th scope="col">Table</th>
+                <th scope="col">Columns</th>
               </tr>
             </thead>
             <tbody th:remove="all-but-first">
-              <tr th:each="table : ${tables}">
-                <td th:text="${table}">Long realistic table name</td>
+              <tr th:each="tableCol : ${columns}">
+                <td th:text="${tableCol.key}">Long realistic table name</td>
+                <td th:text="${#strings.listJoin(tableCol.value, ', ')}">col1, col2, col3, col4</td>
               </tr>
             </tbody>
           </table>

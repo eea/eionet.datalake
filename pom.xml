@@ -113,7 +113,6 @@
                             <targetPath>WEB-INF/classes/database</targetPath>
                             <includes>
                                 <include>*.xml</include>
-                                <include>*.content</include>
                             </includes>
                         </resource>
                     </webResources>

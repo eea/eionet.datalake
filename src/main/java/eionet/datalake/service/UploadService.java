@@ -1,7 +1,6 @@
 package eionet.datalake.service;
 
 import eionet.datalake.dao.DatasetService;
-import eionet.datalake.dao.SQLService;
 import eionet.datalake.dao.QATestService;
 import eionet.datalake.dao.TestResultService;
 import eionet.datalake.dao.EditionsService;
@@ -33,9 +32,6 @@ public class UploadService {
     @Autowired
     private EditionsService editionsService;
 
-    @Autowired
-    private SQLService sqlService;
-
     /**
      * Service for QA Test storage.
      */
@@ -53,10 +49,10 @@ public class UploadService {
      * FIXME: If there is a datasetId, then it must already exist the database.
      */
     public String uploadFile(MultipartFile myFile, String datasetId) throws IOException {
-        String editionId = UniqueId.generateUniqueId();
+        String editionId = UniqueId.generateEditionId();
         boolean knownDataset = true;
         if (datasetId == null || "".equals(datasetId)) {
-            datasetId = UniqueId.generateUniqueId();
+            datasetId = UniqueId.generateDatasetId();
             knownDataset = false;
             Dataset datasetRec = new Dataset();
             datasetRec.setDatasetId(datasetId);

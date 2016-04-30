@@ -107,7 +107,7 @@ public class SQLService {
     }
     /**
      * Get views from database via metadata query.
-     * @param args - unused.
+     * @param fileId - name of MS-Access file.
      */
     public List<String> metaViews(String fileId) throws SQLException {
         return getTablesByType(fileId, "VIEW");

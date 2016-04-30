@@ -3,6 +3,7 @@ package eionet.datalake.controller;
 import eionet.datalake.dao.DatasetService;
 import eionet.datalake.dao.EditionsService;
 import eionet.datalake.dao.QATestService;
+import eionet.datalake.dao.JackcessService;
 import eionet.datalake.dao.SQLService;
 import eionet.datalake.dao.TestResultService;
 import eionet.datalake.model.Dataset;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +47,9 @@ public class EditionController {
 
     @Autowired
     private EditionsService editionsService;
+
+    @Autowired
+    private JackcessService jackcessService;
 
     @Autowired
     private SQLService sqlService;
@@ -87,8 +92,10 @@ public class EditionController {
         Edition dataset = editionsService.getById(fileId);
         model.addAttribute("editionId", fileId);
         model.addAttribute("dataset", dataset);
-        List<String> tables = sqlService.metaTables(fileId);
-        model.addAttribute("tables", tables);
+//      List<String> tables = jackcessService.metaTables(fileId);
+//      model.addAttribute("tables", tables);
+        Map<String, List<String>> columns = jackcessService.getColumns(fileId);
+        model.addAttribute("columns", columns);
         return "editionQuery";
     }
 
@@ -121,8 +128,10 @@ public class EditionController {
         model.addAttribute("dataset", dataset);
         List<Edition> otherEditions = editionsService.getByDatasetId(dataset.getDatasetId());
         model.addAttribute("otherEditions", otherEditions);
-        List<String> tables = sqlService.metaTables(fileId);
-        model.addAttribute("tables", tables);
+//      List<String> tables = jackcessService.metaTables(fileId);
+//      model.addAttribute("tables", tables);
+        Map<String, List<String>> columns = jackcessService.getColumns(fileId);
+        model.addAttribute("columns", columns);
         List<TestResult> results = testResultService.getByEditionId(fileId);
         model.addAttribute("testresults", results);
         return "editionFactsheet";
@@ -135,7 +144,7 @@ public class EditionController {
     public String createQAtests(
             @PathVariable("editionId") String fileId, final Model model) throws Exception {
         Edition dataset = editionsService.getById(fileId);
-        List<String> tables = sqlService.metaTables(fileId);
+        List<String> tables = jackcessService.metaTables(fileId);
         QATest qatest = new QATest();
         String datasetId = dataset.getDatasetId();
         for (String table : tables) {

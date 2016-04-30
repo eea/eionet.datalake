@@ -3,7 +3,7 @@ package eionet.datalake.controller;
 import eionet.datalake.dao.DatasetService;
 import eionet.datalake.dao.EditionsService;
 import eionet.datalake.dao.QATestService;
-import eionet.datalake.dao.SQLService;
+import eionet.datalake.dao.JackcessService;
 import eionet.datalake.model.Dataset;
 import eionet.datalake.model.Edition;
 import eionet.datalake.model.QATest;
@@ -44,7 +44,7 @@ public class DatasetController {
     private EditionsService editionsService;
 
     @Autowired
-    private SQLService sqlService;
+    private JackcessService jackcessService;
 
     /**
      * Service for QA Test storage
@@ -91,7 +91,7 @@ public class DatasetController {
     public String createQAtests(
             @PathVariable("datasetId") String fileId, final Model model) throws Exception {
         Edition dataset = editionsService.getById(fileId);
-        List<String> tables = sqlService.metaTables(fileId);
+        List<String> tables = jackcessService.metaTables(fileId);
         QATest qatest = new QATest();
         String datasetId = dataset.getDatasetId();
         for (String table : tables) {
