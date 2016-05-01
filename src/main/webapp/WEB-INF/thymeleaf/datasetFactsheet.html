@@ -25,7 +25,7 @@
           <ul>
             <li><a href="datasetEdit.html" th:href="@{'/datasets/' + ${dataset.datasetId} + '/edit'}">Edit metadata</a></li>
             <li><a href="fileupload.html" th:href="@{/fileupload(datasetId=${dataset.datasetId})}">Upload new edition</a></li>
-            <li><a href="view_qatests.html" th:href="@{'/qatests/' + ${dataset.datasetId}}">Edit QA tests</a></li>
+            <li><a href="qatests.html" th:href="@{'/qatests/' + ${dataset.datasetId}}">Edit QA tests</a></li>
             <li><a href="#" th:href="@{'/datasets/' + ${dataset.datasetId} + '/download'}">Download last good</a></li>
             <li><a href="#" th:href="@{'/datasets/' + ${dataset.datasetId} + '/rdf'}">Download as RDF</a></li>
           </ul>

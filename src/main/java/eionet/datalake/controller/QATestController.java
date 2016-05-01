@@ -65,7 +65,7 @@ public class QATestController {
         newQATest.setExpectedResult("true");
         model.addAttribute("newqatest", newQATest);
         if(message != null) model.addAttribute("message", message);
-        return "view_qatests";
+        return "qatests";
     }
 
     /**
@@ -100,18 +100,17 @@ public class QATestController {
      * @param message
      * @return view name
      */
-    @RequestMapping("/{datasetid}/edit")
-    public String editQATest(Model model,
-            @PathVariable("datasetid") String datasetId,
+    @RequestMapping("/edit")
+    public String editQATestForm(Model model,
             @RequestParam("testid") String testId,
             @RequestParam(required = false) String message) {
-        model.addAttribute("datasetId", datasetId);
         BreadCrumbs.set(model, "Modify QA Test");
         QATest qatest = qaTestService.getById(testId);
+        model.addAttribute("datasetId", qatest.getDatasetId());
         model.addAttribute("qatest", qatest);
 
         if (message != null) model.addAttribute("message", message);
-        return "qatest_edit";
+        return "qatestEdit";
     }
 
     /**
@@ -123,7 +122,7 @@ public class QATestController {
      * @return view name
      */
     @RequestMapping(value = "/{datasetid}/edit", method = RequestMethod.POST)
-    public String editUser(
+    public String updateQATest(
             QATest qatest,
             BindingResult bindingResult, ModelMap model) {
         qaTestService.save(qatest);

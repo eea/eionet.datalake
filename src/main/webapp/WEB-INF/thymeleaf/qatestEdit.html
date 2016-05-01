@@ -12,10 +12,10 @@
 <h1>Modify QA test</h1>
 <div id="operations">
     <ul>
-        <li><a href="view_qatests.html" th:href="@{/qatests/view}" >Back to tests</a></li>
+        <li><a href="qatests.html" th:href="@{'/qatests/' + ${datasetId}}" >Back to tests</a></li>
     </ul>
 </div>
-<form action="edit" th:action="@{/qatests/edit}" th:object="${qatest}" method="POST">
+<form action="qatestEdit.html" th:action="@{'/qatests/' + ${datasetId} + '/edit'}" th:object="${qatest}" method="POST">
     <table class="datatable">
         <tr>
             <th scope="row"><label for="query">Query</label></th>

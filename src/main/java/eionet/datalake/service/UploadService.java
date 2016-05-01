@@ -1,19 +1,21 @@
 package eionet.datalake.service;
 
 import eionet.datalake.dao.DatasetService;
+import eionet.datalake.dao.EditionsService;
+import eionet.datalake.dao.JackcessService;
 import eionet.datalake.dao.QATestService;
 import eionet.datalake.dao.TestResultService;
-import eionet.datalake.dao.EditionsService;
 import eionet.datalake.model.Dataset;
+import eionet.datalake.model.Edition;
 import eionet.datalake.model.QATest;
 import eionet.datalake.model.QATestType;
 import eionet.datalake.model.TestResult;
-import eionet.datalake.model.Edition;
 import eionet.datalake.util.Filenames;
 import eionet.datalake.util.UniqueId;
 import java.io.IOException;
-import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +33,9 @@ public class UploadService {
 
     @Autowired
     private EditionsService editionsService;
+
+    @Autowired
+    private JackcessService jackcessService;
 
     /**
      * Service for QA Test storage.
@@ -71,11 +76,28 @@ public class UploadService {
             datasetService.save(datasetRec);
         }
         editionsService.storeFile(myFile, editionId, datasetId);
-        if (knownDataset) {
-            qaTestRunService.runQAOnEdition(editionId);
+        if (!knownDataset) {
+            createDefaultQAtests(editionId, datasetId);
         }
+        qaTestRunService.runQAOnEdition(editionId);
         datasetService.updateToLatest(datasetId);
         return editionId;
+    }
+
+    private void createDefaultQAtests(String editionId, String datasetId) {
+        try {
+            List<String> tables = jackcessService.metaTables(editionId);
+            //Map<String, List<String>> columns = jackcessService.getColumns(editionId);
+            QATest qatest = new QATest();
+            qatest.setTestId(null);
+            qatest.setDatasetId(datasetId);
+            qatest.setTestType(QATestType.tableExists.name());
+            qatest.setQuery(String.join(",\n", tables));
+            qatest.setExpectedResult("true");
+            qaTestService.save(qatest);
+        } catch (IOException e) {
+            // This was not an Access file. No QA tests.
+        }
     }
 
 }

@@ -92,8 +92,6 @@ public class EditionController {
         Edition dataset = editionsService.getById(fileId);
         model.addAttribute("editionId", fileId);
         model.addAttribute("dataset", dataset);
-//      List<String> tables = jackcessService.metaTables(fileId);
-//      model.addAttribute("tables", tables);
         Map<String, List<String>> columns = jackcessService.getColumns(fileId);
         model.addAttribute("columns", columns);
         return "editionQuery";
@@ -140,6 +138,7 @@ public class EditionController {
     /**
      * Create some QA tests for the dataset.
      */
+    /*
     @RequestMapping(value = "/{editionId}/adddefaulttests")
     public String createQAtests(
             @PathVariable("editionId") String fileId, final Model model) throws Exception {
@@ -147,19 +146,18 @@ public class EditionController {
         List<String> tables = jackcessService.metaTables(fileId);
         QATest qatest = new QATest();
         String datasetId = dataset.getDatasetId();
-        for (String table : tables) {
-            qatest.setTestId(null);
-            qatest.setDatasetId(datasetId);
-            qatest.setTestType(QATestType.tableExists.name());
-            qatest.setQuery(table);
-            qatest.setExpectedResult("true");
-            qaTestService.save(qatest);
-        }
+        qatest.setTestId(null);
+        qatest.setDatasetId(datasetId);
+        qatest.setTestType(QATestType.tableExists.name());
+        qatest.setQuery(String.join(",\n", tables));
+        qatest.setExpectedResult("true");
+        qaTestService.save(qatest);
 //      model.addAttribute("editionId", fileId);
 //      model.addAttribute("dataset", dataset);
 //      model.addAttribute("tables", tables);
         return "redirect:/qatests/" + datasetId;
     }
+    */
 
     /**
      * Run the QA tests on a dataset.

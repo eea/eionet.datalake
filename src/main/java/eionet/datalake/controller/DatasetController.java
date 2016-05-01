@@ -87,6 +87,7 @@ public class DatasetController {
     /**
      * Create some QA tests for the dataset.
      */
+    /*
     @RequestMapping(value = "/{datasetId}/adddefaulttests")
     public String createQAtests(
             @PathVariable("datasetId") String fileId, final Model model) throws Exception {
@@ -107,6 +108,7 @@ public class DatasetController {
 //      model.addAttribute("tables", tables);
         return "redirect:/qatests/" + datasetId;
     }
+    */
 
     /**
      * Run the QA tests on a dataset.

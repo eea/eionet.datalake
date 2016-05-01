@@ -60,7 +60,7 @@ public class ITUserController extends AbstractContextControllerTests {
 
     @Test
     public void newUserView() throws Exception {
-        request(get("/users/view")).andExpect(view().name("view_users"));
+        request(get("/users/view")).andExpect(view().name("users"));
     }
 
     @Test

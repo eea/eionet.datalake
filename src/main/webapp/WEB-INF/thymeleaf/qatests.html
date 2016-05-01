@@ -40,7 +40,7 @@
           <td th:text="${qatest.query}">T_DefaultProtocol</td>
           <td th:text="${qatest.expectedResult}">true</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" th:href="@{/qatests/${datasetId}/edit(testid=${qatest.testId})}" />
+            <input class="edit-button" type="button" value="Edit" href="qatestEdit.html" th:href="@{/qatests/edit(testid=${qatest.testId})}" />
           </td>
       </tr>
       <tr>
@@ -49,7 +49,7 @@
           <td>SELECT CASE WHEN count(*) &gt; 1000 THEN 1 ELSE 0 END FROM TABLE</td>
           <td>1</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html"/>
+            <input class="edit-button" type="button" value="Edit" href="qatestEdit.html"/>
           </td>
       </tr>
       <tr>
@@ -58,7 +58,7 @@
           <td>T_DefaultProtocol.IsSSL</td>
           <td>false</td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="qatest_edit.html" />
+            <input class="edit-button" type="button" value="Edit" href="qatestEdit.html" />
           </td>
       </tr>
   </tbody>

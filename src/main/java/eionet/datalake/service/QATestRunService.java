@@ -54,14 +54,14 @@ public class QATestRunService {
         Edition edition = editionsService.getById(editionId);
         int countFailures = 0;
         List<QATest> qatests = new ArrayList<QATest>();
-//      try {
+        try {
             String datasetId = edition.getDatasetId();
             qatests = qaTestService.getByDatasetId(datasetId);
             countFailures = runTableExistsTests(qatests, edition);
             countFailures += runSQLCheckTests(qatests, edition);
-//      } catch (SQLException e) {
+        } catch (IOException e) {
            //
-//      }
+        }
         int countTests = qatests.size();
         editionsService.updateQAScore(editionId, countTests, countFailures);
     }
@@ -76,25 +76,66 @@ public class QATestRunService {
         for (String table : tables) {
             pool.put(table.toUpperCase(), Boolean.valueOf(false));
         }
-        TestResult result = new TestResult();
         String tableExists = QATestType.tableExists.name();
         for (QATest qatest : qatests) {
             if (!tableExists.equals(qatest.getTestType())) {
                 continue;
             }
-            result.setEditionId(edition.getEditionId());
-            result.setTestId(qatest.getTestId());
-            if (pool.containsKey(qatest.getQuery().trim().toUpperCase())) {
-                result.setPassed(true);
-                result.setResult("");
-            } else {
-                result.setPassed(false);
+            TestResult result = runOneTableExistsTest(qatest, pool);
+            if (result.getPassed() == false) {
                 countFailures++;
-                result.setResult(qatest.getQuery().trim() + " not found");
             }
+            result.setTestId(qatest.getTestId());
+            result.setEditionId(edition.getEditionId());
             testResultService.replace(result);
         }
         return countFailures;
+    }
+
+    /**
+     * Run one table exist test.
+     */
+    private TestResult runOneTableExistsTest(QATest qatest, HashMap<String, Boolean> pool) throws IOException {
+        TestResult result = new TestResult();
+        result.setPassed(true);
+        result.setResult("");
+        boolean expectedBool = getExpectedAsBool(qatest);
+        String query = qatest.getQuery().trim().toUpperCase();
+        String[] tables = query.split("\\s*,\\s*");
+        List<String> failures = new ArrayList<String>(tables.length);
+
+        for (String table : tables) {
+            if ("".equals(table)) {
+                continue;
+            }
+            if (expectedBool) {
+                if (!pool.containsKey(table)) {
+                    failures.add(table);
+                }
+            } else {
+                if (pool.containsKey(table)) {
+                    failures.add(table);
+                }
+            }
+        }
+        if (failures.size() > 0) {
+            if (expectedBool) {
+                result.setResult("Not found: " + String.join(", ", failures));
+            } else {
+                result.setResult("Not expected: " + String.join(", ", failures));
+            }
+            result.setPassed(false);
+        }
+        return result;
+    }
+
+    private boolean getExpectedAsBool(QATest qatest) {
+        String expected = qatest.getExpectedResult().trim().toLowerCase();
+        boolean expectedBool = false;
+        if ("true".equals(expected) || "1".equals(expected) || "yes".equals(expected) || "".equals(expected)) {
+            expectedBool = true;
+        }
+        return expectedBool;
     }
 
     /**

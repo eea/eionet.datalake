@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private static final String VIEW_USERS_HTML = "view_users";
+    private static final String VIEW_USERS_HTML = "users";
     private static final String EXISTING_USER_HTML = "existing_user";
 
     /**
