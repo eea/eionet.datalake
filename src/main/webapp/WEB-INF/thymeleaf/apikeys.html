@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:include="layout :: headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="developer.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/application.css" th:href="@{/css/application.css}" />
+  </head>
+  <body>
+    <div id="container">
+      <div th:include="layout :: bannerFragment">
+        <div id="pagehead">
+          <div id="networktitle">Datalake</div>
+          <div id="sitetitle">European Environment Information and Observation Network</div>
+          <div id="sitetagline">Networking improving Europe's environment</div>
+        </div>
+      </div>
+      <div id="workarea">
+        <h1>API keys</h1>
+        <div th:if="${message}" th:text="${message}" class="system-msg">System message</div>
+<p>The identifier is the equivalent of a user id and will be used for logging actions.
+The key value is the string that the script will use to authenticate.
+Scope is currently unused.
+</p>
+<table class="datatable">
+  <thead>
+    <tr>
+        <th>Identifier</th>
+        <th>Scope</th>
+        <th>Key value</th>
+        <th>Edit Key</th>
+        <th>Delete Key</th>
+    </tr>
+  </thead>
+  <tbody th:remove="all-but-first">
+      <tr th:each="apikey : ${allAPIKeys}">
+          <td th:text="${apikey.identifier}">ee5b711e-b4c8-46d2-93b1-374c29c80b0c</td>
+          <td th:text="${apikey.scope}"></td>
+          <td th:text="${apikey.keyValue}">23d95c62-c110-439d-a85f-b6bc2816da34</td>
+          <td>
+            <input class="edit-button" type="button" value="Edit" href="apikeyEdit.html" th:href="@{/apikeys/edit(identifier=${apikey.identifier})}" />
+          </td>
+          <td>
+            <input class="delete-button" type="button" value="Delete" href="#" th:href="@{/apikeys/delete(identifier=${apikey.identifier})}" />
+          </td>
+      </tr>
+      <tr>
+        <td>691e2538-c067-4d58-87e1-ca880bd935a9</td>
+        <td></td>
+        <td>82de6158-0793-4e7b-bbcd-79686f76e4f7</td>
+          <td>
+            <input class="edit-button" type="button" value="Edit" href="#" />
+          </td>
+          <td>
+            <input class="delete-button" type="button" value="Delete" href="#" />
+          </td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>Add new API key</h2>
+<form action="#" th:action="@{/apikeys/add}" th:object="${newapikey}" method="post">
+    <table class="datatable">
+        <tr>
+            <th scope="row"><label for="identifier">Identifier</label></th>
+            <td><input type="text" size="36" value="ee5b711e-b4c8-46d2-93b1-374c29c80b0c" th:field="*{identifier}" /></td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="scope">Scope</label></th>
+            <td><input type="text" size="60" value="" th:field="*{scope}" /></td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="keyValue">Key value</label></th>
+            <td><input type="text" size="60" value="c02508b1-d7ff-47d4-85a9-2545d010641e" th:field="*{keyValue}" /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Add API key"/>
+</form>
+<script type="text/javascript">
+    (function(){
+        $('.edit-button').click(function(){
+            window.location.assign($(this).attr("href"));
+        });
+        $('.delete-button').click(function(){
+            if (confirm("Are you sure you want to delete the key ?") == true) {
+                window.location.assign($(this).attr("href"));
+            }
+        });
+    })();
+</script>
+      </div>
+    </div>
+    <!-- container -->
+    <div id="pagefoot" th:include="layout :: footerFragment">
+    Footer
+    </div>
+  </body>
+</html>

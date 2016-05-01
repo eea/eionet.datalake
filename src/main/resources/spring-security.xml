@@ -15,6 +15,7 @@
         <security:intercept-url pattern="/fileupload" access="isAuthenticated()" />
         <security:intercept-url pattern="/datasets" access="isAuthenticated()" />
         <security:intercept-url pattern="/editions" access="isAuthenticated()" />
+        <security:intercept-url pattern="/apikeys/**" access="hasRole('ADMIN')" />
         <security:intercept-url pattern="/users/**" access="hasRole('ADMIN')"/>
         <security:intercept-url pattern="/**" access="permitAll()"/>
         <security:custom-filter position="CAS_FILTER" ref="casFilter" />

@@ -30,7 +30,7 @@
            </span>
           </td>
           <td>
-            <input class="edit-button" type="button" value="Edit" href="existing_user.html" th:href="@{/users/existing(userName=${user.username})}" />
+            <input class="edit-button" type="button" value="Edit" href="userEditForm.html" th:href="@{/users/edit(userName=${user.username})}" />
           </td>
           <td>
             <input class="delete-button" type="button" value="Delete" href="#" th:href="@{/users/delete(userName=${user.username})}" />

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:include="layout :: headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="developer.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/application.css" th:href="@{/css/application.css}" />
+  </head>
+  <body>
+    <div id="container">
+      <div th:include="layout :: bannerFragment">
+        <div id="pagehead">
+          <div id="networktitle">Datalake</div>
+          <div id="sitetitle">European Environment Information and Observation Network</div>
+          <div id="sitetagline">Networking improving Europe's environment</div>
+        </div>
+      </div>
+      <div id="workarea">
+
+<h1>Modify user</h1>
+<div id="operations">
+    <ul>
+        <li><a href="apikeys.html" th:href="@{/apikeys/view}" >Back to API keys</a></li>
+    </ul>
+</div>
+<form action="edit" th:action="@{/apikeys/edit}" th:object="${apikey}" method="post">
+    <table class="datatable">
+        <tr>
+            <th scope="row"><label for="identifier">Identifier</label></th>
+            <td><input type="text" size="36" value="ee5b711e-b4c8-46d2-93b1-374c29c80b0c" th:field="*{identifier}" readonly="readonly"/></td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="scope">Scope</label></th>
+            <td><input type="text" size="60" value="" th:field="*{scope}" /></td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="keyValue">Key value</label></th>
+            <td><input type="text" size="60" value="c02508b1-d7ff-47d4-85a9-2545d010641e" th:field="*{keyValue}" /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Update API key"/>
+</form>
+      </div>
+    </div>
+    <!-- container -->
+    <div id="pagefoot" th:include="layout :: footerFragment">
+    Footer
+    </div>
+  </body>
+</html>

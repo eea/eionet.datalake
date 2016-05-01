@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -28,9 +29,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
-    private static final String VIEW_USERS_HTML = "users";
-    private static final String EXISTING_USER_HTML = "existing_user";
 
     /**
      * Service for user management.
@@ -61,7 +59,7 @@ public class UserController {
         Authorisation user = new Authorisation();
         model.addAttribute("user", user);
         if(message != null) model.addAttribute("message", message);
-        return VIEW_USERS_HTML;
+        return "users";
     }
 
     /**
@@ -111,8 +109,8 @@ public class UserController {
      * @param message
      * @return view name
      */
-    @RequestMapping("/existing")
-    public String existingUser(@RequestParam String userName, Model model,
+    @RequestMapping("/edit")
+    public String editUserForm(@RequestParam String userName, Model model,
             @RequestParam(required = false) String message) {
         model.addAttribute("userName", userName);
         BreadCrumbs.set(model, "Modify user");
@@ -125,7 +123,7 @@ public class UserController {
         Authorisation user = new Authorisation(userName, userRoles);
         model.addAttribute("user", user);
         if (message != null) model.addAttribute("message", message);
-        return EXISTING_USER_HTML;
+        return "userEditForm";
     }
 
     /**
@@ -136,7 +134,7 @@ public class UserController {
      * @param model - contains attributes for the view
      * @return view name
      */
-    @RequestMapping("/edit")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editUser(Authorisation user, BindingResult bindingResult, ModelMap model) {
         ArrayList<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
         if (user.getAuthorisations() != null) {

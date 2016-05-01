@@ -1,6 +1,8 @@
 package eionet.datalake.controller;
 
+import eionet.datalake.dao.APIKeyService;
 import eionet.datalake.dao.EditionsService;
+import eionet.datalake.model.APIKey;
 import eionet.datalake.model.Dataset;
 import eionet.datalake.model.Edition;
 import eionet.datalake.service.UploadService;
@@ -37,6 +39,9 @@ public class RestAPIController {
     @Autowired
     private UploadService uploadService;
 
+    @Autowired
+    APIKeyService apiKeyService;
+
     private Log logger = LogFactory.getLog(RestAPIController.class);
 
     /**
@@ -48,7 +53,12 @@ public class RestAPIController {
                 @RequestParam(value = "dataset", required = true) String datasetId,
                 @RequestParam(value = "apikey", required = true) String apiKey) throws IOException {
 
-        // TODO: check the API key.
+        try {
+            APIKey apikeyRec = apiKeyService.getByKeyValue(apiKey);
+        } catch (Exception e) {
+            //TODO: log the error, send 403 return code.
+            return "Unrecognised API key\n";
+        }
         String uuidName = uploadService.uploadFile(myFile, datasetId);
         return uuidName + "\n";
     }

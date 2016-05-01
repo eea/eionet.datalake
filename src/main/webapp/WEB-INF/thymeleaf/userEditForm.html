@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head th:include="layout :: headerFragment">
-   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="developer.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/application.css" th:href="@{/css/application.css}" />
   </head>
   <body>
     <div id="container">
       <div th:include="layout :: bannerFragment">
+        <div id="pagehead">
+          <div id="networktitle">Datalake</div>
+          <div id="sitetitle">European Environment Information and Observation Network</div>
+          <div id="sitetagline">Networking improving Europe's environment</div>
+        </div>
       </div>
       <div id="workarea">
 
 <h1>Modify user</h1>
 <div id="operations">
     <ul>
-        <li><a href="view_user.html" th:href="@{/users/view}" >Back to users</a></li>
+        <li><a href="users.html" th:href="@{/users/view}" >Back to users</a></li>
     </ul>
 </div>
-<form action="edit" th:action="@{/users/edit}" th:object="${user}" method="post">
+<form action="users.html" th:action="@{/users/edit}" th:object="${user}" method="post">
     <table class="datatable">
         <tr>
             <th scope="row"><label for="userName">Username</label></th>

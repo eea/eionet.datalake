@@ -90,9 +90,14 @@
               <li><a href="index.html" th:href="@{/}">Home</a></li>
               <li><a href="about.html" th:href="@{/about}">About Datalake</a></li>
               <li><a href="fileupload.html" th:href="@{/fileupload}">Upload dataset</a></li>
-              <li sec:authorize-url="/datasets"><a href="datasets.html" th:href="@{/datasets}">Datasets</a></li>
+              <li sec:authorize-url="/datasets">
+                <a href="datasets.html" th:href="@{/datasets}">Datasets</a>
+              </li>
               <li sec:authorize="hasRole('ADMIN')">
-                 <a href="users.html" th:href="@{/users/view}">User authorisations</a>
+                <a href="users.html" th:href="@{/users/view}">User authorisations</a>
+              </li>
+              <li sec:authorize="hasRole('ADMIN')">
+                <a href="apikeys.html" th:href="@{/apikeys/view}">API keys</a>
               </li>
             </ul>
           </div>
